@@ -85,6 +85,7 @@ const makeApolloClient = makeConfig => {
 
   const uploadLink = createUploadLink({
     uri: `${serverUrl}/graphql`,
+    headers: { 'Apollo-Require-Preflight': 'true' },
   })
 
   const authLink = setContext((_, { headers }) => {
