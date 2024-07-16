@@ -10,6 +10,7 @@ export {
 } from './helpers/getUrl'
 
 export { useCurrentUser } from './helpers/currentUserContext'
+export { useSubscriptionManager } from './helpers/subscriptionManagerContext'
 
 export { ProviderConnectionPage } from './pages'
 
