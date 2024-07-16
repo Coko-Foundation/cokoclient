@@ -106,6 +106,9 @@ const makeApolloClient = makeConfig => {
   const wsLink = new GraphQLWsLink(
     createClient({
       url: webSocketUrl,
+      connectionParams: {
+        authToken: localStorage.getItem('token'),
+      },
     }),
   )
 
