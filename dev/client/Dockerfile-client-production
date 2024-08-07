@@ -17,7 +17,6 @@ COPY ./scripts/coko-client-build.sh ./scripts/coko-client-build.sh
 COPY ./src ./src
 COPY ./webpack ./webpack
 
-
 ENV WEBPACK_CONFIG_PATH=./webpack/webpack.config.js
 ENV NODE_ENV='production'
 ENV CLIENT_PAGE_TITLE='Coko client playground'

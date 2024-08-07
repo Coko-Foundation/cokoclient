@@ -27,8 +27,13 @@ const webSocketServerUrl = sanitizeUrl(
   window.env?.websocketServerUrl || process.env.WEBSOCKET_SERVER_URL,
 )
 
+const yjsWebSocketServerUrl = sanitizeUrl(
+  window.env?.yjsWebsocketServerUrl || process.env.YJS_WEBSOCKET_SERVER_URL,
+)
+
 module.exports = {
   clientUrl,
   serverUrl,
   webSocketServerUrl,
+  yjsWebSocketServerUrl,
 }

@@ -12,6 +12,7 @@ services:
     environment:
       - SERVER_URL='http://localhost:3000'
       - WEBSOCKET_SERVER_URL='http://localhost:3001'
+      - YJS_WEBSOCKET_SERVER_URL='http://localhost:3002'
 
   server:
     build:

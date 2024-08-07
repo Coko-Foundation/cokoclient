@@ -1,7 +1,14 @@
 export { v4 as uuid } from 'uuid'
 
 export { default as startClient } from './helpers/startClient'
-export { clientUrl, serverUrl, webSocketServerUrl } from './helpers/getUrl'
+
+export {
+  clientUrl,
+  serverUrl,
+  webSocketServerUrl,
+  yjsWebSocketServerUrl,
+} from './helpers/getUrl'
+
 export { useCurrentUser } from './helpers/currentUserContext'
 
 export { ProviderConnectionPage } from './pages'
