@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.0.63](https://gitlab.coko.foundation/cokoapps/client/compare/v0.0.62...v0.0.63) (2024-08-07)
+
+
+### Features
+
+* add YJS_WEBSOCKET_SERVER_URL to list of dynamic env variables ([5d181c6](https://gitlab.coko.foundation/cokoapps/client/commit/5d181c694825a1b5b7100d4ce449b2cffd57a1be))
+
 ### [0.0.62](https://gitlab.coko.foundation/cokoapps/client/compare/v0.0.61...v0.0.62) (2024-06-03)
 
 
