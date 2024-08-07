@@ -32,6 +32,7 @@ const {
 
   SERVER_URL,
   WEBSOCKET_SERVER_URL,
+  YJS_WEBSOCKET_SERVER_URL,
 } = process.env
 
 //
@@ -69,6 +70,7 @@ const variablesForBuild = {
   NODE_ENV: undefined,
   SERVER_URL: null,
   WEBSOCKET_SERVER_URL: null,
+  YJS_WEBSOCKET_SERVER_URL: null,
   CLIENT_WS_MIN_TIMEOUT: DEFAULT_CLIENT_WS_MIN_TIMEOUT,
   CLIENT_WS_TIMEOUT: DEFAULT_CLIENT_WS_TIMEOUT,
 }
@@ -133,6 +135,7 @@ const defaultLanguage = 'en-US'
 
 const serverUrl = SERVER_URL
 const websocketServerUrl = WEBSOCKET_SERVER_URL
+const yjsWebsocketServerUrl = YJS_WEBSOCKET_SERVER_URL
 
 const WSLinkMinTimeout = CLIENT_WS_MIN_TIMEOUT || DEFAULT_CLIENT_WS_MIN_TIMEOUT
 const WSLinkTimeout = CLIENT_WS_TIMEOUT || DEFAULT_CLIENT_WS_TIMEOUT
@@ -179,6 +182,10 @@ logStatus(`Server will be requested at`, serverUrl)
 logStatus(`Websocket server will be requested at`, websocketServerUrl)
 logStatus(`Websocket link min timeout will be `, WSLinkMinTimeout)
 logStatus(`Websocket link timeout will be `, WSLinkTimeout)
+logStatus(
+  'yjs websocket server url will be requested at',
+  yjsWebsocketServerUrl,
+)
 logStatus(`React fast-refresh is`, useFastRefresh ? 'on' : 'off')
 
 logStatus(

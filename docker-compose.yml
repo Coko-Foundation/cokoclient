@@ -18,6 +18,8 @@ services:
       - CLIENT_APP_ROOT_PATH=./dev/client/app
       - CLIENT_FAVICON_PATH=../static/favicon.ico
       - SERVER_URL=${SERVER_URL:-http://localhost:3000}
+      - WEBSOCKET_SERVER_URL=${WEBSOCKET_SERVER_URL:-http://localhost:3001}
+      - YJS_WEBSOCKET_SERVER_URL=${YJS_WEBSOCKET_SERVER_URL:-http://localhost:3002}
     volumes:
       - ./dev:/home/node/client/dev
       - ./src:/home/node/client/src
