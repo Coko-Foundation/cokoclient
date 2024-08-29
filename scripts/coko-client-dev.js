@@ -1,18 +1,14 @@
-const path = require('path')
+const Webpack = require('webpack')
+const WebpackDevServer = require('webpack-dev-server')
 
-const { execSync } = require('child_process')
+const webpackConfig = require('../webpack/webpack.config')
 
-const defaultWebpackConfig = path.join('..', 'webpack', 'webpack.config.js')
+const compiler = Webpack(webpackConfig)
+const devServerOptions = { ...webpackConfig.devServer, open: true }
+const server = new WebpackDevServer(devServerOptions, compiler)
 
-module.exports = async argsOverride => {
-  // const webpackConfig = path.join(
-  //   'webpack',
-  //   `webpack.${config.util.getEnv('NODE_ENV')}.config.js`,
-  // )
-
-  const webpackConfig = defaultWebpackConfig
-
-  execSync(`yarn webpack-dev-server --config ${webpackConfig}`, {
-    stdio: 'inherit',
-  })
+const runServer = async () => {
+  await server.start()
 }
+
+runServer()

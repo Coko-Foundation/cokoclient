@@ -1,11 +1,9 @@
-version: '3'
-
 services:
   client:
     build:
       context: .
       dockerfile: ./dev/client/Dockerfile-client-development
-    command: ['./scripts/coko-client-dev.sh']
+    command: ['./scripts/coko-client-dev.js']
     ports:
       - ${CLIENT_PORT:-4000}:${CLIENT_PORT:-4000}
       - ${WEBPACK_ANALYZER_PORT:-8888}:8888
@@ -22,6 +20,7 @@ services:
       - YJS_WEBSOCKET_SERVER_URL=${YJS_WEBSOCKET_SERVER_URL:-http://localhost:3002}
     volumes:
       - ./dev:/home/node/client/dev
+      - ./scripts:/home/node/client/scripts
       - ./src:/home/node/client/src
     tty: true
 
