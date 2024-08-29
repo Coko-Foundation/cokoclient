@@ -2,6 +2,21 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [1.0.0-beta.0](https://gitlab.coko.foundation/cokoapps/client/compare/v0.0.63...v1.0.0-beta.0) (2024-08-29)
+
+
+### Features
+
+* add preflight header to make upload pass csrf prevention ([db024cc](https://gitlab.coko.foundation/cokoapps/client/commit/db024cc1a42df9444950c650eeba7071ba3522b9))
+* switch to graphql-ws and add subscription manager ([9f02f39](https://gitlab.coko.foundation/cokoapps/client/commit/9f02f39477a77f8602d6de01212fe3e333700e36))
+* **webpack:** start webpack dev server programmatically ([53031fd](https://gitlab.coko.foundation/cokoapps/client/commit/53031fd18743f488c25555c2968b9f8eaa39348b))
+
+
+### Bug Fixes
+
+* add connection params token to new subscription implementation ([6b7556b](https://gitlab.coko.foundation/cokoapps/client/commit/6b7556b720e5ab017ad076f1dafa70c8fcacff43))
+* fix apollo link ([ae16187](https://gitlab.coko.foundation/cokoapps/client/commit/ae1618701ad47dfbda9f292f63d53fc1c793dc3a))
+
 ### [0.0.63](https://gitlab.coko.foundation/cokoapps/client/compare/v0.0.62...v0.0.63) (2024-08-07)
 
 
