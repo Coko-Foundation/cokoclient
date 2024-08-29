@@ -31,39 +31,7 @@ services:
       dockerfile: ./Dockerfile-server
     depends_on:
       - db
-    entrypoint:
-      [
-        'node_modules/.bin/wait-for-it',
-        'db:5432',
-        '--',
-        'sh',
-        'scripts/setupDevServer.sh',
-      ]
-    command:
-      [
-        'node_modules/.bin/nodemon',
-        'startServer.js',
-        '--watch',
-        'startServer.js',
-        '--watch',
-        'app.js',
-        '--watch',
-        'api',
-        '--watch',
-        'config',
-        '--watch',
-        'controllers',
-        '--watch',
-        'models',
-        '--watch',
-        'services',
-        '--watch',
-        'scripts',
-        '--watch',
-        '--ext',
-        'js,graphql',
-      ]
-    # command: ['echo', 'hello']
+    command: ['yarn', 'coko-server', 'start-dev']
     ports:
       - ${SERVER_PORT:-3000}:${SERVER_PORT:-3000}
     environment:
@@ -73,18 +41,19 @@ services:
       - POSTGRES_DB=${POSTGRES_DB:-dev}
       - POSTGRES_USER=${POSTGRES_USER:-user}
       - POSTGRES_PASSWORD=${POSTGRES_PASSWORD:-password}
-      - PUBSWEET_SECRET=${PUBSWEET_SECRET:-thesecret}
+      - SECRET=${SECRET:-thesecret}
       - SERVER_PORT=${SERVER_PORT:-3000}
       - CLIENT_URL=${CLIENT_URL:-http://0.0.0.0:4000}
     volumes:
       - ./dev/server/api:/home/node/app/api
       - ./dev/server/config:/home/node/app/config
-      - ./dev/server/controllers:/home/node/app/controllers
-      - ./dev/server/models:/home/node/app/models
+      # - ./dev/server/controllers:/home/node/app/controllers
+      # - ./dev/server/models:/home/node/app/models
       - ./dev/server/scripts:/home/node/app/scripts
-      - ./dev/server/services:/home/node/app/services
+      # - ./dev/server/services:/home/node/app/services
       # - ./dev/server/node_modules/@coko/server:/home/node/app/node_modules/@coko/server
       # - ./dev/server/node_modules/pubsweet-server:/home/node/app/node_modules/pubsweet-server
+    tty: true
 
   db:
     image: postgres:15
@@ -94,5 +63,3 @@ services:
       - POSTGRES_DB=${POSTGRES_DB:-dev}
       - POSTGRES_USER=${POSTGRES_USER:-user}
       - POSTGRES_PASSWORD=${POSTGRES_PASSWORD:-password}
-    # volumes:
-    #   - ./dev/server/scripts/init-pgboss.sql:/docker-entrypoint-initdb.d/init-pgboss.sql

@@ -122,7 +122,7 @@ const makeApolloClient = makeConfig => {
   )
 
   const config = {
-    splitLink,
+    link: splitLink,
     cache: new InMemoryCache(),
   }
 
