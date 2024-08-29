@@ -39,6 +39,7 @@ const Root = props => {
         <Link to="/imagedemo">Image demo</Link>
         <Link to="/ant">Ant</Link>
         <Link to="/protected">Protected</Link>
+        <Link to="/profile">Profile</Link>
       </div>
 
       <Buttons>

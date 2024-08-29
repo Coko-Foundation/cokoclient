@@ -1,6 +1,6 @@
 /* eslint-disable no-param-reassign */
 
-import React, { useEffect, useState } from 'react'
+import React, { useState } from 'react'
 import { BrowserRouter } from 'react-router-dom'
 import PropTypes from 'prop-types'
 import { ConfigProvider as AntConfigProvider } from 'antd'
@@ -16,20 +16,15 @@ import {
   split,
 } from '@apollo/client'
 import { getMainDefinition } from '@apollo/client/utilities'
+import { GraphQLWsLink } from '@apollo/client/link/subscriptions'
 import { setContext } from '@apollo/client/link/context'
-import { WebSocketLink } from '@apollo/client/link/ws'
-import { SubscriptionClient } from 'subscriptions-transport-ws'
 import { createUploadLink } from 'apollo-upload-client'
+import { createClient } from 'graphql-ws'
 
 import { CurrentUserContext } from './currentUserContext'
+import { SubscriptionManagerProvider } from './subscriptionManagerContext'
 // import AuthWrapper from '../components/AuthWrapper'
 import { serverUrl } from './getUrl'
-
-const wsMinTimeout = process.env.CLIENT_WS_MIN_TIMEOUT
-const wsTimeout = process.env.CLIENT_WS_TIMEOUT
-
-let wsLink
-let webSocketClient
 
 const replaceHttpWithWs = url => {
   let wsUrl = url.replace(/^http:/, 'ws:')
@@ -85,6 +80,7 @@ const makeApolloClient = makeConfig => {
 
   const uploadLink = createUploadLink({
     uri: `${serverUrl}/graphql`,
+    headers: { 'Apollo-Require-Preflight': 'true' },
   })
 
   const authLink = setContext((_, { headers }) => {
@@ -105,40 +101,28 @@ const makeApolloClient = makeConfig => {
     return forward(operation)
   })
 
-  let link = ApolloLink.from([removeTypename, authLink, uploadLink])
+  const link = ApolloLink.from([removeTypename, authLink, uploadLink])
 
-  if (localStorage.getItem('token')) {
-    if (!webSocketClient) {
-      webSocketClient = new SubscriptionClient(webSocketUrl, {
-        reconnect: true,
-        lazy: true,
-        inactivityTimeout: 3000,
-        minTimeout: wsMinTimeout,
-        timeout: wsTimeout,
-        connectionParams: {
-          authToken: localStorage.getItem('token'),
-        },
-      })
-    }
-
-    if (!wsLink) {
-      wsLink = new WebSocketLink(webSocketClient)
-    }
-  }
-
-  if (wsLink) {
-    link = split(
-      ({ query }) => {
-        const { kind, operation } = getMainDefinition(query)
-        return kind === 'OperationDefinition' && operation === 'subscription'
+  const wsLink = new GraphQLWsLink(
+    createClient({
+      url: webSocketUrl,
+      connectionParams: {
+        authToken: localStorage.getItem('token'),
       },
-      wsLink,
-      link,
-    )
-  }
+    }),
+  )
+
+  const splitLink = split(
+    ({ query }) => {
+      const { kind, operation } = getMainDefinition(query)
+      return kind === 'OperationDefinition' && operation === 'subscription'
+    },
+    wsLink,
+    link,
+  )
 
   const config = {
-    link,
+    link: splitLink,
     cache: new InMemoryCache(),
   }
 
@@ -148,7 +132,7 @@ const makeApolloClient = makeConfig => {
 const Root = props => {
   const { makeApolloConfig, routes, theme } = props
   const [currentUser, setCurrentUser] = useState()
-  let client = makeApolloClient(makeApolloConfig)
+  const client = makeApolloClient(makeApolloConfig)
 
   const mapper = {
     borderRadius: pxToNumConverter(theme.borderRadius),
@@ -177,34 +161,25 @@ const Root = props => {
     },
   }
 
-  useEffect(() => {
-    if (localStorage.getItem('token')) {
-      client = makeApolloClient(makeApolloConfig)
-    }
-
-    if (!localStorage.getItem('token') && webSocketClient) {
-      webSocketClient.unsubscribeAll()
-      webSocketClient.close()
-    }
-  }, [localStorage.getItem('token')])
-
   return (
     <ApolloProvider client={client}>
-      <BrowserRouter>
-        {/* TO DO -- check how to fix this linting error */}
-        {/* eslint-disable-next-line react/jsx-no-constructed-context-values */}
-        <CurrentUserContext.Provider value={{ currentUser, setCurrentUser }}>
-          {/* <AuthWrapper> */}
-          <AntConfigProvider theme={mappedAntTheme}>
-            <ThemeProvider theme={theme}>
-              <Normalize />
-              <GlobalStyle />
-              {routes}
-            </ThemeProvider>
-          </AntConfigProvider>
-          {/* </AuthWrapper> */}
-        </CurrentUserContext.Provider>
-      </BrowserRouter>
+      <SubscriptionManagerProvider>
+        <BrowserRouter>
+          {/* TO DO -- check how to fix this linting error */}
+          {/* eslint-disable-next-line react/jsx-no-constructed-context-values */}
+          <CurrentUserContext.Provider value={{ currentUser, setCurrentUser }}>
+            {/* <AuthWrapper> */}
+            <AntConfigProvider theme={mappedAntTheme}>
+              <ThemeProvider theme={theme}>
+                <Normalize />
+                <GlobalStyle />
+                {routes}
+              </ThemeProvider>
+            </AntConfigProvider>
+            {/* </AuthWrapper> */}
+          </CurrentUserContext.Provider>
+        </BrowserRouter>
+      </SubscriptionManagerProvider>
     </ApolloProvider>
   )
 }

@@ -10,6 +10,7 @@ import {
   Root,
   ImageDemo,
   AntDemo,
+  Profile,
   Protected,
   Teams,
 } from './pages'
@@ -32,6 +33,19 @@ const Routes = (
               requireIdentityVerification={false}
             >
               <Protected />
+            </RequireAuth>
+          )}
+        />
+
+        <Route
+          exact
+          path="/profile"
+          render={() => (
+            <RequireAuth
+              notAuthenticatedRedirectTo="/"
+              requireIdentityVerification={false}
+            >
+              <Profile />
             </RequireAuth>
           )}
         />

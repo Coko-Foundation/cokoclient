@@ -12,13 +12,10 @@
     "pg": "8"
   },
   "dependencies": {
-    "@coko/server": "^3.7.0",
+    "@coko/server": "^4.0.0-beta.1",
     "@faker-js/faker": "^7.6.0",
     "config": "^3.3.9",
-    "lodash": "^4.17.21",
-    "nodemon": "^2.0.22"
+    "lodash": "^4.17.21"
   },
-  "devDependencies": {
-    "node-wait-for-it": "^0.2.0"
-  }
+  "devDependencies": {}
 }
