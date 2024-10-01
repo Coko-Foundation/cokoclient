@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [1.0.0-beta.1](https://gitlab.coko.foundation/cokoapps/client/compare/v1.0.0-beta.0...v1.0.0-beta.1) (2024-10-01)
+
+
+### Bug Fixes
+
+* add shebang to dev js script ([c9ea398](https://gitlab.coko.foundation/cokoapps/client/commit/c9ea398e734b0e0aa8d4b873778c94080a734db2))
+
 ## [1.0.0-beta.0](https://gitlab.coko.foundation/cokoapps/client/compare/v0.0.63...v1.0.0-beta.0) (2024-08-29)
 
 
