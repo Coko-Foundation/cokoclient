@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [1.0.0-beta.2](https://gitlab.coko.foundation/cokoapps/client/compare/v1.0.0-beta.1...v1.0.0-beta.2) (2025-03-26)
+
+
+### Features
+
+* **components:** make sign up terms configurable ([2740f89](https://gitlab.coko.foundation/cokoapps/client/commit/2740f89f14371c35ccafa8af3ca772b48fac1624))
+
 ## [1.0.0-beta.1](https://gitlab.coko.foundation/cokoapps/client/compare/v1.0.0-beta.0...v1.0.0-beta.1) (2024-10-01)
 
 
