@@ -15,6 +15,7 @@ export const Base = args => (
 Base.args = {
   onSubmit: () => {},
   errorMessage: faker.lorem.sentence(),
+  termsAndConditionsContent: faker.lorem.sentences(5),
   userEmail: faker.internet.email(),
 }
 

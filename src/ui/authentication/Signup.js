@@ -29,6 +29,7 @@ const Signup = props => {
     hasSuccess,
     loading,
     onSubmit,
+    termsAndConditionsContent,
     // userEmail,
   } = props
 
@@ -39,38 +40,7 @@ const Signup = props => {
     const termsAndConditionsModal = modal.info()
     termsAndConditionsModal.update({
       title: <ModalHeader>Agreeing to Terms and Conditions</ModalHeader>,
-      content: (
-        <Paragraph>
-          By checking “I agree” and selecting “Sign up” below, I accept the{' '}
-          <CokoLink
-            as="a"
-            href="https://www.biointeractive.org/hhmi-biointeractive-online-community-terms-use"
-            rel="noreferrer"
-            target="_blank"
-          >
-            HHMI BioInteractive Online Community Terms of Use
-          </CokoLink>
-          ,{' '}
-          <CokoLink
-            as="a"
-            href="https://www.hhmi.org/terms-of-use"
-            rel="noreferrer"
-            target="_blank"
-          >
-            HHMI Terms of Use
-          </CokoLink>
-          , and{' '}
-          <CokoLink
-            as="a"
-            href="https://www.hhmi.org/privacy-policy"
-            rel="noreferrer"
-            target="_blank"
-          >
-            HHMI Privacy Policy and Cookie Notice
-          </CokoLink>
-          .
-        </Paragraph>
-      ),
+      content: <Paragraph>{termsAndConditionsContent}</Paragraph>,
       footer: [
         <ModalFooter key="footer">
           <Button
@@ -78,7 +48,7 @@ const Signup = props => {
             onClick={termsAndConditionsModal.destroy}
             type="primary"
           >
-            Ok
+            OK
           </Button>
         </ModalFooter>,
       ],
@@ -209,37 +179,40 @@ const Signup = props => {
                 type="password"
               />
             </Form.Item>
-            <ModalContext.Provider value={null}>
-              <Form.Item
-                name="agreedTc"
-                rules={[
-                  {
-                    validator: (_, value) =>
-                      value
-                        ? Promise.resolve()
-                        : Promise.reject(
-                            new Error(
-                              'You need to agree to the terms and conditions',
+
+            {termsAndConditionsContent && (
+              <ModalContext.Provider value={null}>
+                <Form.Item
+                  name="agreedTc"
+                  rules={[
+                    {
+                      validator: (_, value) =>
+                        value
+                          ? Promise.resolve()
+                          : Promise.reject(
+                              new Error(
+                                'You need to agree to the terms and conditions',
+                              ),
                             ),
-                          ),
-                  },
-                ]}
-                valuePropName="checked"
-              >
-                <Checkbox aria-label="I agree to the terms and conditions">
-                  I agree to the{' '}
-                  <CokoLink
-                    as="a"
-                    href="#termsAndCondition"
-                    id="termsAndConditions"
-                    onClick={showTermsAndConditions}
-                  >
-                    terms and conditions
-                  </CokoLink>
-                </Checkbox>
-              </Form.Item>
-              {contextHolder}
-            </ModalContext.Provider>
+                    },
+                  ]}
+                  valuePropName="checked"
+                >
+                  <Checkbox aria-label="I agree to the terms and conditions">
+                    I agree to the{' '}
+                    <CokoLink
+                      as="a"
+                      href="#termsAndCondition"
+                      id="termsAndConditions"
+                      onClick={showTermsAndConditions}
+                    >
+                      terms and conditions
+                    </CokoLink>
+                  </Checkbox>
+                </Form.Item>
+                {contextHolder}
+              </ModalContext.Provider>
+            )}
           </AuthenticationForm>
         )}
       </AuthenticationWrapper>
@@ -254,6 +227,7 @@ Signup.propTypes = {
   hasError: PropTypes.bool,
   hasSuccess: PropTypes.bool,
   loading: PropTypes.bool,
+  termsAndConditionsContent: PropTypes.node,
   // userEmail: PropTypes.string,
 }
 
@@ -262,6 +236,7 @@ Signup.defaultProps = {
   hasError: false,
   hasSuccess: false,
   loading: false,
+  termsAndConditionsContent: null,
   // userEmail: null,
 }
 
