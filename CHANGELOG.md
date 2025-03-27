@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [1.0.0-beta.3](https://gitlab.coko.foundation/cokoapps/client/compare/v1.0.0-beta.2...v1.0.0-beta.3) (2025-03-27)
+
+
+### Features
+
+* **webpack:** build js script ([22f1e21](https://gitlab.coko.foundation/cokoapps/client/commit/22f1e216a3a18c60543c9f7a763c222f7016e923))
+
 ## [1.0.0-beta.2](https://gitlab.coko.foundation/cokoapps/client/compare/v1.0.0-beta.1...v1.0.0-beta.2) (2025-03-26)
 
 
