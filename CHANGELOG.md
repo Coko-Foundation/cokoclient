@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.0.4](https://gitlab.coko.foundation/cokoapps/client/compare/v1.0.3...v1.0.4) (2025-06-26)
+
+
+### Bug Fixes
+
+* fix createUploadLink import ([2079da7](https://gitlab.coko.foundation/cokoapps/client/commit/2079da7111a33bafc0f350bf6ecf1a8c08addb3b))
+
 ### [1.0.3](https://gitlab.coko.foundation/cokoapps/client/compare/v1.0.2...v1.0.3) (2025-06-26)
 
 
