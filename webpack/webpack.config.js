@@ -237,8 +237,7 @@ const webpackConfig = {
       // Typescript
       { test: /\.tsx?$/, loader: 'ts-loader' },
 
-      // TO DELETE?
-      // mjs files: needed because of apollo client??
+      // mjs files: needed because of apollo upload client
       {
         test: /\.m?js/,
         resolve: {

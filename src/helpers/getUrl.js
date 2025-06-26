@@ -1,11 +1,3 @@
-const mapper = {
-  client: {
-    protocol: process.env.CLIENT_PROTOCOL,
-    host: process.env.CLIENT_HOST,
-    port: process.env.CLIENT_PORT,
-  },
-}
-
 const removeTrailingSlashes = url => url.replace(/\/+$/, '')
 
 const sanitizeUrl = url => {
@@ -13,14 +5,6 @@ const sanitizeUrl = url => {
   return removeTrailingSlashes(url)
 }
 
-const makeUrl = type => {
-  const { protocol, host, port } = mapper[type]
-  if (!protocol || !host || !port) return null
-  const url = `${protocol}://${host}${port ? `:${port}` : ''}`
-  return sanitizeUrl(url)
-}
-
-const clientUrl = makeUrl('client')
 const serverUrl = sanitizeUrl(window.env?.serverUrl || process.env.SERVER_URL)
 
 const webSocketServerUrl = sanitizeUrl(
@@ -32,7 +16,6 @@ const yjsWebSocketServerUrl = sanitizeUrl(
 )
 
 module.exports = {
-  clientUrl,
   serverUrl,
   webSocketServerUrl,
   yjsWebSocketServerUrl,
