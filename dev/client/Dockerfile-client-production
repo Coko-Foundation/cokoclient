@@ -1,16 +1,17 @@
 # IMAGE FOR BUILDING
-FROM node:18-bookworm-slim
+FROM node:20-bookworm-slim
 
 RUN apt-get update \ 
     && apt-get upgrade -y \
     && apt-get install -y
 
 WORKDIR /home/node/app
+RUN corepack enable
 
 COPY package.json .
 COPY yarn.lock .
 
-RUN yarn install --frozen-lockfile
+RUN yarn install --immutable
 
 COPY ./dev/client ./dev/client
 COPY ./scripts/coko-client-build.sh ./scripts/coko-client-build.sh
@@ -31,7 +32,7 @@ RUN sh ./scripts/coko-client-build.sh
 
 # IMAGE FOR RUNNING
 
-FROM node:16-bullseye-slim
+FROM node:20-bookworm-slim
 
 RUN apt-get update && apt-get install -y
 RUN npm install --global serve

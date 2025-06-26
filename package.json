@@ -24,9 +24,10 @@
     "webpack"
   ],
   "scripts": {
-    "build": "npx babel --delete-dir-on-start src --out-dir dist",
+    "build": "yarn dlx babel --delete-dir-on-start src --out-dir dist",
     "clean": "rm -rf node_modules && rm -rf dist && rm -rf dev/server/node_modules",
-    "cz": "git-cz",
+    "cz": "./node_modules/.bin/lint-staged && ./node_modules/.bin/git-cz",
+    "commitlint": "./node_modules/.bin/commitlint",
     "prepare": "husky install",
     "prepublishOnly": "yarn run build",
     "release": "standard-version",
@@ -109,5 +110,5 @@
   "publishConfig": {
     "access": "public"
   },
-  "packageManager": "yarn@1.22.22+sha1.ac34549e6aa8e7ead463a7407e1c7390f61a6610"
+  "packageManager": "yarn@4.9.2"
 }
