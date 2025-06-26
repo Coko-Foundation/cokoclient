@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.0.6](https://gitlab.coko.foundation/cokoapps/client/compare/v1.0.5...v1.0.6) (2025-06-26)
+
+
+### Bug Fixes
+
+* **webpack:** remove broken client url from build ([581c6c0](https://gitlab.coko.foundation/cokoapps/client/commit/581c6c09d7c8145180ad8bf5299b36f4480500d9))
+
 ### [1.0.5](https://gitlab.coko.foundation/cokoapps/client/compare/v1.0.4...v1.0.5) (2025-06-26)
 
 
