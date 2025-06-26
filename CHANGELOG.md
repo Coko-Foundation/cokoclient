@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.0.2](https://gitlab.coko.foundation/cokoapps/client/compare/v1.0.1...v1.0.2) (2025-06-26)
+
+
+### Bug Fixes
+
+* **webpack:** add another missing babel plugin ([c4b3ed1](https://gitlab.coko.foundation/cokoapps/client/commit/c4b3ed18db4e0532e7d90eaaaad2b1affa1a1a02))
+
 ### [1.0.1](https://gitlab.coko.foundation/cokoapps/client/compare/v1.0.0...v1.0.1) (2025-06-26)
 
 
