@@ -7,6 +7,7 @@ RUN apt-get update \
 WORKDIR /home/node/client
 RUN corepack enable
 
+COPY .yarnrc.yml .
 COPY package.json .
 COPY yarn.lock .
 
