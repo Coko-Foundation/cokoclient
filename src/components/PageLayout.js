@@ -5,7 +5,6 @@ import styled, { createGlobalStyle, css } from 'styled-components'
 
 import { fadeIn, grid, th } from '../toolkit'
 
-// TO DO -- Remove div > div when you clean up client from pubsweet
 const GlobalStyle = createGlobalStyle`
   html {
     height: 100%;
