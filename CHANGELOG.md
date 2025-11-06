@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [1.1.0](https://gitlab.coko.foundation/cokoapps/client/compare/v1.0.6...v1.1.0) (2025-11-06)
+
+
+### Features
+
+* **components:** add optional prop to dismiss reviewer at any time in AssignReviewer component ([394f111](https://gitlab.coko.foundation/cokoapps/client/commit/394f111cda754f230521adf4836b65835b96fe4c))
+
 ### [1.0.6](https://gitlab.coko.foundation/cokoapps/client/compare/v1.0.5...v1.0.6) (2025-06-26)
 
 
