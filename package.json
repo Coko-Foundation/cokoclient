@@ -29,7 +29,7 @@
     "cz": "./node_modules/.bin/lint-staged && ./node_modules/.bin/git-cz",
     "commitlint": "./node_modules/.bin/commitlint",
     "prepare": "husky install",
-    "prepublishOnly": "yarn run build",
+    "prepack": "yarn run build",
     "release": "standard-version",
     "storybook": "STORYBOOK_THEME_PATH='src/theme/index.js' coko-storybook"
   },
