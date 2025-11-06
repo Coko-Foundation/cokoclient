@@ -89,6 +89,7 @@ const ReviewerTable = props => {
   const {
     additionalColumns,
     canInviteMore,
+    canDismissReviewer,
     className,
     manualSorting,
     onChange,
@@ -195,6 +196,7 @@ const ReviewerTable = props => {
       key: 'removeRow',
       render: (text, rowData) => (
         <InviteRowProp
+          canDismissReviewer={canDismissReviewer}
           canInvite={canInviteMore}
           className={className}
           data={rowData}
@@ -253,6 +255,8 @@ ReviewerTable.propTypes = {
   ),
   /** Whether more reviewers can be invited */
   canInviteMore: PropTypes.bool.isRequired,
+  /** Whether a reviewer can be removed even after accepting invitation */
+  canDismissReviewer: PropTypes.bool,
   /** Enable drag and drop, but also disable auto-sorted columns */
   manualSorting: PropTypes.bool,
   /** Function to run when data is filtered/sorted */
@@ -281,6 +285,7 @@ ReviewerTable.propTypes = {
 
 ReviewerTable.defaultProps = {
   additionalColumns: [],
+  canDismissReviewer: false,
   manualSorting: false,
   reviewers: [],
   showEmails: false,

@@ -26,6 +26,7 @@ const RemoveInviteWrapper = styled.div`
 const InviteRowProp = props => {
   const {
     canInvite,
+    canDismissReviewer,
     className,
     data,
     onClickInvite,
@@ -119,7 +120,7 @@ const InviteRowProp = props => {
     )
   }
 
-  if (type === 'remove' && notInvited) {
+  if (type === 'remove' && (notInvited || canDismissReviewer)) {
     return (
       <RemoveInviteWrapper className={className} onClick={handleRemove}>
         <CloseOutlined />
@@ -133,6 +134,8 @@ const InviteRowProp = props => {
 InviteRowProp.propTypes = {
   /** Whether more reviewers can be invited */
   canInvite: PropTypes.bool,
+  /** Whether a reviewer can be removed even after accepting invitation */
+  canDismissReviewer: PropTypes.bool,
   /** Current row's invite status fields */
   data: PropTypes.shape({
     id: PropTypes.string.isRequired,
@@ -155,6 +158,7 @@ InviteRowProp.propTypes = {
 
 InviteRowProp.defaultProps = {
   canInvite: false,
+  canDismissReviewer: false,
   onClickInvite: () => {},
   onClickRemove: () => {},
   onClickRevokeInvitation: () => {},

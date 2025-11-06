@@ -52,6 +52,7 @@ const AssignReviewers = props => {
     amountOfReviewers,
     automate,
     canInviteMore,
+    canDismissReviewer,
     className,
     onAddReviewers,
     onAmountOfReviewersChange,
@@ -136,6 +137,7 @@ const AssignReviewers = props => {
 
       <ReviewerTable
         additionalColumns={additionalReviewerColumns}
+        canDismissReviewer={canDismissReviewer}
         canInviteMore={canInviteMore}
         manualSorting={manualSorting}
         onChange={onTableChange}
@@ -171,6 +173,8 @@ AssignReviewers.propTypes = {
   automate: PropTypes.bool.isRequired,
   /** Whether more reviewers can be invited */
   canInviteMore: PropTypes.bool.isRequired,
+  /** Whether more reviewers can be invited */
+  canDismissReviewer: PropTypes.bool,
   /** Function to run on selecting a reviewer in the search box */
   onAddReviewers: PropTypes.func.isRequired,
   /** Handle change in amount of reviewers input */
@@ -211,6 +215,7 @@ AssignReviewers.propTypes = {
 AssignReviewers.defaultProps = {
   additionalReviewerColumns: [],
   additionalSearchFields: [],
+  canDismissReviewer: false,
   reviewerPool: [],
   searchPlaceholder: undefined,
   suggestedReviewerName: null,
