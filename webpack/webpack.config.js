@@ -190,7 +190,9 @@ logStatus(`React fast-refresh is`, useFastRefresh ? 'on' : 'off')
 
 logStatus(
   'Custom environment variables detected',
-  customVariables.length > 0 ? `${customVariables}` : 'none',
+  Object.keys(customVariables).length > 0
+    ? `${Object.keys(customVariables).join(', ')}`
+    : 'none',
   true,
 )
 

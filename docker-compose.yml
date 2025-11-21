@@ -18,9 +18,12 @@ services:
       - SERVER_URL=${SERVER_URL:-http://localhost:3000}
       - WEBSOCKET_SERVER_URL=${WEBSOCKET_SERVER_URL:-http://localhost:3001}
       - YJS_WEBSOCKET_SERVER_URL=${YJS_WEBSOCKET_SERVER_URL:-http://localhost:3002}
+      - CLIENT_CUSTOM_VAR=${CLIENT_CUSTOM_VAR}
+      - CLIENT_FOO=bar
     volumes:
       - ./dev:/home/node/client/dev
       - ./scripts:/home/node/client/scripts
+      - ./webpack:/home/node/client/webpack
       - ./src:/home/node/client/src
     tty: true
 
