@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.1.2](https://gitlab.coko.foundation/cokoapps/client/compare/v1.1.1...v1.1.2) (2025-11-21)
+
+
+### Bug Fixes
+
+* **webpack:** fix reporting of custom environment variables found ([df82f36](https://gitlab.coko.foundation/cokoapps/client/commit/df82f36ea5a3cbcc3565b1f49ccdcb3cb52b332a))
+
 ### [1.1.1](https://gitlab.coko.foundation/cokoapps/client/compare/v1.1.0...v1.1.1) (2025-11-06)
 
 ## [1.1.0](https://gitlab.coko.foundation/cokoapps/client/compare/v1.0.6...v1.1.0) (2025-11-06)
