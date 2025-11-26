@@ -33,6 +33,9 @@ const {
   SERVER_URL,
   WEBSOCKET_SERVER_URL,
   YJS_WEBSOCKET_SERVER_URL,
+
+  SENTRY_DSN,
+  SENTRY_ENVIRONMENT,
 } = process.env
 
 //
@@ -71,6 +74,8 @@ const variablesForBuild = {
   SERVER_URL: null,
   WEBSOCKET_SERVER_URL: null,
   YJS_WEBSOCKET_SERVER_URL: null,
+  SENTRY_DSN: null,
+  SENTRY_ENVIRONMENT: null,
   CLIENT_WS_MIN_TIMEOUT: DEFAULT_CLIENT_WS_MIN_TIMEOUT,
   CLIENT_WS_TIMEOUT: DEFAULT_CLIENT_WS_TIMEOUT,
 }
@@ -182,6 +187,7 @@ logStatus(`Server will be requested at`, serverUrl)
 logStatus(`Websocket server will be requested at`, websocketServerUrl)
 logStatus(`Websocket link min timeout will be `, WSLinkMinTimeout)
 logStatus(`Websocket link timeout will be `, WSLinkTimeout)
+logStatus(`Sentry initialized: `, SENTRY_DSN && SENTRY_ENVIRONMENT)
 logStatus(
   'yjs websocket server url will be requested at',
   yjsWebsocketServerUrl,
