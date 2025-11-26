@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [1.2.0](https://gitlab.coko.foundation/cokoapps/client/compare/v1.1.2...v1.2.0) (2025-11-26)
+
+
+### Features
+
+* add sentry support ([d351831](https://gitlab.coko.foundation/cokoapps/client/commit/d351831d6b6688375b8f4795879cce9879e96858))
+
 ### [1.1.2](https://gitlab.coko.foundation/cokoapps/client/compare/v1.1.1...v1.1.2) (2025-11-21)
 
 
