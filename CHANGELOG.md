@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.2.1](https://gitlab.coko.foundation/cokoapps/client/compare/v1.2.0...v1.2.1) (2025-11-28)
+
+
+### Bug Fixes
+
+* reconnect to subsciption server after drop ([60ac368](https://gitlab.coko.foundation/cokoapps/client/commit/60ac3682102c1d18b5e46d35ba1a068713e2b851))
+
 ## [1.2.0](https://gitlab.coko.foundation/cokoapps/client/compare/v1.1.2...v1.2.0) (2025-11-26)
 
 
