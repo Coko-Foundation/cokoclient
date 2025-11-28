@@ -1,3 +1,13 @@
+type TestObject {
+  id: ID!
+  value: String!
+}
+
 extend type Query {
   getRootData: [String!]!
+  testObjects: [TestObject!]!
+}
+
+extend type Subscription {
+  testObjectAdded: TestObject!
 }

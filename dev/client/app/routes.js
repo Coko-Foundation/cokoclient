@@ -13,6 +13,7 @@ import {
   Profile,
   Protected,
   Teams,
+  SubscriptionsTest,
 } from './pages'
 
 const Routes = (
@@ -53,6 +54,16 @@ const Routes = (
         <Route exact path="/provider-connection-popup/:provider">
           <ProviderConnectionPage closeOnSuccess />
         </Route>
+
+        <Route
+          exact
+          path="/subscriptions-test"
+          render={() => (
+            <RequireAuth>
+              <SubscriptionsTest />
+            </RequireAuth>
+          )}
+        />
       </Switch>
     </PageLayout>
   </Authenticate>

@@ -1,6 +1,6 @@
 /* eslint-disable no-param-reassign */
 
-import React, { useState } from 'react'
+import React, { useMemo, useState } from 'react'
 import { BrowserRouter } from 'react-router-dom'
 import PropTypes from 'prop-types'
 import { ConfigProvider as AntConfigProvider } from 'antd'
@@ -19,12 +19,18 @@ import { getMainDefinition } from '@apollo/client/utilities'
 import { GraphQLWsLink } from '@apollo/client/link/subscriptions'
 import { setContext } from '@apollo/client/link/context'
 import createUploadLink from 'apollo-upload-client/createUploadLink.mjs'
+import { loadErrorMessages, loadDevMessages } from '@apollo/client/dev'
 import { createClient } from 'graphql-ws'
 
 import { CurrentUserContext } from './currentUserContext'
 import { SubscriptionManagerProvider } from './subscriptionManagerContext'
 // import AuthWrapper from '../components/AuthWrapper'
 import { serverUrl } from './getUrl'
+
+if (process.env.NODE_ENV !== 'production') {
+  loadDevMessages()
+  loadErrorMessages()
+}
 
 const replaceHttpWithWs = url => {
   let wsUrl = url.replace(/^http:/, 'ws:')
@@ -103,11 +109,32 @@ const makeApolloClient = makeConfig => {
 
   const link = ApolloLink.from([removeTypename, authLink, uploadLink])
 
+  const subscriptionsLogMessage = '[subscriptions-ws]'
+
   const wsLink = new GraphQLWsLink(
     createClient({
       url: webSocketUrl,
+      retryAttempts: Infinity,
       connectionParams: {
         authToken: localStorage.getItem('token'),
+      },
+      shouldRetry: () => {
+        /* eslint-disable-next-line no-console */
+        console.log(`${subscriptionsLogMessage} Attempting to reconnect...`)
+        return true
+      },
+      on: {
+        connecting: () => {
+          /* eslint-disable-next-line no-console */
+          console.log(`${subscriptionsLogMessage} Connecting...`)
+        },
+        connected: socket => {
+          /* eslint-disable-next-line no-console */
+          console.log(`${subscriptionsLogMessage} Connected.`)
+        },
+        closed: event => {
+          console.error(`${subscriptionsLogMessage} Disconnected:`, event)
+        },
       },
     }),
   )
@@ -132,7 +159,7 @@ const makeApolloClient = makeConfig => {
 const Root = props => {
   const { makeApolloConfig, routes, theme } = props
   const [currentUser, setCurrentUser] = useState()
-  const client = makeApolloClient(makeApolloConfig)
+  const client = useMemo(() => makeApolloClient(makeApolloConfig), [])
 
   const mapper = {
     borderRadius: pxToNumConverter(theme.borderRadius),

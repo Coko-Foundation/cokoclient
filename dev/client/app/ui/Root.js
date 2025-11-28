@@ -40,6 +40,7 @@ const Root = props => {
         <Link to="/ant">Ant</Link>
         <Link to="/protected">Protected</Link>
         <Link to="/profile">Profile</Link>
+        <Link to="/subscriptions-test">Subscriptions</Link>
       </div>
 
       <Buttons>
