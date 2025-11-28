@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.2.2](https://gitlab.coko.foundation/cokoapps/client/compare/v1.2.1...v1.2.2) (2025-11-28)
+
+
+### Bug Fixes
+
+* recreate apollo client when the user auth token changes ([1594a02](https://gitlab.coko.foundation/cokoapps/client/commit/1594a025b3c3ef237c82edeb83e6d973c035f612))
+
 ### [1.2.1](https://gitlab.coko.foundation/cokoapps/client/compare/v1.2.0...v1.2.1) (2025-11-28)
 
 
