@@ -7,7 +7,7 @@
   ],
   "repository": {
     "type": "git",
-    "url": "git@gitlab.coko.foundation:cokoapps/client.git"
+    "url": "git+https://github.com/Coko-Foundation/cokoclient.git"
   },
   "license": "MIT",
   "author": "Yannis Barlas",
