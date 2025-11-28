@@ -159,7 +159,11 @@ const makeApolloClient = makeConfig => {
 const Root = props => {
   const { makeApolloConfig, routes, theme } = props
   const [currentUser, setCurrentUser] = useState()
-  const client = useMemo(() => makeApolloClient(makeApolloConfig), [])
+
+  const client = useMemo(
+    () => makeApolloClient(makeApolloConfig),
+    [currentUser],
+  )
 
   const mapper = {
     borderRadius: pxToNumConverter(theme.borderRadius),
