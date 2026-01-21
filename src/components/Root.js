@@ -22,10 +22,10 @@ import createUploadLink from 'apollo-upload-client/createUploadLink.mjs'
 import { loadErrorMessages, loadDevMessages } from '@apollo/client/dev'
 import { createClient } from 'graphql-ws'
 
-import { CurrentUserContext } from './currentUserContext'
-import { SubscriptionManagerProvider } from './subscriptionManagerContext'
-// import AuthWrapper from '../components/AuthWrapper'
-import { serverUrl } from './getUrl'
+import { CurrentUserContext } from '../helpers/currentUserContext'
+import { SubscriptionManagerProvider } from '../helpers/subscriptionManagerContext'
+// import AuthWrapper from './AuthWrapper'
+import { serverUrl } from '../helpers/getUrl'
 
 if (process.env.NODE_ENV !== 'production') {
   loadDevMessages()

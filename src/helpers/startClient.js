@@ -4,7 +4,7 @@ import React from 'react'
 import ReactDOM from 'react-dom'
 import { createBrowserHistory } from 'history'
 
-import Root from './Root'
+import Root from '../components/Root'
 
 const history = createBrowserHistory()
 const rootEl = document.getElementById('root')
