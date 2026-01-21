@@ -5,7 +5,7 @@
 
 import {
   startClient,
-  clientUrl,
+  // clientUrl,
   serverUrl,
   webSocketServerUrl,
   yjsWebSocketServerUrl,
@@ -15,7 +15,7 @@ import theme from './theme'
 
 /* eslint-disable no-console */
 console.log('window.env', window.env)
-console.log('Client url:', clientUrl)
+// console.log('Client url:', clientUrl)
 console.log('Server url:', serverUrl)
 console.log('Websocket server url:', webSocketServerUrl)
 console.log('Yjs websocket server url:', yjsWebSocketServerUrl)

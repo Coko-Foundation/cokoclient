@@ -1,0 +1,443 @@
+import path from 'path'
+import fs from 'fs'
+import { fileURLToPath } from 'url'
+
+import { defineConfig, type UserConfig, type Plugin } from 'vite'
+import react from '@vitejs/plugin-react'
+import * as esbuild from 'esbuild'
+
+const __dirname = path.dirname(fileURLToPath(import.meta.url))
+
+const {
+  NODE_ENV,
+
+  CLIENT_APP_ROOT_PATH,
+  CLIENT_BUILD_FOLDER_PATH,
+  CLIENT_ENTRY_FILE_PATH,
+  CLIENT_FAVICON_PATH,
+  CLIENT_PAGE_TITLE,
+  CLIENT_STATIC_FOLDER_PATH,
+  CLIENT_PAGES_FOLDER_PATH,
+  CLIENT_PORT,
+  CLIENT_UI_FOLDER_PATH,
+  CLIENT_LANGUAGE,
+  CLIENT_WS_MIN_TIMEOUT,
+  CLIENT_WS_TIMEOUT,
+
+  SERVER_URL,
+  WEBSOCKET_SERVER_URL,
+  YJS_WEBSOCKET_SERVER_URL,
+
+  SENTRY_DSN,
+  SENTRY_ENVIRONMENT,
+} = process.env
+
+//
+/* SET UP VARS */
+//
+
+// Environment variables that will only be used in this config
+const variablesForViteConfig = [
+  'CLIENT_APP_ROOT_PATH',
+  'CLIENT_BUILD_FOLDER_PATH',
+  'CLIENT_ENTRY_FILE_PATH',
+  'CLIENT_FAVICON_PATH',
+  'CLIENT_LANGUAGE',
+  'CLIENT_PAGE_TITLE',
+  'CLIENT_PAGES_FOLDER_PATH',
+  'CLIENT_PORT',
+  'CLIENT_STATIC_FOLDER_PATH',
+  'CLIENT_UI_FOLDER_PATH',
+]
+
+const DEFAULT_CLIENT_WS_MIN_TIMEOUT = 5000
+const DEFAULT_CLIENT_WS_TIMEOUT = 60000
+
+// Environment variables that will be passed down to the build
+const variablesForBuild: Record<string, string | number | null | undefined> = {
+  NODE_ENV: undefined,
+  SERVER_URL: null,
+  WEBSOCKET_SERVER_URL: null,
+  YJS_WEBSOCKET_SERVER_URL: null,
+  SENTRY_DSN: null,
+  SENTRY_ENVIRONMENT: null,
+  CLIENT_WS_MIN_TIMEOUT: DEFAULT_CLIENT_WS_MIN_TIMEOUT,
+  CLIENT_WS_TIMEOUT: DEFAULT_CLIENT_WS_TIMEOUT,
+}
+
+// Allow custom variables that start with CLIENT_ to pass into the build
+const customVariables = Object.keys(process.env)
+  .filter(k => {
+    return (
+      !variablesForViteConfig.includes(k) &&
+      !(k in variablesForBuild) &&
+      k.startsWith('CLIENT_')
+    )
+  })
+  .reduce((obj: Record<string, undefined>, k) => {
+    obj[k] = undefined
+    return obj
+  }, {})
+
+const variablesInBuild = { ...variablesForBuild, ...customVariables }
+
+const mode = NODE_ENV === 'production' ? 'production' : 'development'
+const isEnvDevelopment = mode === 'development'
+const isEnvProduction = mode === 'production'
+
+const appPath = CLIENT_APP_ROOT_PATH
+  ? path.resolve(CLIENT_APP_ROOT_PATH)
+  : path.resolve(process.cwd(), 'app')
+
+const uiFolderPath = path.resolve(appPath, CLIENT_UI_FOLDER_PATH || 'ui')
+const pagesFolderPath = path.resolve(
+  appPath,
+  CLIENT_PAGES_FOLDER_PATH || 'pages',
+)
+
+const staticFolderPath =
+  CLIENT_STATIC_FOLDER_PATH || path.resolve(appPath, '..', 'static')
+
+const buildFolderPath =
+  CLIENT_BUILD_FOLDER_PATH || path.resolve(appPath, '..', '_build')
+
+const entryFilePath = CLIENT_ENTRY_FILE_PATH || './start.js'
+const devServerPort = Number(CLIENT_PORT) || 8080
+const faviconPath = CLIENT_FAVICON_PATH
+const pageTitle = CLIENT_PAGE_TITLE || 'Coko App'
+const language = CLIENT_LANGUAGE || 'en-US'
+
+const WSLinkMinTimeout = CLIENT_WS_MIN_TIMEOUT || DEFAULT_CLIENT_WS_MIN_TIMEOUT
+const WSLinkTimeout = CLIENT_WS_TIMEOUT || DEFAULT_CLIENT_WS_TIMEOUT
+
+// Template path in the vite folder
+const templatePath = path.resolve(__dirname, 'index.html')
+
+// #region log-init
+const cyan = (t: string) => `\x1b[36m${t}\x1b[0m`
+
+const logSeparator = () => console.log(cyan('//////////////////////'))
+
+const logHeader = (text: string) => {
+  logSeparator()
+  console.log(cyan(`// ${text.toUpperCase()}\n`))
+}
+
+const logStatus = (label: string, message: unknown, newLine?: boolean) => {
+  console.log(`${cyan(label)}: ${message}${newLine ? '\n' : ''}`)
+}
+
+logHeader('coko client info (vite)')
+logStatus('Environment', NODE_ENV, true)
+logStatus('App context path is set to', appPath)
+isEnvProduction && logStatus('Build will be written to', buildFolderPath)
+logStatus('Static folder path found at', staticFolderPath)
+logStatus('App entry file will be', entryFilePath)
+logStatus('UI folder path will be', uiFolderPath)
+logStatus('Pages folder path will be', pagesFolderPath)
+logStatus('Favicon path will be', faviconPath)
+logStatus('Page title set to', pageTitle)
+logStatus('Language set to', language)
+isEnvDevelopment && logStatus('Dev server will run at port', devServerPort)
+logStatus('Server will be requested at', SERVER_URL)
+logStatus('Websocket server will be requested at', WEBSOCKET_SERVER_URL)
+logStatus('Websocket link min timeout will be', WSLinkMinTimeout)
+logStatus('Websocket link timeout will be', WSLinkTimeout)
+logStatus('Sentry initialized:', SENTRY_DSN && SENTRY_ENVIRONMENT)
+logStatus(
+  'yjs websocket server url will be requested at',
+  YJS_WEBSOCKET_SERVER_URL,
+)
+
+logStatus(
+  'Custom environment variables detected',
+  Object.keys(customVariables).length > 0
+    ? Object.keys(customVariables).join(', ')
+    : 'none',
+  true,
+)
+
+logSeparator()
+console.log('')
+// #endregion log-init
+
+// Build the define object for environment variables
+const defineEnv: Record<string, string> = {}
+
+Object.keys(variablesInBuild).forEach(key => {
+  const value = process.env[key]
+
+  if (value !== undefined) {
+    defineEnv[`process.env.${key}`] = JSON.stringify(value)
+  } else if (variablesInBuild[key] !== undefined) {
+    defineEnv[`process.env.${key}`] = JSON.stringify(variablesInBuild[key])
+  } else if (variablesInBuild[key] === null) {
+    // Optional variables - set to undefined if not provided
+    defineEnv[`process.env.${key}`] = 'undefined'
+  } else {
+    throw new Error(`Environment variable ${key} is required but not defined`)
+  }
+})
+
+// Helper function to recursively copy directory
+function copyDirSync(src: string, dest: string) {
+  if (!fs.existsSync(dest)) {
+    fs.mkdirSync(dest, { recursive: true })
+  }
+
+  const entries = fs.readdirSync(src, { withFileTypes: true })
+
+  for (const entry of entries) {
+    const srcPath = path.join(src, entry.name)
+    const destPath = path.join(dest, entry.name)
+
+    if (entry.isDirectory()) {
+      copyDirSync(srcPath, destPath)
+    } else {
+      fs.copyFileSync(srcPath, destPath)
+    }
+  }
+}
+
+// Process HTML template with substitutions
+function processTemplate(html: string): string {
+  return html
+    .replace('{{TITLE}}', pageTitle)
+    .replace('{{LANGUAGE}}', language)
+    .replace('{{ENTRY}}', entryFilePath)
+}
+
+// Plugin to handle JSX and CommonJS in .js files
+function jsTransformPlugin(): Plugin {
+  return {
+    name: 'js-transform',
+    enforce: 'pre',
+
+    async transform(code, id) {
+      // Only process .js files outside node_modules
+      if (!id.endsWith('.js') || id.includes('node_modules')) {
+        return null
+      }
+
+      // Determine if file has JSX
+      const hasJsx = /<[A-Za-z]/.test(code)
+
+      try {
+        const result = await esbuild.transform(code, {
+          loader: hasJsx ? 'jsx' : 'js',
+          jsx: 'automatic',
+          jsxImportSource: 'react',
+          format: 'esm',
+        })
+        return { code: result.code, map: result.map }
+      } catch {
+        // If transform fails, let other plugins handle it
+        return null
+      }
+    },
+  }
+}
+
+// Plugin to serve index.html from vite folder
+function cokoHtmlPlugin(): Plugin {
+  return {
+    name: 'coko-html',
+    enforce: 'pre',
+
+    // Resolve virtual index.html to our template
+    resolveId(id) {
+      if (id.endsWith('index.html') && id.includes(appPath)) {
+        return id
+      }
+      return null
+    },
+
+    // Load our template instead of looking for index.html in app folder
+    load(id) {
+      if (id.endsWith('index.html') && id.includes(appPath)) {
+        const template = fs.readFileSync(templatePath, 'utf-8')
+        return processTemplate(template)
+      }
+      return null
+    },
+
+    // Dev server: serve our template for HTML requests
+    configureServer(server) {
+      // Middleware that runs before Vite's internal handlers - serve index.html for root
+      server.middlewares.use((req, res, next) => {
+        if (req.url === '/' || req.url === '/index.html') {
+          const template = fs.readFileSync(templatePath, 'utf-8')
+          const html = processTemplate(template)
+
+          server.transformIndexHtml(req.url, html).then(transformed => {
+            res.setHeader('Content-Type', 'text/html')
+            res.end(transformed)
+          })
+          return
+        }
+        next()
+      })
+
+      // Return a function to add middleware after Vite's internal handlers (SPA fallback)
+      return () => {
+        server.middlewares.use((req, res, next) => {
+          const acceptsHtml = req.headers.accept?.includes('text/html')
+
+          if (req.method === 'GET' && acceptsHtml) {
+            const template = fs.readFileSync(templatePath, 'utf-8')
+            const html = processTemplate(template)
+
+            server.transformIndexHtml('/', html).then(transformed => {
+              res.setHeader('Content-Type', 'text/html')
+              res.end(transformed)
+            })
+            return
+          }
+          next()
+        })
+      }
+    },
+  }
+}
+
+//
+/* VITE CONFIG */
+//
+
+const viteConfig: UserConfig = defineConfig({
+  root: appPath,
+  base: '/',
+  mode,
+  publicDir: staticFolderPath,
+
+  // Environment variable replacement
+  define: defineEnv,
+
+  // Path aliases
+  resolve: {
+    alias: {
+      pages: pagesFolderPath,
+      ui: uiFolderPath,
+    },
+    extensions: ['.mjs', '.js', '.jsx', '.ts', '.tsx', '.json'],
+  },
+
+  // Plugins
+  plugins: [
+    // Handle JSX and CommonJS in .js files
+    jsTransformPlugin(),
+
+    // Custom HTML plugin to serve template from vite folder
+    cokoHtmlPlugin(),
+
+    // React plugin with babel configuration for styled-components and decorators
+    react({
+      // Include .js files for JSX processing (not just .jsx)
+      include: /\.[jt]sx?$/,
+      babel: {
+        plugins: [
+          ['@babel/plugin-proposal-decorators', { legacy: true }],
+          'babel-plugin-parameter-decorator',
+          ['@babel/plugin-transform-class-properties', { loose: true }],
+          [
+            '@babel/plugin-transform-private-property-in-object',
+            { loose: true },
+          ],
+          ['@babel/plugin-transform-private-methods', { loose: true }],
+          'babel-plugin-styled-components',
+        ],
+      },
+    }),
+
+    // Custom plugin to copy static assets on build
+    {
+      name: 'copy-static-assets',
+      writeBundle() {
+        if (fs.existsSync(staticFolderPath)) {
+          copyDirSync(staticFolderPath, buildFolderPath)
+        }
+      },
+    },
+  ],
+
+  // Build configuration
+  build: {
+    outDir: buildFolderPath,
+    emptyOutDir: true,
+    sourcemap: isEnvDevelopment ? 'inline' : false,
+
+    rollupOptions: {
+      input: path.resolve(appPath, 'index.html'),
+      output: {
+        entryFileNames: isEnvProduction
+          ? 'js/[name].[hash:8].js'
+          : 'js/bundle.js',
+        chunkFileNames: isEnvProduction
+          ? 'js/[name].[hash:8].chunk.js'
+          : 'js/[name].chunk.js',
+        assetFileNames: assetInfo => {
+          const extType = assetInfo.name?.split('.').pop() || ''
+
+          if (/png|jpe?g|svg|gif|tiff|bmp|ico/i.test(extType)) {
+            return 'assets/images/[name].[hash:8][extname]'
+          }
+
+          if (/woff|woff2|eot|ttf|otf/i.test(extType)) {
+            return 'assets/fonts/[name].[hash:8][extname]'
+          }
+
+          if (/css/i.test(extType)) {
+            return 'static/css/[name].[hash:8][extname]'
+          }
+
+          return 'assets/[name].[hash:8][extname]'
+        },
+      },
+    },
+
+    minify: isEnvProduction ? 'esbuild' : false,
+    cssCodeSplit: true,
+  },
+
+  // Dev server configuration
+  server: {
+    host: '0.0.0.0',
+    port: devServerPort,
+    strictPort: false,
+    open: false,
+  },
+
+  // Preview server
+  preview: {
+    host: '0.0.0.0',
+    port: devServerPort,
+  },
+
+  // Optimize dependencies
+  optimizeDeps: {
+    include: ['react', 'react-dom', 'styled-components'],
+    esbuildOptions: {
+      loader: {
+        '.js': 'jsx',
+      },
+    },
+  },
+
+  // CSS configuration
+  css: {
+    preprocessorOptions: {
+      less: {
+        javascriptEnabled: true,
+      },
+    },
+    devSourcemap: isEnvDevelopment,
+  },
+
+  // ESBuild configuration
+  esbuild: {
+    loader: 'tsx',
+    include: /\.[jt]sx?$/,
+  },
+})
+
+export default viteConfig

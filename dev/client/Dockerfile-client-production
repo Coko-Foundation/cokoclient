@@ -1,7 +1,7 @@
 # IMAGE FOR BUILDING
 FROM node:20-bookworm-slim
 
-RUN apt-get update \ 
+RUN apt-get update \
     && apt-get upgrade -y \
     && apt-get install -y
 
@@ -15,18 +15,17 @@ COPY yarn.lock .
 RUN yarn install --immutable
 
 COPY ./dev/client ./dev/client
-COPY ./scripts/coko-client-build.sh ./scripts/coko-client-build.sh
+COPY ./scripts/coko-client-build.mjs ./scripts/coko-client-build.mjs
 COPY ./src ./src
-COPY ./webpack ./webpack
+COPY ./vite ./vite
 
-ENV WEBPACK_CONFIG_PATH=./webpack/webpack.config.js
 ENV NODE_ENV='production'
 ENV CLIENT_PAGE_TITLE='Coko client playground'
 ENV CLIENT_FAVICON_PATH='../static/favicon.ico'
 ENV CLIENT_LANGUAGE='en-US'
 ENV CLIENT_APP_ROOT_PATH='./dev/client/app'
 
-RUN sh ./scripts/coko-client-build.sh
+RUN node ./scripts/coko-client-build.mjs
 
 ######################################################################
 ######################################################################

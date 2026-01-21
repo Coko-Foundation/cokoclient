@@ -15,8 +15,4 @@ const yjsWebSocketServerUrl = sanitizeUrl(
   window.env?.yjsWebsocketServerUrl || process.env.YJS_WEBSOCKET_SERVER_URL,
 )
 
-module.exports = {
-  serverUrl,
-  webSocketServerUrl,
-  yjsWebSocketServerUrl,
-}
+export { serverUrl, webSocketServerUrl, yjsWebSocketServerUrl }

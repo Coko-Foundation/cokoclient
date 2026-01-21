@@ -13,15 +13,13 @@
   "author": "Yannis Barlas",
   "main": "dist",
   "bin": {
-    "coko-client-build": "./scripts/coko-client-build.sh",
-    "coko-client-build-js": "./scripts/coko-client-build.js",
-    "coko-client-dev": "./scripts/coko-client-dev.sh",
-    "coko-client-dev-js": "./scripts/coko-client-dev.js"
+    "coko-client-build": "./scripts/coko-client-build.mjs",
+    "coko-client-dev": "./scripts/coko-client-dev.mjs"
   },
   "files": [
     "dist",
     "scripts",
-    "webpack"
+    "vite"
   ],
   "scripts": {
     "build": "npx babel --delete-dir-on-start src --out-dir dist",
@@ -55,6 +53,7 @@
     "@babel/preset-react": "^7.13.13",
     "@pmmmwh/react-refresh-webpack-plugin": "^0.5.0-beta.6",
     "@sentry/react": "^10.27.0",
+    "@vitejs/plugin-react": "^5.1.2",
     "antd": "^5.6.1",
     "apollo-upload-client": "^18.0.1",
     "app-root-path": "^3.0.0",
@@ -89,6 +88,7 @@
     "typescript": "^5.8.3",
     "url-loader": "^4.1.1",
     "uuid": "^8.3.2",
+    "vite": "^7.3.1",
     "webpack": "^5.30.0",
     "webpack-bundle-analyzer": "^4.9.0",
     "webpack-cli": "^4.6.0",
@@ -96,7 +96,7 @@
   },
   "devDependencies": {
     "@apollo/client": "^3.3.13",
-    "@coko/lint": "^2.0.1",
+    "@coko/lint": "^2.1.0",
     "@coko/storybook": "^2.0.0",
     "@faker-js/faker": "^8.0.2",
     "fontsource-advent-pro": "^4.0.0",

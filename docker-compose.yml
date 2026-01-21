@@ -3,15 +3,12 @@ services:
     build:
       context: .
       dockerfile: ./dev/client/Dockerfile-client-development
-    command: ['./scripts/coko-client-dev.js']
+    command: ['node', './scripts/coko-client-dev.mjs']
     ports:
       - ${CLIENT_PORT:-4000}:${CLIENT_PORT:-4000}
-      - ${WEBPACK_ANALYZER_PORT:-8888}:8888
     environment:
       - NODE_ENV=development
-      - WEBPACK_CONFIG_PATH=./webpack/webpack.config.js
       - CLIENT_PORT=${CLIENT_PORT:-4000}
-      - CLIENT_FAST_REFRESH=1
       - CLIENT_PAGE_TITLE=${CLIENT_PAGE_TITLE:-"Coko client playground"}
       - CLIENT_APP_ROOT_PATH=./dev/client/app
       - CLIENT_FAVICON_PATH=../static/favicon.ico
@@ -23,7 +20,7 @@ services:
     volumes:
       - ./dev:/home/node/client/dev
       - ./scripts:/home/node/client/scripts
-      - ./webpack:/home/node/client/webpack
+      - ./vite:/home/node/client/vite
       - ./src:/home/node/client/src
     tty: true
 
