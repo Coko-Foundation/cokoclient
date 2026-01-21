@@ -1,13 +1,12 @@
-import path from 'path'
-import fs from 'fs'
+import path from 'node:path'
+import fs from 'node:fs'
 import { fileURLToPath } from 'url'
 
 import { defineConfig, type UserConfig, type Plugin } from 'vite'
-import react from '@vitejs/plugin-react'
+import react from '@vitejs/plugin-react-swc'
 import * as esbuild from 'esbuild'
 
-const __dirname = path.dirname(fileURLToPath(import.meta.url))
-
+// #region setup
 const {
   NODE_ENV,
 
@@ -54,18 +53,20 @@ const DEFAULT_CLIENT_WS_MIN_TIMEOUT = 5000
 const DEFAULT_CLIENT_WS_TIMEOUT = 60000
 
 // Environment variables that will be passed down to the build
+// All values are defaults
 const variablesForBuild: Record<string, string | number | null | undefined> = {
   NODE_ENV: undefined,
-  SERVER_URL: null,
-  WEBSOCKET_SERVER_URL: null,
-  YJS_WEBSOCKET_SERVER_URL: null,
-  SENTRY_DSN: null,
-  SENTRY_ENVIRONMENT: null,
+  SERVER_URL: undefined,
+  WEBSOCKET_SERVER_URL: undefined,
+  YJS_WEBSOCKET_SERVER_URL: undefined,
+  SENTRY_DSN: undefined,
+  SENTRY_ENVIRONMENT: undefined,
   CLIENT_WS_MIN_TIMEOUT: DEFAULT_CLIENT_WS_MIN_TIMEOUT,
   CLIENT_WS_TIMEOUT: DEFAULT_CLIENT_WS_TIMEOUT,
 }
 
 // Allow custom variables that start with CLIENT_ to pass into the build
+// All custom variables will start with a default value of undefined
 const customVariables = Object.keys(process.env)
   .filter(k => {
     return (
@@ -111,7 +112,8 @@ const WSLinkMinTimeout = CLIENT_WS_MIN_TIMEOUT || DEFAULT_CLIENT_WS_MIN_TIMEOUT
 const WSLinkTimeout = CLIENT_WS_TIMEOUT || DEFAULT_CLIENT_WS_TIMEOUT
 
 // Template path in the vite folder
-const templatePath = path.resolve(__dirname, 'index.html')
+const templatePath = path.resolve(import.meta.dirname, 'index.html')
+// #endregion setup
 
 // #region log-init
 const cyan = (t: string) => `\x1b[36m${t}\x1b[0m`
@@ -127,7 +129,7 @@ const logStatus = (label: string, message: unknown, newLine?: boolean) => {
   console.log(`${cyan(label)}: ${message}${newLine ? '\n' : ''}`)
 }
 
-logHeader('coko client info (vite)')
+logHeader('coko client info')
 logStatus('Environment', NODE_ENV, true)
 logStatus('App context path is set to', appPath)
 isEnvProduction && logStatus('Build will be written to', buildFolderPath)
@@ -143,7 +145,10 @@ logStatus('Server will be requested at', SERVER_URL)
 logStatus('Websocket server will be requested at', WEBSOCKET_SERVER_URL)
 logStatus('Websocket link min timeout will be', WSLinkMinTimeout)
 logStatus('Websocket link timeout will be', WSLinkTimeout)
-logStatus('Sentry initialized:', SENTRY_DSN && SENTRY_ENVIRONMENT)
+logStatus(
+  'Sentry initialized:',
+  SENTRY_DSN && SENTRY_ENVIRONMENT ? 'yes' : 'no',
+)
 logStatus(
   'yjs websocket server url will be requested at',
   YJS_WEBSOCKET_SERVER_URL,
@@ -162,22 +167,13 @@ console.log('')
 // #endregion log-init
 
 // Build the define object for environment variables
-const defineEnv: Record<string, string> = {}
-
-Object.keys(variablesInBuild).forEach(key => {
-  const value = process.env[key]
-
-  if (value !== undefined) {
-    defineEnv[`process.env.${key}`] = JSON.stringify(value)
-  } else if (variablesInBuild[key] !== undefined) {
-    defineEnv[`process.env.${key}`] = JSON.stringify(variablesInBuild[key])
-  } else if (variablesInBuild[key] === null) {
-    // Optional variables - set to undefined if not provided
-    defineEnv[`process.env.${key}`] = 'undefined'
-  } else {
-    throw new Error(`Environment variable ${key} is required but not defined`)
-  }
-})
+const defineEnv = Object.keys(variablesInBuild).reduce((acc, k) => {
+  // fall back to null. undefined is not json serializable
+  const defaultValue = variablesInBuild[k] || null
+  const value = process.env[k] || defaultValue
+  acc[`process.env.${k}`] = JSON.stringify(value)
+  return acc
+}, {} as Record<string, any>)
 
 // Helper function to recursively copy directory
 function copyDirSync(src: string, dest: string) {
@@ -240,39 +236,44 @@ function jsTransformPlugin(): Plugin {
 
 // Plugin to serve index.html from vite folder
 function cokoHtmlPlugin(): Plugin {
+  let cachedHtml: string | null = null
+
+  // Only read html file so that you don't have to read the html file from disk
+  // on every request
+  const getHtml = () => {
+    if (!cachedHtml) {
+      const template = fs.readFileSync(templatePath, 'utf-8')
+      cachedHtml = processTemplate(template)
+    }
+
+    return cachedHtml
+  }
+
   return {
     name: 'coko-html',
     enforce: 'pre',
 
     // Resolve virtual index.html to our template
     resolveId(id) {
-      if (id.endsWith('index.html') && id.includes(appPath)) {
-        return id
-      }
+      if (id.endsWith('index.html') && id.includes(appPath)) return id
       return null
     },
 
     // Load our template instead of looking for index.html in app folder
     load(id) {
-      if (id.endsWith('index.html') && id.includes(appPath)) {
-        const template = fs.readFileSync(templatePath, 'utf-8')
-        return processTemplate(template)
-      }
+      if (id.endsWith('index.html') && id.includes(appPath)) return getHtml()
       return null
     },
 
     // Dev server: serve our template for HTML requests
     configureServer(server) {
       // Middleware that runs before Vite's internal handlers - serve index.html for root
-      server.middlewares.use((req, res, next) => {
+      server.middlewares.use(async (req, res, next) => {
         if (req.url === '/' || req.url === '/index.html') {
-          const template = fs.readFileSync(templatePath, 'utf-8')
-          const html = processTemplate(template)
-
-          server.transformIndexHtml(req.url, html).then(transformed => {
-            res.setHeader('Content-Type', 'text/html')
-            res.end(transformed)
-          })
+          const html = getHtml()
+          const transformed = await server.transformIndexHtml(req.url, html)
+          res.setHeader('Content-Type', 'text/html')
+          res.end(transformed)
           return
         }
         next()
@@ -280,17 +281,14 @@ function cokoHtmlPlugin(): Plugin {
 
       // Return a function to add middleware after Vite's internal handlers (SPA fallback)
       return () => {
-        server.middlewares.use((req, res, next) => {
+        server.middlewares.use(async (req, res, next) => {
           const acceptsHtml = req.headers.accept?.includes('text/html')
 
           if (req.method === 'GET' && acceptsHtml) {
-            const template = fs.readFileSync(templatePath, 'utf-8')
-            const html = processTemplate(template)
-
-            server.transformIndexHtml('/', html).then(transformed => {
-              res.setHeader('Content-Type', 'text/html')
-              res.end(transformed)
-            })
+            const html = getHtml()
+            const transformed = await server.transformIndexHtml('/', html)
+            res.setHeader('Content-Type', 'text/html')
+            res.end(transformed)
             return
           }
           next()
@@ -313,43 +311,23 @@ const viteConfig: UserConfig = defineConfig({
   // Environment variable replacement
   define: defineEnv,
 
-  // Path aliases
   resolve: {
     alias: {
       pages: pagesFolderPath,
       ui: uiFolderPath,
     },
+    // Extensions to try when extension is ommitted in import
     extensions: ['.mjs', '.js', '.jsx', '.ts', '.tsx', '.json'],
   },
 
-  // Plugins
   plugins: [
-    // Handle JSX and CommonJS in .js files
     jsTransformPlugin(),
-
-    // Custom HTML plugin to serve template from vite folder
     cokoHtmlPlugin(),
 
-    // React plugin with babel configuration for styled-components and decorators
     react({
-      // Include .js files for JSX processing (not just .jsx)
-      include: /\.[jt]sx?$/,
-      babel: {
-        plugins: [
-          ['@babel/plugin-proposal-decorators', { legacy: true }],
-          'babel-plugin-parameter-decorator',
-          ['@babel/plugin-transform-class-properties', { loose: true }],
-          [
-            '@babel/plugin-transform-private-property-in-object',
-            { loose: true },
-          ],
-          ['@babel/plugin-transform-private-methods', { loose: true }],
-          'babel-plugin-styled-components',
-        ],
-      },
+      tsDecorators: true,
     }),
 
-    // Custom plugin to copy static assets on build
     {
       name: 'copy-static-assets',
       writeBundle() {
