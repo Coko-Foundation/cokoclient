@@ -6,6 +6,8 @@ import { defineConfig, type UserConfig, type Plugin } from 'vite'
 import react from '@vitejs/plugin-react-swc'
 import * as esbuild from 'esbuild'
 
+import logger from './logger'
+
 const __filename = fileURLToPath(import.meta.url)
 const __dirname = path.dirname(__filename)
 
@@ -114,59 +116,48 @@ const language = CLIENT_LANGUAGE || 'en-US'
 const WSLinkMinTimeout = CLIENT_WS_MIN_TIMEOUT || DEFAULT_CLIENT_WS_MIN_TIMEOUT
 const WSLinkTimeout = CLIENT_WS_TIMEOUT || DEFAULT_CLIENT_WS_TIMEOUT
 
-// Template path in the vite folder
 const templatePath = path.resolve(__dirname, 'index.html')
 // #endregion setup
 
 // #region log-init
-const cyan = (t: string) => `\x1b[36m${t}\x1b[0m`
+logger.header('Coko Client Configuration')
 
-const logSeparator = () => console.log(cyan('//////////////////////'))
+logger.item('Environment', mode)
+logger.item('Language', language)
+logger.divider()
 
-const logHeader = (text: string) => {
-  logSeparator()
-  console.log(cyan(`// ${text.toUpperCase()}\n`))
+logger.item('App Root', appPath)
+logger.item('Entry File', entryFilePath)
+logger.item('Build Output', buildFolderPath)
+logger.item('Static Assets', staticFolderPath)
+logger.item('Favicon', faviconPath && path.resolve(faviconPath))
+logger.item('Title', pageTitle)
+logger.item('UI folder', uiFolderPath)
+logger.item('Pages folder', pagesFolderPath)
+logger.divider()
+
+logger.item(
+  'Dev Server Port',
+  isEnvDevelopment ? devServerPort : 'N/A (production build)',
+)
+logger.item('API Server', SERVER_URL)
+logger.item('WebSocket', WEBSOCKET_SERVER_URL)
+logger.item('Websocket link min timeout', WSLinkMinTimeout)
+logger.item('Websocket link timeout', WSLinkTimeout)
+logger.item('Yjs websocket', YJS_WEBSOCKET_SERVER_URL)
+logger.divider()
+
+logger.item('Sentry', SENTRY_DSN && 'enabled')
+
+if (Object.keys(customVariables).length > 0) {
+  logger.header(`Custom Variables Detected:`)
+
+  Object.entries(customVariables).map(([k, v]) => {
+    logger.item(k, v)
+  })
 }
 
-const logStatus = (label: string, message: unknown, newLine?: boolean) => {
-  console.log(`${cyan(label)}: ${message}${newLine ? '\n' : ''}`)
-}
-
-logHeader('coko client info')
-logStatus('Environment', NODE_ENV, true)
-logStatus('App context path is set to', appPath)
-isEnvProduction && logStatus('Build will be written to', buildFolderPath)
-logStatus('Static folder path found at', staticFolderPath)
-logStatus('App entry file will be', entryFilePath)
-logStatus('UI folder path will be', uiFolderPath)
-logStatus('Pages folder path will be', pagesFolderPath)
-logStatus('Favicon path will be', faviconPath)
-logStatus('Page title set to', pageTitle)
-logStatus('Language set to', language)
-isEnvDevelopment && logStatus('Dev server will run at port', devServerPort)
-logStatus('Server will be requested at', SERVER_URL)
-logStatus('Websocket server will be requested at', WEBSOCKET_SERVER_URL)
-logStatus('Websocket link min timeout will be', WSLinkMinTimeout)
-logStatus('Websocket link timeout will be', WSLinkTimeout)
-logStatus(
-  'Sentry initialized:',
-  SENTRY_DSN && SENTRY_ENVIRONMENT ? 'yes' : 'no',
-)
-logStatus(
-  'yjs websocket server url will be requested at',
-  YJS_WEBSOCKET_SERVER_URL,
-)
-
-logStatus(
-  'Custom environment variables detected',
-  Object.keys(customVariables).length > 0
-    ? Object.keys(customVariables).join(', ')
-    : 'none',
-  true,
-)
-
-logSeparator()
-console.log('')
+logger.newLine()
 // #endregion log-init
 
 // Build the define object for environment variables
