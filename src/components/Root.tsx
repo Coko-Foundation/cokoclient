@@ -156,6 +156,35 @@ const makeApolloClient = makeConfig => {
   return new ApolloClient(makeConfig ? makeConfig(config) : config)
 }
 
+export function makeTheme(providedTheme) {
+    const mapper = {
+    borderRadius: pxToNumConverter(providedTheme.borderRadius),
+    colorBgBase: providedTheme.colorBackground,
+    colorTextBase: providedTheme.colorText,
+    fontFamily: providedTheme.fontInterface,
+    fontSize: pxToNumConverter(providedTheme.fontSizeBase),
+    fontSizeHeading1: pxToNumConverter(providedTheme.fontSizeHeading1),
+    fontSizeHeading2: pxToNumConverter(providedTheme.fontSizeHeading2),
+    fontSizeHeading3: pxToNumConverter(providedTheme.fontSizeHeading3),
+    fontSizeHeading4: pxToNumConverter(providedTheme.fontSizeHeading4),
+    fontSizeHeading5: pxToNumConverter(providedTheme.fontSizeHeading5),
+    fontSizeHeading6: pxToNumConverter(providedTheme.fontSizeHeading6),
+    lineType: providedTheme.borderStyle,
+    lineWidth: pxToNumConverter(providedTheme.borderWidth),
+    motionUnit: providedTheme.transitionDuration,
+    sizeUnit: pxToNumConverter(providedTheme.gridUnit),
+  }
+
+  const filtered = pickBy(mapper, (v: any) => !!v)
+
+  return {
+    token: {
+      ...providedTheme,
+      ...filtered,
+    },
+  }
+}
+
 const Root = props => {
   const { makeApolloConfig, routes, theme } = props
   const [currentUser, setCurrentUser] = useState()
@@ -165,32 +194,7 @@ const Root = props => {
     [currentUser],
   )
 
-  const mapper = {
-    borderRadius: pxToNumConverter(theme.borderRadius),
-    colorBgBase: theme.colorBackground,
-    colorTextBase: theme.colorText,
-    fontFamily: theme.fontInterface,
-    fontSize: pxToNumConverter(theme.fontSizeBase),
-    fontSizeHeading1: pxToNumConverter(theme.fontSizeHeading1),
-    fontSizeHeading2: pxToNumConverter(theme.fontSizeHeading2),
-    fontSizeHeading3: pxToNumConverter(theme.fontSizeHeading3),
-    fontSizeHeading4: pxToNumConverter(theme.fontSizeHeading4),
-    fontSizeHeading5: pxToNumConverter(theme.fontSizeHeading5),
-    fontSizeHeading6: pxToNumConverter(theme.fontSizeHeading6),
-    lineType: theme.borderStyle,
-    lineWidth: pxToNumConverter(theme.borderWidth),
-    motionUnit: theme.transitionDuration,
-    sizeUnit: pxToNumConverter(theme.gridUnit),
-  }
-
-  const filtered = pickBy(mapper, v => !!v)
-
-  const mappedAntTheme = {
-    token: {
-      ...theme,
-      ...filtered,
-    },
-  }
+  const mappedAntTheme = makeTheme(theme)
 
   return (
     <ApolloProvider client={client}>

@@ -1,3 +1,4 @@
+import React from 'react'
 import propTypes from 'prop-types'
 import moment from 'moment'
 
@@ -10,27 +11,45 @@ const getDuration = timestamp => {
 const DateParser = props => {
   const { children, timestamp, dateFormat, humanizeThreshold } = props
 
-  const renderTimestamp = () => {
-    if (!timestamp) return ''
+  // const renderTimestamp = () => {
+  //   if (!timestamp) return ''
+  //   const duration = getDuration(timestamp)
+
+  //   if (duration.asDays() < humanizeThreshold) {
+  //     return `${duration.humanize()} ago`
+  //   }
+
+  //   return moment(timestamp).format(dateFormat)
+  // }
+
+  // const renderTimeAgo = () => {
+  //   if (!timestamp) return ''
+  //   const duration = getDuration(timestamp)
+  //   return duration.humanize()
+  // }
+
+  // const timestampValue = renderTimestamp()
+  // const timeAgoValue = renderTimeAgo()
+
+  let timestampValue, timeAgoValue
+
+  if (timestamp) {
     const duration = getDuration(timestamp)
 
     if (duration.asDays() < humanizeThreshold) {
-      return `${duration.humanize()} ago`
+      timestampValue = `${duration.humanize()} ago`
+    } else {
+      timestampValue = moment(timestamp).format(dateFormat)
     }
 
-    return moment(timestamp).format(dateFormat)
   }
 
-  const renderTimeAgo = () => {
-    if (!timestamp) return ''
-    const duration = getDuration(timestamp)
-    return duration.humanize()
-  }
-
-  const timestampValue = renderTimestamp()
-  const timeAgoValue = renderTimeAgo()
-
-  return children(timestampValue, timeAgoValue)
+  // return children(timestampValue, timeAgoValue)
+  return (
+    <span>
+      {timestampValue}
+    </span>
+  )
 }
 
 DateParser.propTypes = {

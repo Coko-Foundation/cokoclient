@@ -1,4 +1,4 @@
-import 'fontsource-advent-pro'
+import '@fontsource/advent-pro'
 
 const theme = {
   colorBackground: '#fefae0',

@@ -4,7 +4,7 @@ import { DateParser } from '../../src/ui'
 
 export const Base = () => (
   <DateParser dateFormat="MMMM DD, YYYY" timestamp="1990-01-02">
-    {timestamp => timestamp}
+
   </DateParser>
 )
 

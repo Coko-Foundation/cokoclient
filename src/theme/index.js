@@ -62,7 +62,7 @@ const cokoTheme = {
   lineHeightHeading6: '24px',
 
   /* Spacing */
-  gridUnit: '8px',
+  gridUnit: '4px',
 
   /* Border */
   borderRadius: '0',

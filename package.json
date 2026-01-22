@@ -29,7 +29,7 @@
     "prepare": "husky install",
     "prepack": "yarn run build",
     "release": "standard-version",
-    "storybook": "STORYBOOK_THEME_PATH='src/theme/index.js' coko-storybook"
+    "storybook": "storybook dev -p 5000 --no-open"
   },
   "config": {
     "commitizen": {
@@ -42,6 +42,8 @@
   },
   "dependencies": {
     "@ant-design/icons": "^5.1.4",
+    "@fontsource/advent-pro": "^5.2.7",
+    "@fontsource/source-sans-pro": "^5.2.5",
     "@sentry/react": "^10.27.0",
     "@vitejs/plugin-react-swc": "^4.2.2",
     "antd": "^5.6.1",
@@ -69,12 +71,12 @@
   "devDependencies": {
     "@apollo/client": "^3.3.13",
     "@coko/lint": "^2.1.0",
-    "@coko/storybook": "^2.0.0",
     "@faker-js/faker": "^8.0.2",
-    "fontsource-advent-pro": "^4.0.0",
+    "@storybook/react-vite": "^10.2.0",
     "inversify": "^7.11.0",
     "nodemon": "^2.0.7",
     "standard-version": "^9.2.0",
+    "storybook": "^10.2.0",
     "wax-prosemirror-core": "^0.9.146"
   },
   "peerDependencies": {

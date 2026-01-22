@@ -98,8 +98,9 @@ const StyledButton = styled(AntButton)`
         border-color: ${darken(color, 0.25)};
       }
     `
-  }}
-  padding: 0 ${grid(4)};
+  }};
+
+  padding: ${grid(2)} ${grid(4)};
 `
 
 /**
