@@ -5,7 +5,7 @@ import '@fontsource/source-sans-pro'
 
 
 import defaultTheme from '../src/theme'
-import { makeTheme } from '../src/components/Root'
+import { makeTheme, GlobalStyle } from '../src/components/Root'
 
 const theme = makeTheme({
   ...defaultTheme,
@@ -32,6 +32,7 @@ const preview: Preview = {
     Story => (
       <AntConfigProvider theme={theme}>
         <ThemeProvider theme={theme.token}>
+          <GlobalStyle />
           <Story />
         </ThemeProvider>
       </AntConfigProvider>

@@ -1,59 +1,43 @@
 import React from 'react'
 import propTypes from 'prop-types'
-import moment from 'moment'
+import styled from 'styled-components'
+import dayjs from 'dayjs'
+import duration from 'dayjs/plugin/duration'
+import relativeTime from 'dayjs/plugin/relativeTime'
+
+dayjs.extend(duration)
+dayjs.extend(relativeTime)
 
 const getDuration = timestamp => {
-  const today = moment()
-  const stamp = moment(timestamp)
-  return moment.duration(today.diff(stamp))
+  const today = dayjs()
+  const stamp = dayjs(timestamp)
+  return dayjs.duration(today.diff(stamp))
 }
 
+const Wrapper = styled.span``
+
 const DateParser = props => {
-  const { children, timestamp, dateFormat, humanizeThreshold } = props
+  const { timestamp, dateFormat, humanizeThreshold } = props
+  if (!timestamp) return null
 
-  // const renderTimestamp = () => {
-  //   if (!timestamp) return ''
-  //   const duration = getDuration(timestamp)
+  let timestampValue
+  const duration = getDuration(timestamp)
 
-  //   if (duration.asDays() < humanizeThreshold) {
-  //     return `${duration.humanize()} ago`
-  //   }
-
-  //   return moment(timestamp).format(dateFormat)
-  // }
-
-  // const renderTimeAgo = () => {
-  //   if (!timestamp) return ''
-  //   const duration = getDuration(timestamp)
-  //   return duration.humanize()
-  // }
-
-  // const timestampValue = renderTimestamp()
-  // const timeAgoValue = renderTimeAgo()
-
-  let timestampValue, timeAgoValue
-
-  if (timestamp) {
-    const duration = getDuration(timestamp)
-
-    if (duration.asDays() < humanizeThreshold) {
-      timestampValue = `${duration.humanize()} ago`
-    } else {
-      timestampValue = moment(timestamp).format(dateFormat)
-    }
-
+  if (duration.asDays() < humanizeThreshold) {
+    timestampValue = `${duration.humanize()} ago`
+  } else {
+    timestampValue = dayjs(timestamp).format(dateFormat)
   }
 
-  // return children(timestampValue, timeAgoValue)
   return (
-    <span>
+    <Wrapper>
       {timestampValue}
-    </span>
+    </Wrapper>
   )
 }
 
 DateParser.propTypes = {
-  /** The date string. Can be any date parsable by momentjs. */
+  /** The date string. Can be any date parsable by dayjs. */
   timestamp: propTypes.oneOfType([propTypes.string, propTypes.number, Date])
     .isRequired,
   /** Format of the rendered date. */

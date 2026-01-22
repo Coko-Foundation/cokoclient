@@ -46,7 +46,7 @@ const pxToNumConverter = value => {
   return value
 }
 
-const GlobalStyle = createGlobalStyle`
+export const GlobalStyle = createGlobalStyle`
   body {
     background-color: ${props => props.theme.colorBackground};
     color: ${props => props.theme.colorText};

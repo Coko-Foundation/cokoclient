@@ -1,14 +1,21 @@
 import React from 'react'
 
 import { DateParser } from '../../src/ui'
+import dayjs from 'dayjs'
+
+const timeStamp = dayjs()
 
 export const Base = () => (
-  <DateParser dateFormat="MMMM DD, YYYY" timestamp="1990-01-02">
-
-  </DateParser>
+  <DateParser timestamp={timeStamp} />
 )
 
-Base.args = {}
+export const Formatted = () => (
+  <DateParser dateFormat="MMMM DD, YYYY" timestamp={timeStamp} />
+)
+
+export const Humanized = () => (
+  <DateParser timestamp={timeStamp} humanizeThreshold={1} />
+)
 
 export default {
   component: DateParser,
