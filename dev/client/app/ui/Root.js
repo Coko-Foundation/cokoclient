@@ -9,7 +9,7 @@ import ItemList from './ItemList'
 import { Button } from '../../../../src/ui/common'
 
 // import Inversify from './Inversify'
-// import WaxTest from './WaxTest
+// import WaxTest from './WaxTest'
 
 const Buttons = styled.div`
   display: flex;

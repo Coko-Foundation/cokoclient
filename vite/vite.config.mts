@@ -1,10 +1,13 @@
 import path from 'node:path'
 import fs from 'node:fs'
-import { fileURLToPath } from 'url'
+import { fileURLToPath } from 'node:url'
 
 import { defineConfig, type UserConfig, type Plugin } from 'vite'
 import react from '@vitejs/plugin-react-swc'
 import * as esbuild from 'esbuild'
+
+const __filename = fileURLToPath(import.meta.url)
+const __dirname = path.dirname(__filename)
 
 // #region setup
 const {
@@ -112,7 +115,7 @@ const WSLinkMinTimeout = CLIENT_WS_MIN_TIMEOUT || DEFAULT_CLIENT_WS_MIN_TIMEOUT
 const WSLinkTimeout = CLIENT_WS_TIMEOUT || DEFAULT_CLIENT_WS_TIMEOUT
 
 // Template path in the vite folder
-const templatePath = path.resolve(import.meta.dirname, 'index.html')
+const templatePath = path.resolve(__dirname, 'index.html')
 // #endregion setup
 
 // #region log-init
@@ -174,26 +177,6 @@ const defineEnv = Object.keys(variablesInBuild).reduce((acc, k) => {
   acc[`process.env.${k}`] = JSON.stringify(value)
   return acc
 }, {} as Record<string, any>)
-
-// Helper function to recursively copy directory
-function copyDirSync(src: string, dest: string) {
-  if (!fs.existsSync(dest)) {
-    fs.mkdirSync(dest, { recursive: true })
-  }
-
-  const entries = fs.readdirSync(src, { withFileTypes: true })
-
-  for (const entry of entries) {
-    const srcPath = path.join(src, entry.name)
-    const destPath = path.join(dest, entry.name)
-
-    if (entry.isDirectory()) {
-      copyDirSync(srcPath, destPath)
-    } else {
-      fs.copyFileSync(srcPath, destPath)
-    }
-  }
-}
 
 // Process HTML template with substitutions
 function processTemplate(html: string): string {
@@ -308,7 +291,7 @@ const viteConfig: UserConfig = defineConfig({
   mode,
   publicDir: staticFolderPath,
 
-  // Environment variable replacement
+  // Environment variables
   define: defineEnv,
 
   resolve: {
@@ -323,61 +306,18 @@ const viteConfig: UserConfig = defineConfig({
   plugins: [
     jsTransformPlugin(),
     cokoHtmlPlugin(),
-
-    react({
-      tsDecorators: true,
-    }),
-
-    {
-      name: 'copy-static-assets',
-      writeBundle() {
-        if (fs.existsSync(staticFolderPath)) {
-          copyDirSync(staticFolderPath, buildFolderPath)
-        }
-      },
-    },
+    react({ tsDecorators: true }),
   ],
 
-  // Build configuration
   build: {
     outDir: buildFolderPath,
     emptyOutDir: true,
     sourcemap: isEnvDevelopment ? 'inline' : false,
-
-    rollupOptions: {
-      input: path.resolve(appPath, 'index.html'),
-      output: {
-        entryFileNames: isEnvProduction
-          ? 'js/[name].[hash:8].js'
-          : 'js/bundle.js',
-        chunkFileNames: isEnvProduction
-          ? 'js/[name].[hash:8].chunk.js'
-          : 'js/[name].chunk.js',
-        assetFileNames: assetInfo => {
-          const extType = assetInfo.name?.split('.').pop() || ''
-
-          if (/png|jpe?g|svg|gif|tiff|bmp|ico/i.test(extType)) {
-            return 'assets/images/[name].[hash:8][extname]'
-          }
-
-          if (/woff|woff2|eot|ttf|otf/i.test(extType)) {
-            return 'assets/fonts/[name].[hash:8][extname]'
-          }
-
-          if (/css/i.test(extType)) {
-            return 'static/css/[name].[hash:8][extname]'
-          }
-
-          return 'assets/[name].[hash:8][extname]'
-        },
-      },
-    },
-
     minify: isEnvProduction ? 'esbuild' : false,
     cssCodeSplit: true,
   },
 
-  // Dev server configuration
+  // Dev server
   server: {
     host: '0.0.0.0',
     port: devServerPort,
@@ -385,36 +325,9 @@ const viteConfig: UserConfig = defineConfig({
     open: false,
   },
 
-  // Preview server
   preview: {
     host: '0.0.0.0',
     port: devServerPort,
-  },
-
-  // Optimize dependencies
-  optimizeDeps: {
-    include: ['react', 'react-dom', 'styled-components'],
-    esbuildOptions: {
-      loader: {
-        '.js': 'jsx',
-      },
-    },
-  },
-
-  // CSS configuration
-  css: {
-    preprocessorOptions: {
-      less: {
-        javascriptEnabled: true,
-      },
-    },
-    devSourcemap: isEnvDevelopment,
-  },
-
-  // ESBuild configuration
-  esbuild: {
-    loader: 'tsx',
-    include: /\.[jt]sx?$/,
   },
 })
 
