@@ -1,6 +1,7 @@
 import '@fontsource/advent-pro'
+import { DefaultTheme } from 'styled-components'
 
-const theme = {
+const theme: DefaultTheme = {
   colorBackground: '#fefae0',
   colorBorder: 'lightslategray',
   colorPrimary: '#606c38',

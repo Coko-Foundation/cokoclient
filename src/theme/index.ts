@@ -1,3 +1,5 @@
+import { DefaultTheme } from 'styled-components'
+
 import {
   Action,
   ActionGroup,
@@ -14,7 +16,7 @@ import {
 const defaultFont =
   '-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji"'
 
-const cokoTheme = {
+const cokoTheme: DefaultTheme = {
   /* Colors */
   colorBackground: 'white',
   colorBackgroundHue: '#F1F1F1', // deprecate

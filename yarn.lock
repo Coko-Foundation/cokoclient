@@ -452,7 +452,7 @@ __metadata:
   dependencies:
     "@ant-design/icons": "npm:^5.1.4"
     "@apollo/client": "npm:^3.3.13"
-    "@coko/lint": "npm:^3.0.0-alpha.20"
+    "@coko/lint": "npm:^3.0.0-alpha.21"
     "@faker-js/faker": "npm:^8.0.2"
     "@fontsource/advent-pro": "npm:^5.2.7"
     "@fontsource/source-sans-pro": "npm:^5.2.5"
@@ -499,9 +499,9 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@coko/lint@npm:^3.0.0-alpha.20":
-  version: 3.0.0-alpha.20
-  resolution: "@coko/lint@npm:3.0.0-alpha.20"
+"@coko/lint@npm:^3.0.0-alpha.21":
+  version: 3.0.0-alpha.21
+  resolution: "@coko/lint@npm:3.0.0-alpha.21"
   dependencies:
     "@babel/core": "npm:^7.28.6"
     "@babel/eslint-parser": "npm:^7.28.6"
@@ -544,7 +544,7 @@ __metadata:
     typescript-eslint: "npm:^8.53.0"
   bin:
     coko-lint: ./src/cli.mjs
-  checksum: 10c0/f5173c3c3c591de4f1528610d8704802d98e0d52c28db1aacbe0bc8b5410a7f45403f0d9b1593ab1b53ffb06da9a1bfc8ddb48fa597b5b0c6dcbf07895542d8a
+  checksum: 10c0/4c155acedb5f457a7cc8fe671c89e9d6cfe309c606ae9bdc65cd21f487e8bc5f895bfd6ec11057a2c713848b3157a34cb91b3e8009d279c452a51c15f0f5986b
   languageName: node
   linkType: hard
 

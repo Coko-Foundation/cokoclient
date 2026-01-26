@@ -9,7 +9,7 @@ import { range } from 'lodash'
  * with the grey body background
  */
 export const Background = styled.div`
-  background: ${props => props.theme.colorBody};
+  background: ${props => props.theme.colorBackground};
   padding: 40px;
 `
 

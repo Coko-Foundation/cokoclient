@@ -4,7 +4,7 @@ import React, { useState } from 'react'
 import { faker } from '@faker-js/faker'
 
 import { Table } from '../../../src/ui'
-import { createData, randomPick } from '../../../src/ui/_helpers'
+import { createData, randomPick } from '../_helpers'
 
 const makeData = n =>
   createData(n, i => ({

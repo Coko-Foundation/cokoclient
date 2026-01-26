@@ -4,7 +4,7 @@ import React, { useState } from 'react'
 // import { faker } from '@faker-js/faker'
 
 import { Login } from '../../../src/ui'
-import { Background } from '../../../src/ui/_helpers/_helpers'
+import { Background } from '../_helpers'
 
 export const Base = args => (
   <Background>
@@ -37,4 +37,3 @@ export const FailingLogin = () => {
     </Background>
   )
 }
-

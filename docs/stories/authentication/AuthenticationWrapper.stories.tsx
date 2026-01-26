@@ -2,7 +2,7 @@ import React from 'react'
 import { faker } from '@faker-js/faker'
 
 import { AuthenticationWrapper, Paragraph } from '../../../src/ui'
-import { Background } from '../../../src/ui/_helpers/_helpers'
+import { Background } from '../_helpers'
 
 export const Base = () => (
   <Background>
@@ -11,4 +11,3 @@ export const Base = () => (
     </AuthenticationWrapper>
   </Background>
 )
-

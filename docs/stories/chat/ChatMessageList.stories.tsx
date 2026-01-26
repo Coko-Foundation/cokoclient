@@ -2,7 +2,7 @@ import React from 'react'
 import { faker } from '@faker-js/faker'
 
 import { ChatMessageList } from '../../../src/ui'
-import { createData, randomPick } from '../../../src/ui/_helpers/_helpers'
+import { createData, randomPick } from '../_helpers'
 
 const createMessages = n =>
   createData(n, i => ({
@@ -17,4 +17,3 @@ const messages = createMessages(10)
 export const Base = () => <ChatMessageList messages={messages} />
 
 export const Empty = () => <ChatMessageList />
-

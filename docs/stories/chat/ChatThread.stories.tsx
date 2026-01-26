@@ -2,7 +2,7 @@ import React from 'react'
 import { faker } from '@faker-js/faker'
 
 import { ChatThread } from '../../../src/ui'
-import { createData, noop, randomPick } from '../../../src/ui/_helpers/_helpers'
+import { createData, noop, randomPick } from '../_helpers'
 
 const createMessages = n =>
   createData(n, i => ({
@@ -16,4 +16,3 @@ const messages = createMessages(5)
 
 export const Base = () => <ChatThread messages={messages} onSend={noop} />
 export const Empty = () => <ChatThread onSend={noop} />
-
