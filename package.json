@@ -37,8 +37,7 @@
     }
   },
   "resolutions": {
-    "postcss": "8",
-    "prettier": "2.8.8"
+    "postcss": "8"
   },
   "dependencies": {
     "@ant-design/icons": "^5.1.4",
@@ -62,16 +61,17 @@
     "react-is": "^17.0.2",
     "react-refresh": "^0.10.0",
     "react-router-dom": "^5.2.0",
-    "styled-components": "^5.2.3",
-    "styled-normalize": "^8.0.7",
+    "styled-components": "^6.3.8",
+    "styled-normalize": "^8.1.1",
     "typescript": "^5.8.3",
     "uuid": "^8.3.2",
     "vite": "^7.3.1"
   },
   "devDependencies": {
     "@apollo/client": "^3.3.13",
-    "@coko/lint": "^2.1.0",
+    "@coko/lint": "^3.0.0-alpha.19",
     "@faker-js/faker": "^8.0.2",
+    "@storybook/addon-docs": "^10.2.0",
     "@storybook/react-vite": "^10.2.0",
     "inversify": "^7.11.0",
     "nodemon": "^2.0.7",

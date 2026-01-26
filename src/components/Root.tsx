@@ -33,6 +33,7 @@ if (process.env.NODE_ENV !== 'production') {
 }
 
 const replaceHttpWithWs = url => {
+  if (!url) return null
   let wsUrl = url.replace(/^http:/, 'ws:')
   wsUrl = wsUrl.replace(/^https:/, 'wss:')
   return wsUrl

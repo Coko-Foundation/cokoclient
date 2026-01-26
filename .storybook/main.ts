@@ -3,15 +3,19 @@ import { mergeConfig } from 'vite'
 
 const config: StorybookConfig = {
   stories: ['../stories/**/*.stories.@(js|jsx|mjs|ts|tsx)'],
-  addons: [],
+  // stories: ['../storytest/**/*.stories.@(js|jsx|mjs|ts|tsx)'],
+  addons: ['@storybook/addon-docs'],
   framework: '@storybook/react-vite',
-  typescript: {
-    // reactDocgen: 'react-docgen-typescript',
-    reactDocgen: false,
-  },
+  // docs: {
+  //   defaultName: 'Documentation',
+  // },
+  // typescript: {
+  //   reactDocgen: false,
+  // },
   async viteFinal(config) {
     const { default: viteConfig } = await import('../vite/vite.config.mts')
     return mergeConfig(config, viteConfig)
   },
 }
+
 export default config

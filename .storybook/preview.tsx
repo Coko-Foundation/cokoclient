@@ -1,4 +1,6 @@
-import { Preview } from '@storybook/react'
+import { definePreview } from '@storybook/react-vite'
+import addonDocs from '@storybook/addon-docs'
+
 import { ThemeProvider } from 'styled-components'
 import { ConfigProvider as AntConfigProvider } from 'antd'
 import '@fontsource/source-sans-pro'
@@ -19,7 +21,13 @@ const theme = makeTheme({
 })
 
 
-const preview: Preview = {
+export default definePreview({
+  // addons: [
+  //   addonDocs()
+  // ],
+
+  tags: ['autodocs'],
+
   parameters: {
     controls: {
       matchers: {
@@ -28,6 +36,7 @@ const preview: Preview = {
       },
     },
   },
+
   decorators: [
     Story => (
       <AntConfigProvider theme={theme}>
@@ -38,6 +47,4 @@ const preview: Preview = {
       </AntConfigProvider>
     ),
   ],
-}
-
-export default preview
+})

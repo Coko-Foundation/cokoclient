@@ -42,7 +42,10 @@ DateParser.propTypes = {
     .isRequired,
   /** Format of the rendered date. */
   dateFormat: propTypes.string,
-  /** Humanize duration threshold */
+  /** Humanize duration threshold. ie. If the time between now and the date is
+   * less than this value in days, the date is converted to a humna-readable
+   * form (eg. "one hour ago").
+   */
   humanizeThreshold: propTypes.number,
 }
 

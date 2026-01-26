@@ -38,6 +38,8 @@ const StyledButton = styled(AntButton)`
     if (!Object.keys(colors).includes(status)) {
       if (type === 'primary' && !ghost) {
         return css`
+          background-color: ${th('colorPrimary')};
+
           &:hover,
           &:focus,
           &:active {
