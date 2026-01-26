@@ -30,7 +30,12 @@ const StyledMenuOutlined = styled(MenuOutlined)`
 
 const TableBody = ({ children, className, ...props }) => {
   return (
-    <Droppable droppableId="droppable-table">
+    <Droppable
+      droppableId="droppable-table"
+      ignoreContainerClipping={false}
+      isCombineEnabled={false}
+      isDropDisabled={false}
+    >
       {(provided, snapshot) => (
         <tbody
           className={className}
@@ -87,17 +92,17 @@ TableRow.propTypes = {
 
 const ReviewerTable = props => {
   const {
-    additionalColumns,
+    additionalColumns = [],
     canInviteMore,
-    canDismissReviewer,
+    canDismissReviewer = false,
     className,
-    manualSorting,
+    manualSorting = false,
     onChange,
     onInvite,
     onRemoveRow,
     onRevokeInvitation,
-    reviewers,
-    showEmails,
+    reviewers = [],
+    showEmails = false,
   } = props
 
   const [tableSorter, setTableSorter] = useState({})
@@ -281,14 +286,6 @@ ReviewerTable.propTypes = {
   ),
   /** Shorthand flag to indicate if the emails should be shown */
   showEmails: PropTypes.bool,
-}
-
-ReviewerTable.defaultProps = {
-  additionalColumns: [],
-  canDismissReviewer: false,
-  manualSorting: false,
-  reviewers: [],
-  showEmails: false,
 }
 
 export default ReviewerTable

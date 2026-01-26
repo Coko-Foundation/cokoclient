@@ -9,8 +9,16 @@ const StyledAutoComplete = styled(AntAutoComplete)`
 `
 
 const AutoComplete = props => {
-  const { className, children, debounce, debounceTimeout, onSearch, ...rest } =
-    props
+  const {
+    className,
+    children,
+    debounce = false,
+    debounceTimeout = 500,
+    onSearch,
+    ...rest
+  } = props
+
+  console.log('hey')
 
   const handleSearch = searchValue => onSearch(searchValue)
 
@@ -21,23 +29,13 @@ const AutoComplete = props => {
   // Allow changing on input component, as in the docs
   if (children)
     return (
-      <StyledAutoComplete
-        className={className}
-        onSearch={searchFunc}
-        // eslint-disable-next-line react/jsx-props-no-spreading
-        {...rest}
-      >
+      <StyledAutoComplete className={className} onSearch={searchFunc} {...rest}>
         {children}
       </StyledAutoComplete>
     )
 
   return (
-    <StyledAutoComplete
-      className={className}
-      onSearch={searchFunc}
-      // eslint-disable-next-line react/jsx-props-no-spreading
-      {...rest}
-    />
+    <StyledAutoComplete className={className} onSearch={searchFunc} {...rest} />
   )
 }
 
@@ -48,11 +46,6 @@ AutoComplete.propTypes = {
   debounceTimeout: PropTypes.number,
   /** Function to run while typing */
   onSearch: PropTypes.func.isRequired,
-}
-
-AutoComplete.defaultProps = {
-  debounce: false,
-  debounceTimeout: 500,
 }
 
 export default AutoComplete

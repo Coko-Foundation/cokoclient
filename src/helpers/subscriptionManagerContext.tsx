@@ -1,7 +1,7 @@
 import React, { createContext, useContext } from 'react'
 import SubscriptionManager from './SubscriptionManager'
 
-const SubscriptionManagerContext = createContext()
+const SubscriptionManagerContext = createContext(null)
 const managerInstance = new SubscriptionManager()
 
 export const SubscriptionManagerProvider = ({ children }) => {

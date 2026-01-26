@@ -58,7 +58,7 @@ const StyledDropdown = styled.div`
   .ant-select-item-option-content {
     /* outline: 2px solid ${th('colorPrimary')}; */
     ${props =>
-      props.wrapOptionText &&
+      props.$wrapOptionText &&
       css`
         white-space: normal;
       `}
@@ -151,8 +151,8 @@ const Select = props => {
 
   const customDropdownRender = menu => (
     <StyledDropdown
+      $wrapOptionText={wrapOptionText}
       data-testid="select-dropdown"
-      wrapOptionText={wrapOptionText}
     >
       {menu}
     </StyledDropdown>
@@ -161,13 +161,13 @@ const Select = props => {
   return (
     <SelectWrapper className={className} ref={selectRef}>
       <StyledSelect
-        dropdownRender={customDropdownRender}
         filterOption={async && !filterOption ? false : filterOption}
         id={id}
         notFoundContent={!notFoundContent && async ? null : notFoundContent}
-        onDropdownVisibleChange={o => setOpen(o)}
+        onOpenChange={o => setOpen(o)}
         onSearch={onSearch && searchFunc}
         open={open}
+        popupRender={customDropdownRender}
         showSearch={showSearch || !!onSearch}
         virtual={virtual}
         {...rest}

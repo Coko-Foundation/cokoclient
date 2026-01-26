@@ -123,8 +123,6 @@ function structureStories(pathArray) {
 
 const structured = structureStories(Object.keys(modules))
 
-console.log(structured)
-
 const Root = () => {
   const firstComponent = structured[0].entries[0]
   const [currentPath, setCurrentPath] = React.useState(firstComponent)

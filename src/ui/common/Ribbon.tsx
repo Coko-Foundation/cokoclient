@@ -6,15 +6,16 @@ import { grid, override } from '../../toolkit'
 
 const Wrapper = styled.div`
   background: ${props => {
-    const { status } = props
-    if (status === 'success') return props.theme.colorSuccess
-    if (status === 'error' || status === 'danger') return props.theme.colorError
+    const { $status } = props
+    if ($status === 'success') return props.theme.colorSuccess
+    if ($status === 'error' || $status === 'danger')
+      return props.theme.colorError
     return props.theme.colorSecondary
   }};
   border-radius: ${props => props.theme.borderRadius};
   color: ${props => {
-    const { status } = props
-    if (status === 'success' || status === 'error' || status === 'danger')
+    const { $status } = props
+    if ($status === 'success' || $status === 'error' || $status === 'danger')
       return props.theme.colorTextReverse
     return props.theme.colorText
   }};
@@ -23,7 +24,7 @@ const Wrapper = styled.div`
 
   /* stylelint-disable-next-line order/properties-alphabetical-order */
   ${props =>
-    props.hide &&
+    props.$hide &&
     css`
       visibility: hidden;
     `}
@@ -35,7 +36,7 @@ const Ribbon = props => {
   const { className, children, hide, status, ...rest } = props
 
   return (
-    <Wrapper className={className} hide={hide} status={status} {...rest}>
+    <Wrapper $hide={hide} $status={status} className={className} {...rest}>
       {children}
     </Wrapper>
   )

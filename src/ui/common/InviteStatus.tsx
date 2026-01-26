@@ -12,25 +12,25 @@ const statuses = {
 
 const StyledStatus = styled.span`
   background: ${props => {
-    const { reverseColors, status } = props
-    if (!reverseColors) return null
+    const { $reverseColors, $status } = props
+    if (!$reverseColors) return null
 
-    if (statuses.success.includes(status)) return th('colorSuccess')
-    if (statuses.error.includes(status)) return th('colorError')
-    if (statuses.warning.includes(status)) return th('colorWarning')
-    if (statuses.primary.includes(status)) return th('colorPrimary')
+    if (statuses.success.includes($status)) return th('colorSuccess')
+    if (statuses.error.includes($status)) return th('colorError')
+    if (statuses.warning.includes($status)) return th('colorWarning')
+    if (statuses.primary.includes($status)) return th('colorPrimary')
 
     return th('colorSecondary')
   }};
   border-radius: 3px;
   color: ${props => {
-    const { reverseColors, status } = props
-    if (reverseColors) return th('colorTextReverse')
+    const { $reverseColors, $status } = props
+    if ($reverseColors) return th('colorTextReverse')
 
-    if (statuses.success.includes(status)) return th('colorSuccess')
-    if (statuses.error.includes(status)) return th('colorError')
-    if (statuses.warning.includes(status)) return th('colorWarning')
-    if (statuses.primary.includes(status)) return th('colorPrimary')
+    if (statuses.success.includes($status)) return th('colorSuccess')
+    if (statuses.error.includes($status)) return th('colorError')
+    if (statuses.warning.includes($status)) return th('colorWarning')
+    if (statuses.primary.includes($status)) return th('colorPrimary')
 
     return th('colorText')
   }};
@@ -41,7 +41,7 @@ const StyledStatus = styled.span`
   line-height: ${th('lineHeightBaseSmall')};
   max-width: ${grid(24)};
   min-width: ${grid(12)};
-  padding: ${props => props.reverseColors && '4px 8px'};
+  padding: ${props => props.$reverseColors && '4px 8px'};
   text-transform: uppercase;
   white-space: normal;
 `
@@ -52,9 +52,9 @@ const InviteStatus = props => {
 
   return (
     <StyledStatus
+      $reverseColors={reverseColors}
+      $status={status}
       className={className}
-      reverseColors={reverseColors}
-      status={status}
     >
       {children}
     </StyledStatus>

@@ -117,6 +117,7 @@ export const AdditionalColumns = () => {
         labelPosition="left"
         onChange={setManualSorting}
       />
+
       <ReviewerTable
         additionalColumns={additionalColumns}
         canInviteMore={false}
@@ -130,4 +131,3 @@ export const AdditionalColumns = () => {
     </div>
   )
 }
-

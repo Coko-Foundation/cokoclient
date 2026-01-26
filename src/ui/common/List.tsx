@@ -166,7 +166,7 @@ SelectableItem.defaultProps = {
 // memoized SelectableItem would use old value of selectedItems when handleSelect and handleDeselect are passed as they are
 // when you wrap them with the below function, they always refer to the List's updated selectedItems
 function useFunction(callback) {
-  const ref = React.useRef()
+  const ref = React.useRef(null)
   ref.current = callback
 
   function callbackFunction(...args) {
@@ -186,9 +186,11 @@ function useFunction(callback) {
 //   return 'no data'
 // }
 
+const noop = () => {}
+
 const List = props => {
   const {
-    footerContent,
+    footerContent = null,
     className,
     // disable prop types for props that exist on the ant component anyway
     /* eslint-disable react/prop-types */
@@ -197,21 +199,21 @@ const List = props => {
     pagination,
     renderItem,
     /* eslint-enable react/prop-types */
-    itemSelection,
-    loading,
-    onSearch,
-    onSortOptionChange,
-    searchLoading,
-    searchPlaceholder,
-    showPagination,
-    showSearch,
-    showSort,
-    showTotalCount,
-    sortOptions,
-    totalCount,
-    draggable,
-    onDragEnd,
-    selectedItems: controlledSelectedItems,
+    itemSelection = null,
+    loading = false,
+    onSearch = null,
+    onSortOptionChange = null,
+    searchLoading = false,
+    searchPlaceholder = null,
+    showPagination = true,
+    showSearch = false,
+    showSort = false,
+    showTotalCount = false,
+    sortOptions = [],
+    totalCount = null,
+    draggable = false,
+    onDragEnd = noop,
+    selectedItems: controlledSelectedItems = [],
     ...rest
   } = props
 
@@ -512,25 +514,6 @@ List.propTypes = {
   onDragEnd: PropTypes.func,
   draggable: PropTypes.bool,
   selectedItems: PropTypes.arrayOf(PropTypes.string),
-}
-
-List.defaultProps = {
-  footerContent: null,
-  itemSelection: null,
-  loading: false,
-  onSearch: null,
-  onSortOptionChange: null,
-  searchLoading: false,
-  showPagination: true,
-  searchPlaceholder: null,
-  showSearch: false,
-  showSort: false,
-  showTotalCount: false,
-  sortOptions: [],
-  totalCount: null,
-  onDragEnd: () => {},
-  draggable: false,
-  selectedItems: [],
 }
 
 List.Item = AntList.Item

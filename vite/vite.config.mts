@@ -161,13 +161,16 @@ logger.newLine()
 // #endregion log-init
 
 // Build the define object for environment variables
-const defineEnv = Object.keys(variablesInBuild).reduce((acc, k) => {
-  // fall back to null. undefined is not json serializable
-  const defaultValue = variablesInBuild[k] || null
-  const value = process.env[k] || defaultValue
-  acc[`process.env.${k}`] = JSON.stringify(value)
-  return acc
-}, {} as Record<string, any>)
+const defineEnv = Object.keys(variablesInBuild).reduce(
+  (acc, k) => {
+    // fall back to null. undefined is not json serializable
+    const defaultValue = variablesInBuild[k] || null
+    const value = process.env[k] || defaultValue
+    acc[`process.env.${k}`] = JSON.stringify(value)
+    return acc
+  },
+  {} as Record<string, any>,
+)
 
 // Process HTML template with substitutions
 function processTemplate(html: string): string {

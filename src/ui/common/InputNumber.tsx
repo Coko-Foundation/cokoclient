@@ -6,13 +6,13 @@ import { InputNumber as AntInputNumber } from 'antd'
 import { grid } from '../../toolkit'
 
 const Wrapper = styled.div`
-  cursor: ${props => (props.isDisabled ? 'not-allowed' : 'default')};
+  cursor: ${props => (props.$isDisabled ? 'not-allowed' : 'default')};
   display: inline;
-  opacity: ${props => (props.isDisabled ? '0.5' : '1')};
+  opacity: ${props => (props.$isDisabled ? '0.5' : '1')};
 
   label,
   input {
-    cursor: ${props => (props.isDisabled ? 'not-allowed' : 'default')};
+    cursor: ${props => (props.$isDisabled ? 'not-allowed' : 'default')};
   }
 `
 
@@ -28,7 +28,7 @@ const InputNumber = props => {
   const { className, disabled, label, name, ...rest } = props
 
   return (
-    <Wrapper className={className} isDisabled={disabled}>
+    <Wrapper $isDisabled={disabled} className={className}>
       <label htmlFor={name}>
         <Label>{label}</Label>
         <Input disabled={disabled} name={name} {...rest} />
