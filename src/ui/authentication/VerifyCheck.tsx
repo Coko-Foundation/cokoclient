@@ -16,7 +16,7 @@ const Wrapper = styled.div``
 const ExtraWrapper = styled.div``
 
 const VerifyCheck = props => {
-  const { className, resend, resending, resent } = props
+  const { className, resend, resending = false, resent = false } = props
 
   const initial = !(resending || resent)
 
@@ -67,11 +67,6 @@ VerifyCheck.propTypes = {
   resend: PropTypes.func.isRequired,
   resending: PropTypes.bool,
   resent: PropTypes.bool,
-}
-
-VerifyCheck.defaultProps = {
-  resending: false,
-  resent: false,
 }
 
 export default VerifyCheck

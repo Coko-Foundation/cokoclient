@@ -10,12 +10,12 @@ import { Form, Input, Paragraph, Result, Spin, Page } from '../common'
 const ResetPassword = props => {
   const {
     className,
-    hasError,
-    hasSuccess,
+    hasError = false,
+    hasSuccess = false,
     onSubmit,
-    verifying,
+    verifying = false,
     redirectToLogin,
-    redirectToLoginDelay,
+    redirectToLoginDelay = 3000,
   } = props
 
   const success = !verifying && hasSuccess
@@ -108,13 +108,6 @@ ResetPassword.propTypes = {
   hasSuccess: PropTypes.bool,
   verifying: PropTypes.bool,
   redirectToLoginDelay: PropTypes.number,
-}
-
-ResetPassword.defaultProps = {
-  hasError: false,
-  hasSuccess: false,
-  verifying: false,
-  redirectToLoginDelay: 3000,
 }
 
 export default ResetPassword

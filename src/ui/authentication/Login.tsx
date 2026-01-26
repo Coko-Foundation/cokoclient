@@ -8,7 +8,13 @@ import AuthenticationHeader from './AuthenticationHeader'
 import AuthenticationWrapper from './AuthenticationWrapper'
 
 const Login = props => {
-  const { className, errorMessage, hasError, loading, onSubmit } = props
+  const {
+    className,
+    errorMessage = null,
+    hasError = false,
+    loading = false,
+    onSubmit,
+  } = props
 
   return (
     <Page maxWidth={600}>
@@ -69,12 +75,6 @@ Login.propTypes = {
   hasError: PropTypes.bool,
   loading: PropTypes.bool,
   onSubmit: PropTypes.func.isRequired,
-}
-
-Login.defaultProps = {
-  errorMessage: null,
-  hasError: false,
-  loading: false,
 }
 
 export default Login

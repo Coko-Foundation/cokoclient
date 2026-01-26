@@ -1,4 +1,3 @@
-/* eslint-disable react/jsx-props-no-spreading */
 import React from 'react'
 import PropTypes from 'prop-types'
 import styled from 'styled-components'
@@ -19,15 +18,15 @@ const ProfileForm = props => {
   const {
     children,
     className,
-    message,
-    form,
-    loading,
+    message = '',
+    form = null,
+    loading = false,
     onSubmit,
-    showSecondaryButton,
-    secondaryButtonAction,
-    secondaryButtonLabel,
-    submitButtonLabel,
-    submissionStatus,
+    showSecondaryButton = false,
+    secondaryButtonAction = () => {},
+    secondaryButtonLabel = 'Cancel',
+    submitButtonLabel = 'Save',
+    submissionStatus = null,
     ...rest
   } = props
 
@@ -83,17 +82,6 @@ ProfileForm.propTypes = {
   secondaryButtonLabel: PropTypes.string,
   submitButtonLabel: PropTypes.string,
   submissionStatus: PropTypes.oneOf(['success', 'error', 'danger']),
-}
-
-ProfileForm.defaultProps = {
-  form: null,
-  loading: false,
-  message: '',
-  showSecondaryButton: false,
-  secondaryButtonAction: () => {},
-  secondaryButtonLabel: 'Cancel',
-  submitButtonLabel: 'Save',
-  submissionStatus: null,
 }
 
 export default ProfileForm

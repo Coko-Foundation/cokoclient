@@ -9,15 +9,15 @@ const Wrapper = styled.div``
 const VerifyEmail = props => {
   const {
     className,
-    verifying,
-    successfullyVerified,
-    alreadyVerified,
-    expired,
+    verifying = false,
+    successfullyVerified = false,
+    alreadyVerified = false,
+    expired = false,
     resend,
-    resending,
-    resent,
+    resending = false,
+    resent = false,
     redirectToLogin,
-    redirectDelay,
+    redirectDelay = 3000,
   } = props
 
   const redirect = () =>
@@ -124,16 +124,6 @@ VerifyEmail.propTypes = {
   resent: PropTypes.bool,
   redirectToLogin: PropTypes.func.isRequired,
   redirectDelay: PropTypes.number,
-}
-
-VerifyEmail.defaultProps = {
-  verifying: false,
-  successfullyVerified: false,
-  alreadyVerified: false,
-  expired: false,
-  resending: false,
-  resent: false,
-  redirectDelay: 3000,
 }
 
 export default VerifyEmail

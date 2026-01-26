@@ -10,10 +10,10 @@ const Wrapper = styled.div``
 const ProviderConnection = props => {
   const {
     className,
-    closeOnSuccess,
-    connecting,
-    redirectUrlLabel,
-    successfullyConnected,
+    closeOnSuccess = false,
+    connecting = false,
+    redirectUrlLabel = null,
+    successfullyConnected = false,
   } = props
 
   let resultProps
@@ -60,13 +60,6 @@ ProviderConnection.propTypes = {
   connecting: PropTypes.bool,
   redirectUrlLabel: PropTypes.string,
   successfullyConnected: PropTypes.bool,
-}
-
-ProviderConnection.defaultProps = {
-  closeOnSuccess: false,
-  connecting: false,
-  redirectUrlLabel: null,
-  successfullyConnected: false,
 }
 
 export default ProviderConnection

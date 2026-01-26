@@ -42,8 +42,14 @@ const RequestPasswordResetForm = props => {
 }
 
 const RequestPasswordReset = props => {
-  const { className, hasError, hasSuccess, loading, onSubmit, userEmail } =
-    props
+  const {
+    className,
+    hasError = false,
+    hasSuccess = false,
+    loading = false,
+    onSubmit,
+    userEmail = null,
+  } = props
 
   return (
     <Page maxWidth={600}>
@@ -85,13 +91,6 @@ RequestPasswordReset.propTypes = {
   hasSuccess: PropTypes.bool,
   loading: PropTypes.bool,
   userEmail: PropTypes.string,
-}
-
-RequestPasswordReset.defaultProps = {
-  hasError: false,
-  hasSuccess: false,
-  loading: false,
-  userEmail: null,
 }
 
 export default RequestPasswordReset

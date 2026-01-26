@@ -1,4 +1,3 @@
-/* eslint-disable react/jsx-props-no-spreading */
 import React from 'react'
 import PropTypes from 'prop-types'
 import styled from 'styled-components'
@@ -20,11 +19,11 @@ const Wrapper = styled.div``
 const ChangePassword = props => {
   const {
     className,
-    form,
-    loading,
-    message,
+    form = null,
+    loading = false,
+    message = '',
     onSubmit,
-    submissionStatus,
+    submissionStatus = null,
     ...rest
   } = props
 
@@ -143,13 +142,6 @@ ChangePassword.propTypes = {
   message: PropTypes.string,
   onSubmit: PropTypes.func.isRequired,
   submissionStatus: PropTypes.oneOf(['success', 'error', 'danger']),
-}
-
-ChangePassword.defaultProps = {
-  form: null,
-  loading: false,
-  message: '',
-  submissionStatus: null,
 }
 
 export default ChangePassword

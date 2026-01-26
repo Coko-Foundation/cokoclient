@@ -24,13 +24,13 @@ const ModalFooter = Modal.footer
 const Signup = props => {
   const {
     className,
-    errorMessage,
-    hasError,
-    hasSuccess,
-    loading,
+    errorMessage = null,
+    hasError = false,
+    hasSuccess = false,
+    loading = false,
     onSubmit,
-    termsAndConditionsContent,
-    // userEmail,
+    termsAndConditionsContent = null,
+    // userEmail = null,
   } = props
 
   const [modal, contextHolder] = Modal.useModal()
@@ -229,15 +229,6 @@ Signup.propTypes = {
   loading: PropTypes.bool,
   termsAndConditionsContent: PropTypes.node,
   // userEmail: PropTypes.string,
-}
-
-Signup.defaultProps = {
-  errorMessage: null,
-  hasError: false,
-  hasSuccess: false,
-  loading: false,
-  termsAndConditionsContent: null,
-  // userEmail: null,
 }
 
 export default Signup

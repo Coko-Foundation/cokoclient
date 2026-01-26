@@ -35,17 +35,17 @@ const AlternativeAction = styled.div`
 
 const AuthenticationForm = props => {
   const {
-    alternativeActionLabel,
-    alternativeActionLink,
+    alternativeActionLabel = null,
+    alternativeActionLink = null,
     className,
     children,
-    errorMessage,
-    forgotPasswordUrl,
-    hasError,
-    loading,
+    errorMessage = null,
+    forgotPasswordUrl = '/request-password-reset',
+    hasError = false,
+    loading = false,
     onSubmit,
-    showForgotPassword,
-    submitButtonLabel,
+    showForgotPassword = false,
+    submitButtonLabel = 'Submit',
   } = props
 
   return (
@@ -102,17 +102,6 @@ AuthenticationForm.propTypes = {
   showForgotPassword: PropTypes.bool,
   /** Text displayed inside submit button */
   submitButtonLabel: PropTypes.string,
-}
-
-AuthenticationForm.defaultProps = {
-  alternativeActionLabel: null,
-  alternativeActionLink: null,
-  errorMessage: null,
-  forgotPasswordUrl: '/request-password-reset',
-  hasError: false,
-  loading: false,
-  showForgotPassword: false,
-  submitButtonLabel: 'Submit',
 }
 
 export default AuthenticationForm
