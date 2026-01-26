@@ -40,7 +40,7 @@ const Wrapper = styled.div`
 `
 
 const ButtonGroup = props => {
-  const { className, children, inline, justify } = props
+  const { className, children, inline = false, justify = 'left' } = props
 
   return (
     <Wrapper className={className} inline={inline} justify={justify}>
@@ -67,11 +67,6 @@ ButtonGroup.propTypes = {
 
   /** Sets position of buttons in the row. Only applies when `inline` is `false` */
   justify: PropTypes.oneOf(['left', 'right', 'center']),
-}
-
-ButtonGroup.defaultProps = {
-  inline: false,
-  justify: 'left',
 }
 
 export default ButtonGroup

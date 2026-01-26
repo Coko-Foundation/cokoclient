@@ -18,7 +18,7 @@ const Wrapper = styled.div`
 `
 
 const Page = props => {
-  const { className, children, maxWidth } = props
+  const { className, children, maxWidth = null } = props
 
   return (
     <Wrapper className={className} maxWidth={maxWidth}>
@@ -29,10 +29,6 @@ const Page = props => {
 
 Page.propTypes = {
   maxWidth: PropTypes.number,
-}
-
-Page.defaultProps = {
-  maxWidth: null,
 }
 
 export default Page

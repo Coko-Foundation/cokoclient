@@ -77,7 +77,7 @@ const NestedWrapper = styled.div`
   }
 `
 
-export const Indicator = ({ size, className }) => (
+export const Indicator = ({ size = 10, className }) => (
   <IndicatorWrapper className={className} size={size}>
     <BounceOne />
     <BounceTwo />
@@ -88,13 +88,15 @@ Indicator.propTypes = {
   size: PropTypes.number,
 }
 
-Indicator.defaultProps = {
-  size: 10,
-}
-
 const Spin = props => {
-  const { className, children, renderBackground, size, spinning, ...rest } =
-    props
+  const {
+    className,
+    children,
+    renderBackground = true,
+    size = 10,
+    spinning,
+    ...rest
+  } = props
 
   const showChildren = renderBackground || (!renderBackground && !spinning)
 
@@ -119,11 +121,6 @@ Spin.propTypes = {
   size: PropTypes.number,
   spinning: PropTypes.bool.isRequired,
   renderBackground: PropTypes.bool,
-}
-
-Spin.defaultProps = {
-  size: 10,
-  renderBackground: true,
 }
 
 export default Spin

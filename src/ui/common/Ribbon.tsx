@@ -33,7 +33,7 @@ const Wrapper = styled.div`
 `
 
 const Ribbon = props => {
-  const { className, children, hide, status, ...rest } = props
+  const { className, children, hide = false, status = null, ...rest } = props
 
   return (
     <Wrapper $hide={hide} $status={status} className={className} {...rest}>
@@ -45,11 +45,6 @@ const Ribbon = props => {
 Ribbon.propTypes = {
   hide: PropTypes.bool,
   status: PropTypes.oneOf(['success', 'error', 'danger']),
-}
-
-Ribbon.defaultProps = {
-  hide: false,
-  status: null,
 }
 
 export default Ribbon

@@ -47,13 +47,28 @@ const Wrapper = styled.div`
   position: relative;
 `
 
+const defaultFocusableContent = [
+  'a[href]',
+  'area[href]',
+  'input:not([disabled]):not([type=hidden])',
+  'select:not([disabled])',
+  'textarea:not([disabled])',
+  'button:not([disabled])',
+  'object',
+  'embed',
+  '[tabindex]:not([tabindex="-1"])',
+  'audio[controls]',
+  'video[controls]',
+  '[contenteditable]:not([contenteditable="false"])',
+]
+
 const Popup = ({
-  alignment,
+  alignment = 'start',
   children,
-  focusableContent,
-  id,
+  focusableContent = defaultFocusableContent,
+  id = uuid(),
   toggle,
-  position,
+  position = 'block-start',
   ...rest
 }) => {
   const WrapperRef = useRef(null)
@@ -150,26 +165,6 @@ Popup.propTypes = {
     'inline-start',
     'inline-end',
   ]),
-}
-
-Popup.defaultProps = {
-  id: uuid(),
-  focusableContent: [
-    'a[href]',
-    'area[href]',
-    'input:not([disabled]):not([type=hidden])',
-    'select:not([disabled])',
-    'textarea:not([disabled])',
-    'button:not([disabled])',
-    'object',
-    'embed',
-    '[tabindex]:not([tabindex="-1"])',
-    'audio[controls]',
-    'video[controls]',
-    '[contenteditable]:not([contenteditable="false"])',
-  ],
-  position: 'block-start',
-  alignment: 'start',
 }
 
 export default Popup

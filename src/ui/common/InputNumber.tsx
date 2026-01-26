@@ -25,7 +25,13 @@ const Input = styled(AntInputNumber)`
 `
 
 const InputNumber = props => {
-  const { className, disabled, label, name, ...rest } = props
+  const {
+    className,
+    disabled = false,
+    label = null,
+    name = 'number-input',
+    ...rest
+  } = props
 
   return (
     <Wrapper $isDisabled={disabled} className={className}>
@@ -41,12 +47,6 @@ InputNumber.propTypes = {
   disabled: PropTypes.bool,
   label: PropTypes.string,
   name: PropTypes.string,
-}
-
-InputNumber.defaultProps = {
-  disabled: false,
-  label: null,
-  name: 'number-input',
 }
 
 export default InputNumber

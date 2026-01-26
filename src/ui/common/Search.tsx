@@ -14,12 +14,9 @@ const StyledSearch = styled(Input.Search)`
 const Search = props => {
   const { className, ...rest } = props
 
-  // eslint-disable-next-line react/jsx-props-no-spreading
   return <StyledSearch className={className} {...rest} />
 }
 
 Search.propTypes = {}
-
-Search.defaultProps = {}
 
 export default Search

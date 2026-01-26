@@ -13,7 +13,7 @@ const Wrapper = styled.div`
 `
 
 const FormSection = props => {
-  const { className, children, label, last } = props
+  const { className, children, label = null, last = false } = props
 
   return (
     <Wrapper className={className}>
@@ -31,11 +31,6 @@ FormSection.propTypes = {
   /** Label to display as heading above section */
   label: PropTypes.string,
   last: PropTypes.bool,
-}
-
-FormSection.defaultProps = {
-  label: null,
-  last: false,
 }
 
 export default FormSection

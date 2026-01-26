@@ -25,7 +25,7 @@ const StyledRadioGroup = styled(AntRadio.Group)`
  * with the addition of `vertical` and a slightly modified `onChange`.
  */
 const Radio = props => {
-  const { className, onChange, vertical, ...rest } = props
+  const { className, onChange = null, vertical = false, ...rest } = props
 
   const handleChange = e => onChange(e.target.value)
 
@@ -35,7 +35,6 @@ const Radio = props => {
       onChange={handleChange}
       role="radiogroup"
       vertical={vertical}
-      // eslint-disable-next-line react/jsx-props-no-spreading
       {...rest}
     />
   )
@@ -46,11 +45,6 @@ Radio.propTypes = {
   onChange: PropTypes.func,
   /** Arrange items vertically instead of inline. */
   vertical: PropTypes.bool,
-}
-
-Radio.defaultProps = {
-  onChange: null,
-  vertical: false,
 }
 
 export default Radio

@@ -1,5 +1,3 @@
-/* eslint-disable react/jsx-props-no-spreading */
-
 import React, { useState } from 'react'
 import PropTypes from 'prop-types'
 import styled from 'styled-components'
@@ -56,20 +54,20 @@ const FormItem = props => {
 // Disable the prop types that are the same as the underlying component
 const Form = props => {
   const {
-    autoSave,
-    autoSaveDebounceDelay,
+    autoSave = false,
+    autoSaveDebounceDelay = 500,
     children,
-    feedbackComponent: FeedbackComponent,
+    feedbackComponent: FeedbackComponent = Ribbon,
     // eslint-disable-next-line react/prop-types
     form: propsForm,
-    onAutoSave,
+    onAutoSave = null,
     // eslint-disable-next-line react/prop-types
     onValuesChange,
-    onFinishFailed,
-    ribbonMessage,
-    ribbonPosition,
-    submissionStatus,
-    scrollErrorIntoView,
+    onFinishFailed = () => {},
+    ribbonMessage = null,
+    ribbonPosition = 'top',
+    submissionStatus = null,
+    scrollErrorIntoView = true,
     ...rest
   } = props
 
@@ -77,7 +75,6 @@ const Form = props => {
   const [internalForm] = AntForm.useForm()
   const form = propsForm || internalForm
 
-  // eslint-disable-next-line react/prop-types
   const runAutoSave = debounce(() => onAutoSave(form.getFieldsValue()), 500)
 
   const handleValuesChange = (changedValues, allValues) => {
@@ -190,18 +187,6 @@ Form.propTypes = {
   ribbonPosition: PropTypes.oneOf(['top', 'bottom']),
   submissionStatus: PropTypes.oneOf(['success', 'error', 'danger']),
   scrollErrorIntoView: PropTypes.bool,
-}
-
-Form.defaultProps = {
-  autoSave: false,
-  autoSaveDebounceDelay: 500,
-  feedbackComponent: Ribbon,
-  onAutoSave: null,
-  onFinishFailed: () => {},
-  ribbonMessage: null,
-  ribbonPosition: 'top',
-  submissionStatus: null,
-  scrollErrorIntoView: true,
 }
 
 // const Form = {}

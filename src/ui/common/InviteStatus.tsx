@@ -47,7 +47,7 @@ const StyledStatus = styled.span`
 `
 
 const InviteStatus = props => {
-  const { children, className, reverseColors, status } = props
+  const { children, className, reverseColors = false, status = null } = props
   if (!children) return null
 
   return (
@@ -76,11 +76,6 @@ InviteStatus.propTypes = {
     'primary',
     'publish',
   ]),
-}
-
-InviteStatus.defaultProps = {
-  reverseColors: false,
-  status: null,
 }
 
 export default InviteStatus

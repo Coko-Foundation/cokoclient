@@ -120,7 +120,7 @@ const SelectableItem = memo(props => {
     onDeselect,
     onSelect,
     selected,
-    checkboxLabel,
+    checkboxLabel = '',
     ...rest
   } = props
 
@@ -157,10 +157,6 @@ SelectableItem.propTypes = {
   onSelect: PropTypes.func.isRequired,
   selected: PropTypes.bool.isRequired,
   checkboxLabel: PropTypes.string,
-}
-
-SelectableItem.defaultProps = {
-  checkboxLabel: '',
 }
 
 // memoized SelectableItem would use old value of selectedItems when handleSelect and handleDeselect are passed as they are

@@ -9,7 +9,9 @@ const PaginationNav = styled.nav`
     &:focus-within {
       outline: 4px solid #71ada9;
       outline-offset: 1px;
-      transition: outline-offset 0s, outline 0s;
+      transition:
+        outline-offset 0s,
+        outline 0s;
     }
   }
 
@@ -36,8 +38,20 @@ const PaginationNav = styled.nav`
   }
 `
 
+const defaultPagination = {
+  current: 1,
+  pageSize: 10,
+  itemRender: null,
+  showSizeChanger: false,
+}
+
 const Pagination = React.forwardRef((props, forwardRef) => {
-  const { pagination, onChange, onShowSizeChange, ...rest } = props
+  const {
+    pagination = defaultPagination,
+    onChange = () => {},
+    onShowSizeChange = () => {},
+    ...rest
+  } = props
 
   const { current, pageSize, total } = pagination
 
@@ -164,17 +178,6 @@ Pagination.propTypes = {
   }),
   onChange: PropTypes.func,
   onShowSizeChange: PropTypes.func,
-}
-
-Pagination.defaultProps = {
-  pagination: {
-    current: 1,
-    pageSize: 10,
-    itemRender: null,
-    showSizeChanger: false,
-  },
-  onChange: () => {},
-  onShowSizeChange: () => {},
 }
 
 export default Pagination

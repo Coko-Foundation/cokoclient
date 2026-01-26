@@ -9,7 +9,7 @@ const Left = styled(Col)``
 const Right = styled(Col)``
 
 const Split = props => {
-  const { className, children, gutter, splitAt } = props
+  const { className, children, gutter = 0, splitAt = 12 } = props
   const [left, right] = children
 
   return (
@@ -24,11 +24,6 @@ Split.propTypes = {
   gutter: PropTypes.number,
   /** Number on the antd grid of 24 total */
   splitAt: PropTypes.number,
-}
-
-Split.defaultProps = {
-  gutter: 0,
-  splitAt: 12,
 }
 
 export default Split

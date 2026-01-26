@@ -18,6 +18,4 @@ const Note = props => {
 
 Note.propTypes = {}
 
-Note.defaultProps = {}
-
 export default Note

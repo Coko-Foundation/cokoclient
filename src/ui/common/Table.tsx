@@ -47,11 +47,11 @@ const Table = props => {
   const {
     className,
     children,
-    loading,
-    showSearch,
-    searchLoading,
-    onSearch,
-    searchPlaceholder,
+    loading = false,
+    showSearch = false,
+    searchLoading = false,
+    onSearch = null,
+    searchPlaceholder = null,
     /* eslint-disable react/prop-types */
     dataSource,
     pagination,
@@ -129,14 +129,6 @@ Table.propTypes = {
   searchLoading: PropTypes.bool,
   onSearch: PropTypes.func,
   searchPlaceholder: PropTypes.string,
-}
-
-Table.defaultProps = {
-  loading: false,
-  showSearch: false,
-  searchLoading: false,
-  onSearch: null,
-  searchPlaceholder: null,
 }
 
 export default Table

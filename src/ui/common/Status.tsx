@@ -53,6 +53,4 @@ Status.propTypes = {
   ]).isRequired,
 }
 
-Status.defaultProps = {}
-
 export default Status

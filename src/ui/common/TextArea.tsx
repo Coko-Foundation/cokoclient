@@ -8,12 +8,9 @@ const StyledTextArea = styled(Input.TextArea)``
 const TextArea = props => {
   const { className, ...rest } = props
 
-  // eslint-disable-next-line react/jsx-props-no-spreading
   return <StyledTextArea className={className} {...rest} />
 }
 
 TextArea.propTypes = {}
-
-TextArea.defaultProps = {}
 
 export default TextArea

@@ -1,5 +1,3 @@
-// eslint-disable-next-line react/jsx-props-no-spreading
-
 import React from 'react'
 import PropTypes from 'prop-types'
 // import styled from 'styled-components'
@@ -9,10 +7,9 @@ import { Typography } from 'antd'
 const { Title } = Typography
 
 const Heading = props => {
-  const { className, children, level } = props
+  const { className, children, level = 1 } = props
 
   return (
-    // eslint-disable-next-line react/jsx-props-no-spreading
     <Title className={className} level={level}>
       {children}
     </Title>
@@ -21,10 +18,6 @@ const Heading = props => {
 
 Heading.propTypes = {
   level: PropTypes.number,
-}
-
-Heading.defaultProps = {
-  level: 1,
 }
 
 export const H1 = ({ children, className }) => (

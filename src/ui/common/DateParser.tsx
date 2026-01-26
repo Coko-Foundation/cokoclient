@@ -17,7 +17,7 @@ const getDuration = timestamp => {
 const Wrapper = styled.span``
 
 const DateParser = props => {
-  const { timestamp, dateFormat, humanizeThreshold } = props
+  const { timestamp, dateFormat = 'DD.MM.YYYY', humanizeThreshold = 0 } = props
   if (!timestamp) return null
 
   let timestampValue
@@ -29,11 +29,7 @@ const DateParser = props => {
     timestampValue = dayjs(timestamp).format(dateFormat)
   }
 
-  return (
-    <Wrapper>
-      {timestampValue}
-    </Wrapper>
-  )
+  return <Wrapper>{timestampValue}</Wrapper>
 }
 
 DateParser.propTypes = {
@@ -47,11 +43,6 @@ DateParser.propTypes = {
    * form (eg. "one hour ago").
    */
   humanizeThreshold: propTypes.number,
-}
-
-DateParser.defaultProps = {
-  dateFormat: 'DD.MM.YYYY',
-  humanizeThreshold: 0,
 }
 
 export default DateParser

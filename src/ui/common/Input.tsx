@@ -31,7 +31,13 @@ const StyledPassword = styled(AntInput.Password)`
 `
 
 const Input = props => {
-  const { className, onChange, type, passwordIconRender, ...rest } = props
+  const {
+    className,
+    onChange = null,
+    type = 'text',
+    passwordIconRender = null,
+    ...rest
+  } = props
 
   const handleChange = e => onChange && onChange(e.target.value)
 
@@ -70,12 +76,6 @@ Input.propTypes = {
   onChange: PropTypes.func,
   /** Define type of input. For other valid html input types, we have created separate components (eg. TextArea). */
   type: PropTypes.string,
-}
-
-Input.defaultProps = {
-  passwordIconRender: null,
-  onChange: null,
-  type: 'text',
 }
 
 export default Input

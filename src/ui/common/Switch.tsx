@@ -22,7 +22,7 @@ const Label = styled.span`
 `
 
 const Switch = props => {
-  const { className, label, labelPosition, ...rest } = props
+  const { className, label = null, labelPosition = 'right', ...rest } = props
 
   return (
     <Wrapper className={className}>
@@ -42,11 +42,6 @@ const Switch = props => {
 Switch.propTypes = {
   label: PropTypes.string,
   labelPosition: PropTypes.string,
-}
-
-Switch.defaultProps = {
-  label: null,
-  labelPosition: 'right',
 }
 
 export default Switch

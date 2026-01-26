@@ -65,24 +65,32 @@ const StyledDropdown = styled.div`
   }
 `
 
+const defaultNotFoundContent = (
+  <Empty
+    description="No Data"
+    image={Empty.PRESENTED_IMAGE_SIMPLE}
+    role="status"
+  />
+)
+
 const Select = props => {
   const {
-    async,
+    async = false,
     className,
     // debounce,
-    debounceTimeout,
+    debounceTimeout = 500,
 
     // disable rule for props handled by ant
     /* eslint-disable react/prop-types */
     filterOption,
-    notFoundContent,
+    notFoundContent = defaultNotFoundContent,
     onSearch,
     showSearch,
     id,
     /* eslint-enable react/prop-types */
-    isOpen,
-    virtual,
-    wrapOptionText,
+    isOpen = false,
+    virtual = false,
+    wrapOptionText = false,
     ...rest
   } = props
 
@@ -185,22 +193,6 @@ Select.propTypes = {
   virtual: PropTypes.bool,
 
   wrapOptionText: PropTypes.bool,
-}
-
-Select.defaultProps = {
-  async: false,
-  // debounce: false,
-  debounceTimeout: 500,
-  notFoundContent: (
-    <Empty
-      description="No Data"
-      image={Empty.PRESENTED_IMAGE_SIMPLE}
-      role="status"
-    />
-  ),
-  isOpen: false,
-  virtual: false,
-  wrapOptionText: false,
 }
 
 export default Select
