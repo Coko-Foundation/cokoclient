@@ -101,7 +101,7 @@ const additionalSearchFields = [
   },
 ]
 
-const Template = ({ showInteractiveContent, ...args }) => {
+const Template = ({ showInteractiveContent = false, ...args }) => {
   const [reviewers, setReviewers] = useState(makeReviewers(40))
   const [pool, setPool] = useState(makeReviewers(8))
   const [sortedPool, setSortedPool] = useState([])
@@ -381,10 +381,6 @@ const Template = ({ showInteractiveContent, ...args }) => {
 
 Template.propTypes = {
   showInteractiveContent: PropTypes.bool,
-}
-
-Template.defaultProps = {
-  showInteractiveContent: false,
 }
 
 const commonArgs = {

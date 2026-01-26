@@ -23,15 +23,17 @@ const RemoveInviteWrapper = styled.div`
   }
 `
 
+const noop = () => {}
+
 const InviteRowProp = props => {
   const {
-    canInvite,
-    canDismissReviewer,
+    canInvite = false,
+    canDismissReviewer = false,
     className,
     data,
-    onClickInvite,
-    onClickRemove,
-    onClickRevokeInvitation,
+    onClickInvite = noop,
+    onClickRemove = noop,
+    onClickRevokeInvitation = noop,
     type,
   } = props
 
@@ -154,14 +156,6 @@ InviteRowProp.propTypes = {
   onClickRevokeInvitation: PropTypes.func,
   /** Type of invite prop being rendered */
   type: PropTypes.string.isRequired,
-}
-
-InviteRowProp.defaultProps = {
-  canInvite: false,
-  canDismissReviewer: false,
-  onClickInvite: () => {},
-  onClickRemove: () => {},
-  onClickRevokeInvitation: () => {},
 }
 
 export default InviteRowProp

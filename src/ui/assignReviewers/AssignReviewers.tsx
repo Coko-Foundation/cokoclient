@@ -47,12 +47,12 @@ const StyledRibbon = styled(Ribbon)`
 
 const AssignReviewers = props => {
   const {
-    additionalReviewerColumns,
-    additionalSearchFields,
+    additionalReviewerColumns = [],
+    additionalSearchFields = [],
     amountOfReviewers,
     automate,
     canInviteMore,
-    canDismissReviewer,
+    canDismissReviewer = false,
     className,
     onAddReviewers,
     onAmountOfReviewersChange,
@@ -62,10 +62,10 @@ const AssignReviewers = props => {
     onClickRevokeInvitation,
     onSearch,
     onTableChange,
-    reviewerPool,
+    reviewerPool = [],
     searchPlaceholder,
-    suggestedReviewerName,
-    useShowEmail,
+    suggestedReviewerName = null,
+    useShowEmail = false,
   } = props
 
   const [showEmails, setShowEmails] = useState(false)
@@ -210,16 +210,6 @@ AssignReviewers.propTypes = {
   /** Whether to display the option to show `Show reviewer emails` checkbox.
    * Alternatively, the email renders can be customised using `additionalReviewerColumns`  */
   useShowEmail: PropTypes.bool,
-}
-
-AssignReviewers.defaultProps = {
-  additionalReviewerColumns: [],
-  additionalSearchFields: [],
-  canDismissReviewer: false,
-  reviewerPool: [],
-  searchPlaceholder: undefined,
-  suggestedReviewerName: null,
-  useShowEmail: false,
 }
 
 export default AssignReviewers

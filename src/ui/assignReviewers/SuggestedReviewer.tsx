@@ -30,6 +30,4 @@ SuggestedReviewer.propTypes = {
   name: PropTypes.string.isRequired,
 }
 
-SuggestedReviewer.defaultProps = {}
-
 export default SuggestedReviewer

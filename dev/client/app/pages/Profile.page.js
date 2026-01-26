@@ -34,8 +34,4 @@ const ProfilePage = props => {
   return <Profile onSubmit={handleSubmit} />
 }
 
-ProfilePage.propTypes = {}
-
-ProfilePage.defaultProps = {}
-
 export default ProfilePage

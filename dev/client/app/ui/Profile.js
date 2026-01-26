@@ -51,8 +51,4 @@ const Profile = props => {
   )
 }
 
-Profile.propTypes = {}
-
-Profile.defaultProps = {}
-
 export default Profile

@@ -108,7 +108,13 @@ const StyledButton = styled(AntButton)`
  */
 
 const Button = props => {
-  const { children, className, autoFocus, ...rest } = props
+  const {
+    children,
+    className,
+    autoFocus = false,
+    status = null,
+    ...rest
+  } = props
   const passProps = omit(rest, 'danger')
 
   const buttonRef = useRef(null)
@@ -120,7 +126,12 @@ const Button = props => {
   }, [])
 
   return (
-    <StyledButton className={className} ref={buttonRef} {...passProps}>
+    <StyledButton
+      className={className}
+      ref={buttonRef}
+      status={status}
+      {...passProps}
+    >
       {children}
     </StyledButton>
   )
@@ -129,11 +140,6 @@ const Button = props => {
 Button.propTypes = {
   status: PropTypes.oneOf(['error', 'danger', 'success']),
   autoFocus: PropTypes.bool,
-}
-
-Button.defaultProps = {
-  status: null,
-  autoFocus: false,
 }
 
 export default Button

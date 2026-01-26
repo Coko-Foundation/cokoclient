@@ -8,7 +8,12 @@ import Button from './common/Button'
 const Wrapper = styled.div``
 
 const Teams = props => {
-  const { className, teams, addToReviewerTeam, removeFromReviewerTeam } = props
+  const {
+    className,
+    teams = null,
+    addToReviewerTeam,
+    removeFromReviewerTeam,
+  } = props
 
   const isInReviewerTeam = teams && !!teams.find(t => t.role === 'reviewer')
 
@@ -33,14 +38,9 @@ const Teams = props => {
 }
 
 Teams.propTypes = {
-  /* eslint-disable-next-line react/forbid-prop-types */
   teams: PropTypes.array,
   addToReviewerTeam: PropTypes.func.isRequired,
   removeFromReviewerTeam: PropTypes.func.isRequired,
-}
-
-Teams.defaultProps = {
-  teams: null,
 }
 
 export default Teams

@@ -24,11 +24,11 @@ const checkForRequiredFields = user => {
 
 const RequireAuth = props => {
   const {
-    notAuthenticatedRedirectTo,
-    cleanUp,
+    notAuthenticatedRedirectTo = '/login',
+    cleanUp = () => {},
     children,
-    requireIdentityVerification,
-    notVerifiedRedirectTo,
+    requireIdentityVerification = true,
+    notVerifiedRedirectTo = '/ensure-verified-login',
   } = props
 
   const client = useApolloClient()
@@ -88,13 +88,6 @@ RequireAuth.propTypes = {
   requireIdentityVerification: PropTypes.bool,
   notVerifiedRedirectTo: PropTypes.string,
   notAuthenticatedRedirectTo: PropTypes.string,
-}
-
-RequireAuth.defaultProps = {
-  cleanUp: () => {},
-  requireIdentityVerification: true,
-  notVerifiedRedirectTo: '/ensure-verified-login',
-  notAuthenticatedRedirectTo: '/login',
 }
 
 export default RequireAuth

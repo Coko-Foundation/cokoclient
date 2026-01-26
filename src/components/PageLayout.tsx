@@ -53,9 +53,9 @@ const Page = styled.div`
 const Layout = ({
   children,
   className,
-  fadeInPages,
-  padPages,
-  navComponent,
+  fadeInPages = true,
+  padPages = true,
+  navComponent = null,
 }) => (
   <>
     <GlobalStyle />
@@ -72,12 +72,6 @@ Layout.propTypes = {
   fadeInPages: PropTypes.bool,
   padPages: PropTypes.bool,
   navComponent: PropTypes.elementType,
-}
-
-Layout.defaultProps = {
-  fadeInPages: true,
-  padPages: true,
-  navComponent: null,
 }
 
 export default Layout

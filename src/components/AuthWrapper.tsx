@@ -11,8 +11,8 @@ import Spin from '../ui/common/Spin'
 
 const AuthWrapper = props => {
   const {
-    loadingComponent: LoadingComponent,
-    currentUserQuery,
+    loadingComponent: LoadingComponent = Spin,
+    currentUserQuery = CURRENT_USER,
     children,
   } = props
 
@@ -53,11 +53,6 @@ const AuthWrapper = props => {
 AuthWrapper.propTypes = {
   loadingComponent: PropTypes.func,
   currentUserQuery: PropTypes.shape(),
-}
-
-AuthWrapper.defaultProps = {
-  loadingComponent: Spin,
-  currentUserQuery: CURRENT_USER,
 }
 
 export default AuthWrapper

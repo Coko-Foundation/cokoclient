@@ -1,5 +1,3 @@
-/* eslint-disable no-param-reassign */
-
 import React, { useMemo, useState } from 'react'
 import { BrowserRouter } from 'react-router-dom'
 import PropTypes from 'prop-types'
@@ -158,7 +156,7 @@ const makeApolloClient = makeConfig => {
 }
 
 export function makeTheme(providedTheme) {
-    const mapper = {
+  const mapper = {
     borderRadius: pxToNumConverter(providedTheme.borderRadius),
     colorBgBase: providedTheme.colorBackground,
     colorTextBase: providedTheme.colorText,
@@ -187,7 +185,7 @@ export function makeTheme(providedTheme) {
 }
 
 const Root = props => {
-  const { makeApolloConfig, routes, theme } = props
+  const { makeApolloConfig = null, routes, theme } = props
   const [currentUser, setCurrentUser] = useState()
 
   const client = useMemo(
@@ -202,7 +200,7 @@ const Root = props => {
       <SubscriptionManagerProvider>
         <BrowserRouter>
           {/* TO DO -- check how to fix this linting error */}
-          {/* eslint-disable-next-line react/jsx-no-constructed-context-values */}
+          {}
           <CurrentUserContext.Provider value={{ currentUser, setCurrentUser }}>
             {/* <AuthWrapper> */}
             <AntConfigProvider theme={mappedAntTheme}>
@@ -223,12 +221,8 @@ const Root = props => {
 Root.propTypes = {
   makeApolloConfig: PropTypes.func,
   routes: PropTypes.node.isRequired,
-  /* eslint-disable-next-line react/forbid-prop-types */
-  theme: PropTypes.object.isRequired,
-}
 
-Root.defaultProps = {
-  makeApolloConfig: null,
+  theme: PropTypes.object.isRequired,
 }
 
 export default Root

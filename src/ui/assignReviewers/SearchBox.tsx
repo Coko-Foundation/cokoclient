@@ -39,13 +39,15 @@ const AddButton = styled(Button)`
   height: 100%;
 `
 
+const noop = () => {}
+
 const SearchBox = props => {
   const {
-    additionalSearchFields,
+    additionalSearchFields = [],
     className,
-    searchPlaceholder,
-    onAdd,
-    onSearch,
+    searchPlaceholder = 'Add a reviewer to the list',
+    onAdd = noop,
+    onSearch = noop,
   } = props
 
   const [selection, setSelection] = useState([])
@@ -183,13 +185,6 @@ SearchBox.propTypes = {
   onSearch: PropTypes.func,
   /** Placeholder for the search bar */
   searchPlaceholder: PropTypes.string,
-}
-
-SearchBox.defaultProps = {
-  additionalSearchFields: [],
-  onAdd: () => {},
-  onSearch: () => {},
-  searchPlaceholder: 'Add a reviewer to the list',
 }
 
 export default SearchBox

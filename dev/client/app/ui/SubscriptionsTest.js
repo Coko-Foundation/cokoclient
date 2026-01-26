@@ -5,7 +5,7 @@ import styled from 'styled-components'
 const Wrapper = styled.div``
 
 const SubscriptionsTest = props => {
-  const { data } = props
+  const { data = [] } = props
 
   return (
     <Wrapper>
@@ -23,10 +23,6 @@ SubscriptionsTest.propTypes = {
       value: PropTypes.string,
     }),
   ),
-}
-
-SubscriptionsTest.defaultProps = {
-  data: [],
 }
 
 export default SubscriptionsTest

@@ -8,11 +8,11 @@ import ProviderConnection from '../ui/authentication/ProviderConnection'
 
 const ProviderConnectionPage = props => {
   const {
-    closeOnSuccess,
-    delayOnSuccess,
-    loadingMinimumTime,
-    redirectOnSuccess,
-    redirectUrlLabel,
+    closeOnSuccess = false,
+    delayOnSuccess = 1000,
+    loadingMinimumTime = 1000,
+    redirectOnSuccess = false,
+    redirectUrlLabel = null,
   } = props
 
   const { provider } = useParams()
@@ -78,14 +78,6 @@ ProviderConnectionPage.propTypes = {
   loadingMinimumTime: PropTypes.number,
   redirectOnSuccess: PropTypes.bool,
   redirectUrlLabel: PropTypes.string,
-}
-
-ProviderConnectionPage.defaultProps = {
-  closeOnSuccess: false,
-  delayOnSuccess: 1000,
-  loadingMinimumTime: 1000,
-  redirectOnSuccess: false,
-  redirectUrlLabel: null,
 }
 
 export default ProviderConnectionPage
