@@ -50,7 +50,7 @@ const Date = styled.div`
 `
 
 const ChatMessage = props => {
-  const { className, content, date, own, user } = props
+  const { className, content, date, own = false, user = null } = props
 
   return (
     <Wrapper className={className}>
@@ -74,11 +74,6 @@ ChatMessage.propTypes = {
   date: PropTypes.string.isRequired,
   own: PropTypes.bool,
   user: PropTypes.string,
-}
-
-ChatMessage.defaultProps = {
-  own: false,
-  user: null,
 }
 
 export default ChatMessage

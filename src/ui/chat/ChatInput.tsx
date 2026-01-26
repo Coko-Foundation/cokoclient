@@ -47,6 +47,4 @@ ChatInput.propTypes = {
   onSend: PropTypes.func.isRequired,
 }
 
-ChatInput.defaultProps = {}
-
 export default ChatInput

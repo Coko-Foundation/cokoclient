@@ -13,7 +13,7 @@ const Wrapper = styled.div`
 `
 
 const ChatMessageList = props => {
-  const { className, messages } = props
+  const { className, messages = [] } = props
 
   return (
     <Wrapper className={className}>
@@ -43,10 +43,6 @@ ChatMessageList.propTypes = {
       user: PropTypes.string,
     }),
   ),
-}
-
-ChatMessageList.defaultProps = {
-  messages: [],
 }
 
 export default ChatMessageList

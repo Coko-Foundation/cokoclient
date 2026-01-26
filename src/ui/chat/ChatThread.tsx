@@ -14,7 +14,7 @@ const Wrapper = styled.div`
 `
 
 const ChatThread = props => {
-  const { className, messages, onSend } = props
+  const { className, messages = [], onSend } = props
 
   return (
     <Wrapper className={className}>
@@ -34,10 +34,6 @@ ChatThread.propTypes = {
     }),
   ),
   onSend: PropTypes.func.isRequired,
-}
-
-ChatThread.defaultProps = {
-  messages: [],
 }
 
 export default ChatThread
