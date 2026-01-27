@@ -1,11 +1,7 @@
-// import React from 'react'
-// import PropTypes from 'prop-types'
 import styled from 'styled-components'
 
 import { Layout as AntLayout } from 'antd'
 import { grid, th } from '../../toolkit'
-
-// const Wrapper = styled.div``
 
 const Layout = styled(AntLayout)`
   header,

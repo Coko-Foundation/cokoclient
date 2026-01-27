@@ -1,5 +1,3 @@
-import React from 'react'
-import PropTypes from 'prop-types'
 import styled, { css } from 'styled-components'
 
 import { grid, th } from '../../toolkit'
@@ -49,7 +47,16 @@ const Date = styled.div`
   margin-top: ${grid(2)};
 `
 
-const ChatMessage = props => {
+export type ChatMessageProps = {
+  id: string
+  className?: string
+  content: string
+  date: string
+  own?: boolean
+  user: string
+}
+
+const ChatMessage = (props: ChatMessageProps) => {
   const { className, content, date, own = false, user = null } = props
 
   return (
@@ -60,20 +67,11 @@ const ChatMessage = props => {
         <Content>{content}</Content>
 
         <Date>
-          <DateParser timestamp={date}>
-            {(timestamp, timeAgo) => <span>{timeAgo} ago</span>}
-          </DateParser>
+          <DateParser timestamp={date} />
         </Date>
       </Message>
     </Wrapper>
   )
-}
-
-ChatMessage.propTypes = {
-  content: PropTypes.string.isRequired,
-  date: PropTypes.string.isRequired,
-  own: PropTypes.bool,
-  user: PropTypes.string,
 }
 
 export default ChatMessage

@@ -1,10 +1,8 @@
-import React from 'react'
-import PropTypes from 'prop-types'
+import React, { ReactNode } from 'react'
 
 import AuthenticationForm from './AuthenticationForm'
 import AuthenticationHeader from './AuthenticationHeader'
 import AuthenticationWrapper from './AuthenticationWrapper'
-// import SuccessSubTitle from './SuccessSubTitle'
 import {
   Button,
   Form,
@@ -17,27 +15,36 @@ import {
   Page,
 } from '../common'
 
+type SignupProps = {
+  className?: string
+  errorMessage?: string
+  hasError?: boolean
+  hasSuccess?: boolean
+  loading?: boolean
+  onSubmit: () => void
+  termsAndConditionsContent?: ReactNode
+}
+
 const ModalContext = React.createContext(null)
 const ModalHeader = Modal.header
 const ModalFooter = Modal.footer
 
-const Signup = props => {
+const Signup = (props: SignupProps): React.ReactNode => {
   const {
     className,
-    errorMessage = null,
+    errorMessage,
     hasError = false,
     hasSuccess = false,
     loading = false,
     onSubmit,
-    termsAndConditionsContent = null,
-    // userEmail = null,
+    termsAndConditionsContent,
   } = props
 
   const [modal, contextHolder] = Modal.useModal()
 
-  const showTermsAndConditions = e => {
+  const showTermsAndConditions = (e: React.MouseEvent) => {
     e.preventDefault()
-    const termsAndConditionsModal = modal.info()
+    const termsAndConditionsModal = modal.info({})
     termsAndConditionsModal.update({
       title: <ModalHeader>Agreeing to Terms and Conditions</ModalHeader>,
       content: <Paragraph>{termsAndConditionsContent}</Paragraph>,
@@ -218,17 +225,6 @@ const Signup = props => {
       </AuthenticationWrapper>
     </Page>
   )
-}
-
-Signup.propTypes = {
-  onSubmit: PropTypes.func.isRequired,
-
-  errorMessage: PropTypes.string,
-  hasError: PropTypes.bool,
-  hasSuccess: PropTypes.bool,
-  loading: PropTypes.bool,
-  termsAndConditionsContent: PropTypes.node,
-  // userEmail: PropTypes.string,
 }
 
 export default Signup

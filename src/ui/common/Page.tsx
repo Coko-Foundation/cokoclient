@@ -1,8 +1,13 @@
 import React from 'react'
-import PropTypes from 'prop-types'
 import styled, { css } from 'styled-components'
 
-const Wrapper = styled.div`
+type PageProps = {
+  className?: string
+  children?: React.ReactNode
+  maxWidth?: number | null
+}
+
+const Wrapper = styled.div<{ maxWidth?: number | null }>`
   height: 100%;
 
   ${props =>
@@ -17,7 +22,7 @@ const Wrapper = styled.div`
     `}
 `
 
-const Page = props => {
+const Page = (props: PageProps): React.ReactNode => {
   const { className, children, maxWidth = null } = props
 
   return (
@@ -25,10 +30,6 @@ const Page = props => {
       {children}
     </Wrapper>
   )
-}
-
-Page.propTypes = {
-  maxWidth: PropTypes.number,
 }
 
 export default Page

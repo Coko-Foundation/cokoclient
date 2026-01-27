@@ -1,21 +1,20 @@
 import React from 'react'
-import PropTypes from 'prop-types'
 import styled from 'styled-components'
 
-import {
-  Page,
-  Result,
-  Button,
-  Spin,
-  // Paragraph,
-  // Text
-} from '../common'
+import { Page, Result, Button, Spin } from '../common'
+
+type VerifyCheckProps = {
+  className?: string
+  resend: () => void
+  resending?: boolean
+  resent?: boolean
+}
 
 const Wrapper = styled.div``
 
 const ExtraWrapper = styled.div``
 
-const VerifyCheck = props => {
+const VerifyCheck = (props: VerifyCheckProps): React.ReactNode => {
   const { className, resend, resending = false, resent = false } = props
 
   const initial = !(resending || resent)
@@ -61,12 +60,6 @@ const VerifyCheck = props => {
       </Wrapper>
     </Page>
   )
-}
-
-VerifyCheck.propTypes = {
-  resend: PropTypes.func.isRequired,
-  resending: PropTypes.bool,
-  resent: PropTypes.bool,
 }
 
 export default VerifyCheck

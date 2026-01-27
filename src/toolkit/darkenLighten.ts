@@ -21,12 +21,22 @@
   darken('colorPrimary', 50)
 */
 
-import { get } from 'lodash'
 import Color from 'color'
+import { DefaultTheme } from 'styled-components'
 
-const normalizePercent = num => (num >= 1 && num <= 100 ? num / 100 : num)
+import { get } from './funcs'
 
-const darkenLighten = (original, percent, props, dark) => {
+type ThemedProps = { theme: DefaultTheme }
+
+const normalizePercent = (num: number): number =>
+  num >= 1 && num <= 100 ? num / 100 : num
+
+const darkenLighten = (
+  original: string,
+  percent: number,
+  props: ThemedProps,
+  dark: boolean,
+): string => {
   const color = get(props.theme, original) || original
   const thisMuch = normalizePercent(percent)
 
@@ -42,10 +52,14 @@ const darkenLighten = (original, percent, props, dark) => {
   return converted.lighten(thisMuch).string()
 }
 
-const darken = (original, percent) => props =>
-  darkenLighten(original, percent, props, true)
+const darken =
+  (original: string, percent: number) =>
+  (props: ThemedProps): string =>
+    darkenLighten(original, percent, props, true)
 
-const lighten = (original, percent) => props =>
-  darkenLighten(original, percent, props)
+const lighten =
+  (original: string, percent: number) =>
+  (props: ThemedProps): string =>
+    darkenLighten(original, percent, props, false)
 
 export { darken, lighten }

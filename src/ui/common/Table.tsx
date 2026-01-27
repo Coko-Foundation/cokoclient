@@ -1,5 +1,4 @@
-import React, { useEffect, useState } from 'react'
-import PropTypes from 'prop-types'
+import React, { useEffect, useState, ComponentProps } from 'react'
 import styled from 'styled-components'
 import { Table as AntTable } from 'antd'
 
@@ -8,6 +7,33 @@ import { grid } from '../../toolkit'
 import Search from './Search'
 import Spin from './Spin'
 import Pagination from './Pagination'
+
+type PaginationConfig = {
+  current?: number
+  total?: number
+  pageSize?: number
+  itemRender?:
+    | ((
+        page: number,
+        type: string,
+        originalElement: React.ReactNode,
+      ) => React.ReactNode)
+    | null
+  showSizeChanger?: boolean
+  onShowSizeChange?: (current: number, size: number) => void
+  onChange?: (page: number, pageSize: number) => void
+}
+
+type TableProps = ComponentProps<typeof AntTable> & {
+  loading?: boolean
+  showSearch?: boolean
+  searchLoading?: boolean
+  onSearch?: (value: string) => void
+  searchPlaceholder?: string
+  pagination?: PaginationConfig
+  children?: React.ReactNode
+  className?: string
+}
 
 const Wrapper = styled.div`
   display: flex;
@@ -43,15 +69,17 @@ const PaginationNav = styled(Pagination)`
   text-align: right;
 `
 
-const Table = props => {
+const noop = () => {}
+
+const Table = (props: TableProps) => {
   const {
     className,
     children,
     loading = false,
     showSearch = false,
     searchLoading = false,
-    onSearch = null,
-    searchPlaceholder = null,
+    onSearch = noop,
+    searchPlaceholder,
     /* eslint-disable react/prop-types */
     dataSource,
     pagination,
@@ -82,14 +110,16 @@ const Table = props => {
     pageSize: paginationSize,
   }
 
-  const triggerPaginationEvent = eventName => (page, pageSize) => {
-    setPaginationCurrent(page)
-    setPaginationSize(pageSize)
+  const triggerPaginationEvent =
+    (eventName: 'onChange' | 'onShowSizeChange') =>
+    (page: number, pageSize: number) => {
+      setPaginationCurrent(page)
+      setPaginationSize(pageSize)
 
-    if (pagination && pagination[eventName]) {
-      pagination[eventName](page, pageSize)
+      if (pagination && pagination[eventName]) {
+        pagination[eventName](page, pageSize)
+      }
     }
-  }
 
   const onPaginationChange = triggerPaginationEvent('onChange')
 
@@ -121,14 +151,6 @@ const Table = props => {
       )}
     </Wrapper>
   )
-}
-
-Table.propTypes = {
-  loading: PropTypes.bool,
-  showSearch: PropTypes.bool,
-  searchLoading: PropTypes.bool,
-  onSearch: PropTypes.func,
-  searchPlaceholder: PropTypes.string,
 }
 
 export default Table

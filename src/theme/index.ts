@@ -1,18 +1,5 @@
 import { DefaultTheme } from 'styled-components'
 
-import {
-  Action,
-  ActionGroup,
-  AppBar,
-  Button,
-  Checkbox,
-  GlobalStyle,
-  Radio,
-  TextField,
-  Menu,
-  Logo,
-} from './elements'
-
 const defaultFont =
   '-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji"'
 
@@ -85,22 +72,8 @@ const cokoTheme: DefaultTheme = {
   /* Breakpoints */
   // breakpoints: [480, 768, 1000, 1272],
 
-  // TO DO: Revisit the need for any of these
   cssOverrides: {
-    Login: {
-      Logo,
-    },
-    ui: {
-      Action,
-      ActionGroup,
-      AppBar,
-      Button,
-      Checkbox,
-      GlobalStyle,
-      Radio,
-      TextField,
-      Menu,
-    },
+    ui: {},
   },
 }
 

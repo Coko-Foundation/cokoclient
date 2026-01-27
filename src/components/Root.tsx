@@ -1,16 +1,15 @@
-import React, { useMemo, useState } from 'react'
+import React, { ReactNode, useMemo, useState } from 'react'
 import { BrowserRouter } from 'react-router-dom'
-import PropTypes from 'prop-types'
 import { ConfigProvider as AntConfigProvider } from 'antd'
-import { ThemeProvider, createGlobalStyle } from 'styled-components'
+import { DefaultTheme, ThemeProvider, createGlobalStyle } from 'styled-components'
 import { Normalize } from 'styled-normalize'
-import pickBy from 'lodash/pickBy'
 
 import {
   ApolloClient,
   ApolloLink,
   ApolloProvider,
   InMemoryCache,
+  NormalizedCacheObject,
   split,
 } from '@apollo/client'
 import { getMainDefinition } from '@apollo/client/utilities'
@@ -30,19 +29,19 @@ if (process.env.NODE_ENV !== 'production') {
   loadErrorMessages()
 }
 
-const replaceHttpWithWs = url => {
+const replaceHttpWithWs = (url: string | undefined): string | null => {
   if (!url) return null
   let wsUrl = url.replace(/^http:/, 'ws:')
   wsUrl = wsUrl.replace(/^https:/, 'wss:')
   return wsUrl
 }
 
-const pxToNumConverter = value => {
+const pxToNumConverter = (value: string | number | undefined): number | undefined => {
   if (typeof value === 'string') {
     if (value.slice(-2) === 'px') return parseInt(value.slice(0, -2), 10)
   }
 
-  return value
+  return typeof value === 'number' ? value : undefined
 }
 
 export const GlobalStyle = createGlobalStyle`
@@ -60,27 +59,35 @@ export const GlobalStyle = createGlobalStyle`
 `
 
 // See https://github.com/apollographql/apollo-feature-requests/issues/6#issuecomment-465305186
-export function stripTypenames(obj) {
+export function stripTypenames<T extends Record<string, unknown>>(obj: T): T {
   Object.keys(obj).forEach(property => {
+    const value = obj[property]
     if (
-      obj[property] !== null &&
-      typeof obj[property] === 'object' &&
-      !(obj[property] instanceof File)
+      value !== null &&
+      typeof value === 'object' &&
+      !(value instanceof File)
     ) {
-      delete obj.property
-      const newData = stripTypenames(obj[property], '__typename')
-      obj[property] = newData
+      delete (obj as Record<string, unknown>).property
+      const newData = stripTypenames(value as Record<string, unknown>)
+      ;(obj as Record<string, unknown>)[property] = newData
     } else if (property === '__typename') {
-      delete obj[property]
+      delete (obj as Record<string, unknown>)[property]
     }
   })
   return obj
 }
 
+type ApolloConfig = {
+  link: ApolloLink
+  cache: InMemoryCache
+}
+
+type MakeConfigFn = (config: ApolloConfig) => ApolloConfig
+
 // Construct an ApolloClient. If a function is passed as the first argument,
 // it will be called with the default client config as an argument, and should
 // return the desired config.
-const makeApolloClient = makeConfig => {
+const makeApolloClient = (makeConfig?: MakeConfigFn | null): ApolloClient<NormalizedCacheObject> => {
   const webSocketUrl = `${replaceHttpWithWs(serverUrl)}/subscriptions`
 
   const uploadLink = createUploadLink({
@@ -140,8 +147,11 @@ const makeApolloClient = makeConfig => {
 
   const splitLink = split(
     ({ query }) => {
-      const { kind, operation } = getMainDefinition(query)
-      return kind === 'OperationDefinition' && operation === 'subscription'
+      const definition = getMainDefinition(query)
+      return (
+        definition.kind === 'OperationDefinition' &&
+        definition.operation === 'subscription'
+      )
     },
     wsLink,
     link,
@@ -155,8 +165,8 @@ const makeApolloClient = makeConfig => {
   return new ApolloClient(makeConfig ? makeConfig(config) : config)
 }
 
-export function makeTheme(providedTheme) {
-  const mapper = {
+export function makeTheme(providedTheme: DefaultTheme): { token: Record<string, unknown> } {
+  const mapper: Record<string, unknown> = {
     borderRadius: pxToNumConverter(providedTheme.borderRadius),
     colorBgBase: providedTheme.colorBackground,
     colorTextBase: providedTheme.colorText,
@@ -174,7 +184,9 @@ export function makeTheme(providedTheme) {
     sizeUnit: pxToNumConverter(providedTheme.gridUnit),
   }
 
-  const filtered = pickBy(mapper, (v: any) => !!v)
+  const filtered = Object.fromEntries(
+    Object.entries(mapper).filter(([, v]) => !!v),
+  )
 
   return {
     token: {
@@ -184,9 +196,14 @@ export function makeTheme(providedTheme) {
   }
 }
 
-const Root = props => {
-  const { makeApolloConfig = null, routes, theme } = props
-  const [currentUser, setCurrentUser] = useState()
+type RootProps = {
+  makeApolloConfig?: MakeConfigFn | null
+  routes: ReactNode
+  theme: DefaultTheme
+}
+
+const Root = ({ makeApolloConfig = null, routes, theme }: RootProps): React.ReactNode => {
+  const [currentUser, setCurrentUser] = useState<unknown>()
 
   const client = useMemo(
     () => makeApolloClient(makeApolloConfig),
@@ -216,13 +233,6 @@ const Root = props => {
       </SubscriptionManagerProvider>
     </ApolloProvider>
   )
-}
-
-Root.propTypes = {
-  makeApolloConfig: PropTypes.func,
-  routes: PropTypes.node.isRequired,
-
-  theme: PropTypes.object.isRequired,
 }
 
 export default Root

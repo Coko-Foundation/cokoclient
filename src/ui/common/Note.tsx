@@ -3,6 +3,11 @@ import styled from 'styled-components'
 
 import { grid, th } from '../../toolkit'
 
+type NoteProps = {
+  className?: string
+  children?: React.ReactNode
+}
+
 const Wrapper = styled.div`
   background: ${th('colorSecondary')};
   border-radius: 3px;
@@ -11,11 +16,9 @@ const Wrapper = styled.div`
   text-align: justify;
 `
 
-const Note = props => {
+const Note = (props: NoteProps): React.ReactNode => {
   const { className, children } = props
   return <Wrapper className={className}>{children}</Wrapper>
 }
-
-Note.propTypes = {}
 
 export default Note

@@ -1,22 +1,33 @@
-import React from 'react'
-import PropTypes from 'prop-types'
+import React, { ComponentProps } from 'react'
 import styled from 'styled-components'
 
 import Spin from '../common/Spin'
 import Result from '../common/Result'
 
+type ProviderConnectionProps = {
+  className?: string
+  closeOnSuccess?: boolean
+  connecting?: boolean
+  redirectUrlLabel?: string
+  successfullyConnected?: boolean
+}
+
+type ResultProps = ComponentProps<typeof Result>
+
 const Wrapper = styled.div``
 
-const ProviderConnection = props => {
+const ProviderConnection = (
+  props: ProviderConnectionProps,
+): React.ReactNode => {
   const {
     className,
     closeOnSuccess = false,
     connecting = false,
-    redirectUrlLabel = null,
+    redirectUrlLabel,
     successfullyConnected = false,
   } = props
 
-  let resultProps
+  let resultProps: ResultProps
 
   if (connecting) {
     resultProps = {
@@ -53,13 +64,6 @@ const ProviderConnection = props => {
       <Result {...resultProps} />
     </Wrapper>
   )
-}
-
-ProviderConnection.propTypes = {
-  closeOnSuccess: PropTypes.bool,
-  connecting: PropTypes.bool,
-  redirectUrlLabel: PropTypes.string,
-  successfullyConnected: PropTypes.bool,
 }
 
 export default ProviderConnection

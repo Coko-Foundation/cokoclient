@@ -1,11 +1,16 @@
-import React from 'react'
-import PropTypes from 'prop-types'
+import React, { ComponentProps } from 'react'
 import styled from 'styled-components'
 
 import { InputNumber as AntInputNumber } from 'antd'
 import { grid } from '../../toolkit'
 
-const Wrapper = styled.div`
+type InputNumberProps = ComponentProps<typeof AntInputNumber> & {
+  className?: string
+  label?: string | null
+  name?: string
+}
+
+const Wrapper = styled.div<{ $isDisabled: boolean }>`
   cursor: ${props => (props.$isDisabled ? 'not-allowed' : 'default')};
   display: inline;
   opacity: ${props => (props.$isDisabled ? '0.5' : '1')};
@@ -24,7 +29,7 @@ const Input = styled(AntInputNumber)`
   width: ${grid(8)};
 `
 
-const InputNumber = props => {
+const InputNumber = (props: InputNumberProps): React.ReactNode => {
   const {
     className,
     disabled = false,
@@ -41,12 +46,6 @@ const InputNumber = props => {
       </label>
     </Wrapper>
   )
-}
-
-InputNumber.propTypes = {
-  disabled: PropTypes.bool,
-  label: PropTypes.string,
-  name: PropTypes.string,
 }
 
 export default InputNumber

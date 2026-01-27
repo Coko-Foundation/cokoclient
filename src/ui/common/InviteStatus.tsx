@@ -1,7 +1,31 @@
 import React from 'react'
-import PropTypes from 'prop-types'
 import styled from 'styled-components'
 import { grid, th } from '../../toolkit'
+
+type Status =
+  | 'success'
+  | 'error'
+  | 'warn'
+  | 'warning'
+  | 'accept'
+  | 'reject'
+  | 'revise'
+  | 'primary'
+  | 'publish'
+
+type InviteStatusProps = {
+  children?: React.ReactNode
+  className?: string
+  /** Determines if theme colours are reversed */
+  reverseColors?: boolean
+  /** List of valid status values */
+  status?: Status | null
+}
+
+type StyledStatusProps = {
+  $reverseColors: boolean
+  $status: Status | null
+}
 
 const statuses = {
   success: ['success', 'accept'],
@@ -10,15 +34,15 @@ const statuses = {
   primary: ['primary', 'publish'],
 }
 
-const StyledStatus = styled.span`
+const StyledStatus = styled.span<StyledStatusProps>`
   background: ${props => {
     const { $reverseColors, $status } = props
     if (!$reverseColors) return null
 
-    if (statuses.success.includes($status)) return th('colorSuccess')
-    if (statuses.error.includes($status)) return th('colorError')
-    if (statuses.warning.includes($status)) return th('colorWarning')
-    if (statuses.primary.includes($status)) return th('colorPrimary')
+    if ($status && statuses.success.includes($status)) return th('colorSuccess')
+    if ($status && statuses.error.includes($status)) return th('colorError')
+    if ($status && statuses.warning.includes($status)) return th('colorWarning')
+    if ($status && statuses.primary.includes($status)) return th('colorPrimary')
 
     return th('colorSecondary')
   }};
@@ -27,10 +51,10 @@ const StyledStatus = styled.span`
     const { $reverseColors, $status } = props
     if ($reverseColors) return th('colorTextReverse')
 
-    if (statuses.success.includes($status)) return th('colorSuccess')
-    if (statuses.error.includes($status)) return th('colorError')
-    if (statuses.warning.includes($status)) return th('colorWarning')
-    if (statuses.primary.includes($status)) return th('colorPrimary')
+    if ($status && statuses.success.includes($status)) return th('colorSuccess')
+    if ($status && statuses.error.includes($status)) return th('colorError')
+    if ($status && statuses.warning.includes($status)) return th('colorWarning')
+    if ($status && statuses.primary.includes($status)) return th('colorPrimary')
 
     return th('colorText')
   }};
@@ -46,7 +70,7 @@ const StyledStatus = styled.span`
   white-space: normal;
 `
 
-const InviteStatus = props => {
+const InviteStatus = (props: InviteStatusProps): React.ReactNode => {
   const { children, className, reverseColors = false, status = null } = props
   if (!children) return null
 
@@ -59,23 +83,6 @@ const InviteStatus = props => {
       {children}
     </StyledStatus>
   )
-}
-
-InviteStatus.propTypes = {
-  /** Determines if theme colours are reversed */
-  reverseColors: PropTypes.bool,
-  /** List of valid status values */
-  status: PropTypes.oneOf([
-    'success',
-    'error',
-    'warn',
-    'warning',
-    'accept',
-    'reject',
-    'revise',
-    'primary',
-    'publish',
-  ]),
 }
 
 export default InviteStatus

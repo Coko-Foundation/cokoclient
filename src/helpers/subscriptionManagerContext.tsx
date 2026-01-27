@@ -1,10 +1,16 @@
-import React, { createContext, useContext } from 'react'
+import React, { createContext, ReactNode, useContext } from 'react'
 import SubscriptionManager from './SubscriptionManager'
 
-const SubscriptionManagerContext = createContext(null)
 const managerInstance = new SubscriptionManager()
+const SubscriptionManagerContext = createContext<SubscriptionManager>(managerInstance)
 
-export const SubscriptionManagerProvider = ({ children }) => {
+type SubscriptionManagerProviderProps = {
+  children: ReactNode
+}
+
+export const SubscriptionManagerProvider = ({
+  children,
+}: SubscriptionManagerProviderProps): React.ReactNode => {
   return (
     <SubscriptionManagerContext.Provider value={managerInstance}>
       {children}
@@ -12,5 +18,5 @@ export const SubscriptionManagerProvider = ({ children }) => {
   )
 }
 
-export const useSubscriptionManager = () =>
+export const useSubscriptionManager = (): SubscriptionManager =>
   useContext(SubscriptionManagerContext)

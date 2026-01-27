@@ -1,10 +1,17 @@
 import React from 'react'
-import PropTypes from 'prop-types'
 import styled from 'styled-components'
 import { grid } from '../../toolkit'
 
 import Divider from './Divider'
 import { H2 } from './Headings'
+
+type FormSectionProps = {
+  className?: string
+  children?: React.ReactNode
+  /** Label to display as heading above section */
+  label?: string | null
+  last?: boolean
+}
 
 const Wrapper = styled.div`
   > div:first-child {
@@ -12,7 +19,7 @@ const Wrapper = styled.div`
   }
 `
 
-const FormSection = props => {
+const FormSection = (props: FormSectionProps): React.ReactNode => {
   const { className, children, label = null, last = false } = props
 
   return (
@@ -25,12 +32,6 @@ const FormSection = props => {
       {!last && <Divider />}
     </Wrapper>
   )
-}
-
-FormSection.propTypes = {
-  /** Label to display as heading above section */
-  label: PropTypes.string,
-  last: PropTypes.bool,
 }
 
 export default FormSection

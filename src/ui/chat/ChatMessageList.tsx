@@ -1,10 +1,9 @@
 import React from 'react'
-import PropTypes from 'prop-types'
 import styled from 'styled-components'
 
 import { grid } from '../../toolkit'
-import ChatMessage from './ChatMessage'
-import { List } from '../common'
+import ChatMessage, { ChatMessageProps } from './ChatMessage'
+import List, { ListItem } from '../common/List'
 
 const Wrapper = styled.div`
   li:not(:last-child) {
@@ -12,37 +11,38 @@ const Wrapper = styled.div`
   }
 `
 
-const ChatMessageList = props => {
+type ChatItem = Omit<ChatMessageProps, 'className'>
+
+type ChatMessageListProps = {
+  className?: string
+  messages: ChatItem[]
+}
+
+const ChatMessageList = (props: ChatMessageListProps) => {
   const { className, messages = [] } = props
 
   return (
     <Wrapper className={className}>
       <List
         dataSource={messages}
-        renderItem={item => (
-          <li>
-            <ChatMessage
-              content={item.content}
-              date={item.date}
-              own={item.own}
-              user={item.user}
-            />
-          </li>
-        )}
+        renderItem={(item: ListItem) => {
+          const chatItem = item as unknown as ChatItem
+
+          return (
+            <li>
+              <ChatMessage
+                content={chatItem.content}
+                date={chatItem.date}
+                id={chatItem.id}
+                own={chatItem.own}
+                user={chatItem.user}
+              />
+            </li>
+          )
+        }}
       />
     </Wrapper>
   )
-}
-
-ChatMessageList.propTypes = {
-  messages: PropTypes.arrayOf(
-    PropTypes.shape({
-      content: PropTypes.string,
-      date: PropTypes.string,
-      own: PropTypes.bool,
-      user: PropTypes.string,
-    }),
-  ),
 }
 
 export default ChatMessageList

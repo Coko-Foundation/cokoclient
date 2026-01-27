@@ -1,27 +1,34 @@
-import React from 'react'
-import PropTypes from 'prop-types'
-import styled, { css } from 'styled-components'
+import React, { ComponentProps } from 'react'
+import styled, { css, RuleSet } from 'styled-components'
 import { Switch as AntSwitch } from 'antd'
 
 import { grid } from '../../toolkit'
 
+type LabelPosition = 'left' | 'right'
+
+type SwitchProps = ComponentProps<typeof AntSwitch> & {
+  className?: string
+  label?: string | null
+  labelPosition?: LabelPosition
+}
+
 const Wrapper = styled.span``
 
-const Label = styled.span`
-  ${props =>
+const Label = styled.span<{ $labelPosition: LabelPosition }>`
+  ${(props): RuleSet | false =>
     props.$labelPosition === 'left' &&
     css`
       margin-right: ${grid(2)};
     `}
 
-  ${props =>
+  ${(props): RuleSet | false =>
     props.$labelPosition === 'right' &&
     css`
       margin-left: ${grid(2)};
     `}
 `
 
-const Switch = props => {
+const Switch = (props: SwitchProps): React.ReactNode => {
   const { className, label = null, labelPosition = 'right', ...rest } = props
 
   return (
@@ -37,11 +44,6 @@ const Switch = props => {
       )}
     </Wrapper>
   )
-}
-
-Switch.propTypes = {
-  label: PropTypes.string,
-  labelPosition: PropTypes.string,
 }
 
 export default Switch

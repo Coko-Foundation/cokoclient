@@ -1,12 +1,29 @@
 import React, { cloneElement, useRef, useEffect, useState } from 'react'
 import styled from 'styled-components'
-import PropTypes from 'prop-types'
 
 import { grid } from '../../toolkit'
 import { uuid } from '../../index'
 import cokoTheme from '../../theme'
 
-const PopupContainer = styled.div`
+type Position = 'block-start' | 'block-end' | 'inline-start' | 'inline-end'
+type Alignment = 'start' | 'end'
+
+type PopupProps = {
+  alignment?: Alignment
+  children?: React.ReactNode
+  focusableContent?: string[]
+  id?: string
+  toggle: React.ReactElement
+  position?: Position
+}
+
+type PopupContainerProps = {
+  visible: boolean
+  position: Position
+  alignment: Alignment
+}
+
+const PopupContainer = styled.div<PopupContainerProps>`
   background: ${cokoTheme.colorBackground};
   border: 1px solid ${cokoTheme.colorBorder};
   border-radius: 10px;
@@ -69,12 +86,11 @@ const Popup = ({
   id = uuid(),
   toggle,
   position = 'block-start',
-  ...rest
-}) => {
-  const WrapperRef = useRef(null)
-  const popupRef = useRef(null)
+}: PopupProps): React.ReactNode => {
+  const WrapperRef = useRef<HTMLDivElement>(null)
+  const popupRef = useRef<HTMLDivElement>(null)
 
-  const [focusableElements, setFocusableElements] = useState([])
+  const [focusableElements, setFocusableElements] = useState<NodeListOf<HTMLElement> | null>(null)
   const [visible, setVisible] = useState(false)
 
   const onClickToggle = () => {
@@ -82,7 +98,7 @@ const Popup = ({
   }
 
   useEffect(() => {
-    if (visible && focusableElements.length > 0) {
+    if (visible && focusableElements && focusableElements.length > 0) {
       // focusing the first focusable element of the popup
       focusableElements[0].focus()
     }
@@ -97,16 +113,18 @@ const Popup = ({
     }
   }, [children])
 
-  const handleKeyDown = e => {
-    const isEscapePress = e.key === 'Escape' || e.keyCode === 27
-    const isTabPressed = e.key === 'Tab' || e.keyCode === 9
+  const handleKeyDown = (e: React.KeyboardEvent) => {
+    const isEscapePress = e.key === 'Escape'
+    const isTabPressed = e.key === 'Tab'
 
     if (!isTabPressed && !isEscapePress) return
 
     if (isEscapePress) {
-      popupRef.current.previousElementSibling.focus()
+      ;(popupRef.current?.previousElementSibling as HTMLElement)?.focus()
       setVisible(false)
     }
+
+    if (!focusableElements || focusableElements.length === 0) return
 
     const firstFocusableElement = focusableElements[0]
     const lastFocusableElement = focusableElements[focusableElements.length - 1]
@@ -122,9 +140,9 @@ const Popup = ({
     }
   }
 
-  const handleBlur = e => {
+  const handleBlur = (e: React.FocusEvent) => {
     // when clicking outside the popup wrapper close the popup
-    if (!WrapperRef.current.contains(e.relatedTarget)) {
+    if (!WrapperRef.current?.contains(e.relatedTarget as Node)) {
       setVisible(false)
     }
   }
@@ -136,7 +154,7 @@ const Popup = ({
         'aria-controls': id,
         'aria-expanded': visible,
         'aria-haspopup': 'dialog',
-      })}
+      } as React.HTMLAttributes<HTMLElement>)}
       <PopupContainer
         alignment={alignment}
         id={id}
@@ -144,27 +162,13 @@ const Popup = ({
         onKeyDown={handleKeyDown}
         position={position}
         ref={popupRef}
-        tabIndex="0"
+        tabIndex={0}
         visible={visible}
-        {...rest}
       >
         {children}
       </PopupContainer>
     </Wrapper>
   )
-}
-
-Popup.propTypes = {
-  alignment: PropTypes.oneOf(['start', 'end']),
-  id: PropTypes.string,
-  focusableContent: PropTypes.arrayOf(PropTypes.string),
-  toggle: PropTypes.element.isRequired,
-  position: PropTypes.oneOf([
-    'block-start',
-    'block-end',
-    'inline-start',
-    'inline-end',
-  ]),
 }
 
 export default Popup

@@ -1,5 +1,4 @@
 import React, { useState } from 'react'
-import PropTypes from 'prop-types'
 import styled from 'styled-components'
 import { grid, th } from '../../toolkit'
 
@@ -39,42 +38,78 @@ const AddButton = styled(Button)`
   height: 100%;
 `
 
-const noop = () => {}
+export type AdditionalSearchField = {
+  label: string
+  value: string
+  items?: string[]
+}
 
-const SearchBox = props => {
+export type SearchResult = {
+  id: string
+  value: string
+  label: string
+  displayName: string
+  isDisabled?: boolean
+  status?: string
+  key?: string
+  [key: string]: unknown
+}
+
+type SearchResultGroup = {
+  label: string
+  options: SearchResult[]
+}
+
+type Selection = {
+  value: string
+  label: string
+}
+
+type SearchBoxProps = {
+  additionalSearchFields?: AdditionalSearchField[]
+  className?: string
+  onAdd: (ids: string[]) => Promise<void>
+  onSearch: (value: string) => Promise<SearchResult[]>
+  searchPlaceholder?: string
+}
+
+const SearchBox = (props: SearchBoxProps): React.ReactNode => {
   const {
     additionalSearchFields = [],
     className,
     searchPlaceholder = 'Add a reviewer to the list',
-    onAdd = noop,
-    onSearch = noop,
+    onAdd,
+    onSearch,
   } = props
 
-  const [selection, setSelection] = useState([])
+  const [selection, setSelection] = useState<Selection[]>([])
   const [loadingSearchResults, setLoadingSearchResults] = useState(false)
-  const [searchResults, setSearchResults] = useState([])
+  const [searchResults, setSearchResults] = useState<
+    SearchResult[] | SearchResultGroup[]
+  >([])
 
-  const handleSearch = searchValue => {
+  const handleSearch = (searchValue: string): void => {
     setLoadingSearchResults(true)
 
     onSearch(searchValue)
-      .then(data => {
+      .then((data: SearchResult[]) => {
         if (!additionalSearchFields.length || !data.length) {
           setSearchResults(data)
           return
         }
 
-        const nameMatchData = data.filter(d =>
+        const nameMatchData = data.filter((d: SearchResult) =>
           d.displayName.toLowerCase().includes(searchValue.toLowerCase()),
         )
 
         const otherData = data.filter(
-          d => !d.displayName.toLowerCase().includes(searchValue.toLowerCase()),
+          (d: SearchResult) =>
+            !d.displayName.toLowerCase().includes(searchValue.toLowerCase()),
         )
 
-        const parsedData = []
+        const parsedData: SearchResultGroup[] = []
 
-        nameMatchData.length &&
+        if (nameMatchData.length > 0) {
           parsedData.push({
             label: 'Reviewer Name',
             options: nameMatchData.map(n => ({
@@ -82,6 +117,7 @@ const SearchBox = props => {
               key: `displayName-${n.id}`,
             })),
           })
+        }
 
         additionalSearchFields.forEach(field => {
           if (field.items && Array.isArray(field.items)) {
@@ -89,41 +125,39 @@ const SearchBox = props => {
               if (!item.toLowerCase().includes(searchValue.toLowerCase()))
                 return
 
-              const group = {
-                label: `${field.label}: ${item}`,
-                options: [],
-              }
-
               const filteredData = otherData.filter(
-                d =>
-                  d[field.value] !== undefined && d[field.value].includes(item),
+                (d: SearchResult) =>
+                  d[field.value] !== undefined &&
+                  String(d[field.value]).includes(item),
               )
 
               if (!filteredData.length) return
 
-              group.options = filteredData.map(f => ({
-                ...f,
-                key: `${field.value}-${item}-${f.value}`,
-              }))
+              const group: SearchResultGroup = {
+                label: `${field.label}: ${item}`,
+                options: filteredData.map((f: SearchResult) => ({
+                  ...f,
+                  key: `${field.value}-${item}-${f.value}`,
+                })),
+              }
 
               parsedData.push(group)
             })
           } else {
-            const group = {
-              label: field.label,
-              options: [],
-            }
-
             const filteredData = otherData.filter(
-              d => d[field.value] !== undefined && d[field.value] !== false,
+              (d: SearchResult) =>
+                d[field.value] !== undefined && d[field.value] !== false,
             )
 
             if (!filteredData.length) return
 
-            group.options = filteredData.map(f => ({
-              ...f,
-              key: `${field.value}-${f.value}`,
-            }))
+            const group: SearchResultGroup = {
+              label: field.label,
+              options: filteredData.map((f: SearchResult) => ({
+                ...f,
+                key: `${field.value}-${f.value}`,
+              })),
+            }
 
             parsedData.push(group)
           }
@@ -136,11 +170,15 @@ const SearchBox = props => {
       })
   }
 
-  const handleAdd = () => {
+  const handleAdd = (): void => {
     onAdd(selection.map(s => s.value)).finally(() => {
       setSearchResults([])
       setSelection([])
     })
+  }
+
+  const handleChange = (value: unknown): void => {
+    setSelection(value as Selection[])
   }
 
   return (
@@ -151,7 +189,7 @@ const SearchBox = props => {
         labelInValue
         loading={loadingSearchResults}
         mode="multiple"
-        onChange={setSelection}
+        onChange={handleChange}
         onSearch={handleSearch}
         options={searchResults}
         placeholder={searchPlaceholder}
@@ -168,23 +206,6 @@ const SearchBox = props => {
       </AddButton>
     </Wrapper>
   )
-}
-
-SearchBox.propTypes = {
-  /** Additional search fields definitions to display on search */
-  additionalSearchFields: PropTypes.arrayOf(
-    PropTypes.shape({
-      label: PropTypes.string.isRequired,
-      value: PropTypes.string.isRequired,
-      items: PropTypes.arrayOf(PropTypes.string),
-    }),
-  ),
-  /** Function to run when "Add user(s)" is clicked */
-  onAdd: PropTypes.func,
-  /** Function to run when typing into the search field */
-  onSearch: PropTypes.func,
-  /** Placeholder for the search bar */
-  searchPlaceholder: PropTypes.string,
 }
 
 export default SearchBox

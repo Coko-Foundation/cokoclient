@@ -113,6 +113,7 @@ const Template = ({ showInteractiveContent = false, ...args }) => {
   }, [pool])
 
   const handleAddReviewers = optionsClicked => {
+    console.log(optionsClicked)
     const newReviewers = optionToReviewerData(optionsClicked)
     setPool([...pool, ...newReviewers])
     setReviewers(

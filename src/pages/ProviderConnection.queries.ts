@@ -17,5 +17,4 @@ const CREATE_OAUTH_IDENTITY = gql`
   }
 `
 
-/* eslint-disable-next-line import/prefer-default-export */
 export { CREATE_OAUTH_IDENTITY }

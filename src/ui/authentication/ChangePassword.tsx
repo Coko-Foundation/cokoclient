@@ -1,29 +1,37 @@
-import React from 'react'
-import PropTypes from 'prop-types'
+import React, { ReactNode } from 'react'
 import styled from 'styled-components'
-import { Row as AntRow, Col as AntCol } from 'antd'
+import { Row as AntRow, Col as AntCol, FormInstance } from 'antd'
 
 import { Form, FormSection, Input } from '../common'
 import ProfileForm from './ProfileForm'
 
+type ChangePasswordProps = {
+  className?: string
+  form?: FormInstance
+  loading?: boolean
+  message?: string
+  onSubmit: () => void
+  submissionStatus?: 'success' | 'error' | 'danger'
+}
+
 const Col = styled(AntCol)``
 
-const Row = ({ children }) => (
-  <AntRow align="baseline" gutter={8}>
+const Row = ({ children }: { children: ReactNode }): React.ReactNode => (
+  <AntRow align="top" gutter={8}>
     {children}
   </AntRow>
 )
 
 const Wrapper = styled.div``
 
-const ChangePassword = props => {
+const ChangePassword = (props: ChangePasswordProps): React.ReactNode => {
   const {
     className,
-    form = null,
+    form,
     loading = false,
     message = '',
     onSubmit,
-    submissionStatus = null,
+    submissionStatus,
     ...rest
   } = props
 
@@ -134,14 +142,6 @@ const ChangePassword = props => {
       </ProfileForm>
     </Wrapper>
   )
-}
-
-ChangePassword.propTypes = {
-  form: PropTypes.shape(),
-  loading: PropTypes.bool,
-  message: PropTypes.string,
-  onSubmit: PropTypes.func.isRequired,
-  submissionStatus: PropTypes.oneOf(['success', 'error', 'danger']),
 }
 
 export default ChangePassword

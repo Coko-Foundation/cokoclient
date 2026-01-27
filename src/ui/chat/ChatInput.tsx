@@ -1,12 +1,11 @@
-import React, { useState } from 'react'
-import PropTypes from 'prop-types'
+import { useState } from 'react'
 import styled from 'styled-components'
 
 import { SendOutlined } from '@ant-design/icons'
 
 import { Input } from '../common'
 
-// const Wrapper = styled.div``
+const Wrapper = styled.div``
 
 const Send = styled(SendOutlined)`
   color: ${props => props.theme.colorPrimary};
@@ -18,12 +17,17 @@ const Send = styled(SendOutlined)`
 
 // TODO -- this needs to be a wax editor with two plugins (mention & task)
 
-const ChatInput = props => {
+type ChatInputProps = {
+  className?: string
+  onSend: (value: string) => void
+}
+
+const ChatInput = (props: ChatInputProps) => {
   const { className, onSend } = props
 
   const [inputValue, setInputValue] = useState('')
 
-  const handleChange = value => {
+  const handleChange = (value: string) => {
     setInputValue(value)
   }
 
@@ -32,19 +36,15 @@ const ChatInput = props => {
   const SendIcon = <Send onClick={handleSend} />
 
   return (
-    // <Wrapper className={className}>
-    <Input
-      className={className}
-      onChange={handleChange}
-      onPressEnter={handleSend}
-      suffix={SendIcon}
-    />
-    // </Wrapper>
+    <Wrapper className={className}>
+      <Input
+        className={className}
+        onChange={handleChange}
+        onPressEnter={handleSend}
+        suffix={SendIcon}
+      />
+    </Wrapper>
   )
-}
-
-ChatInput.propTypes = {
-  onSend: PropTypes.func.isRequired,
 }
 
 export default ChatInput

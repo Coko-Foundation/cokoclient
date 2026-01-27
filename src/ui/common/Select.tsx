@@ -2,14 +2,20 @@
 /* stylelint-disable selector-combinator-space-before */
 /* stylelint-disable selector-descendant-combinator-no-non-space */
 /* stylelint-disable string-quotes */
-import React, { useEffect, useRef, useState } from 'react'
-import PropTypes from 'prop-types'
-import styled, { css } from 'styled-components'
-import { debounce as lodashDebounceFunc } from 'lodash'
+import React, { ComponentProps, useEffect, useRef, useState } from 'react'
+import styled, { css, RuleSet } from 'styled-components'
 import { Select as AntSelect } from 'antd'
 
 import { th } from '../../toolkit'
+import { debounce as debounceFunc } from '../../toolkit/funcs'
 import Empty from './Empty'
+
+type SelectProps = ComponentProps<typeof AntSelect> & {
+  async?: boolean
+  debounceTimeout?: number
+  isOpen?: boolean
+  wrapOptionText?: boolean
+}
 
 const SelectWrapper = styled.span``
 
@@ -35,7 +41,7 @@ const StyledSelect = styled(AntSelect)`
   }
 `
 
-const StyledDropdown = styled.div`
+const StyledDropdown = styled.div<{ $wrapOptionText: boolean }>`
   .ant-select-item-option-active {
     background-color: ${th('colorBackgroundHue')};
     outline: 2px solid ${th('colorPrimary')};
@@ -57,7 +63,7 @@ const StyledDropdown = styled.div`
 
   .ant-select-item-option-content {
     /* outline: 2px solid ${th('colorPrimary')}; */
-    ${props =>
+    ${(props): RuleSet | false =>
       props.$wrapOptionText &&
       css`
         white-space: normal;
@@ -66,66 +72,52 @@ const StyledDropdown = styled.div`
 `
 
 const defaultNotFoundContent = (
-  <Empty
-    description="No Data"
-    image={Empty.PRESENTED_IMAGE_SIMPLE}
-    role="status"
-  />
+  <span role="status">
+    <Empty description="No Data" image={Empty.PRESENTED_IMAGE_SIMPLE} />
+  </span>
 )
 
-const Select = props => {
+type AriaAttributes = Record<string, string | null> | null
+
+const Select = (props: SelectProps): React.ReactNode => {
   const {
     async = false,
     className,
-    // debounce,
     debounceTimeout = 500,
-
-    // disable rule for props handled by ant
-    /* eslint-disable react/prop-types */
     filterOption,
     notFoundContent = defaultNotFoundContent,
     onSearch,
     showSearch,
     id,
-    /* eslint-enable react/prop-types */
     isOpen = false,
     virtual = false,
     wrapOptionText = false,
     ...rest
   } = props
 
-  const selectRef = useRef(null)
+  const selectRef = useRef<HTMLSpanElement>(null)
   const [open, setOpen] = useState(isOpen)
-  const [ariaAttributes, setAriaAttributes] = useState({})
+  const [ariaAttributes, setAriaAttributes] = useState<AriaAttributes>({})
 
-  const cleanUpInvalidAttrs = () => {
+  const cleanUpInvalidAttrs = (): void => {
+    const input = selectRef.current?.querySelector('input[role="combobox"]')
+    if (!input) return
+
     // store invalid attrs in local state
     setAriaAttributes({
-      'aria-controls': selectRef.current
-        ?.querySelector('input[role="combobox"]')
-        .getAttribute('aria-controls'),
-      'aria-owns': selectRef.current
-        ?.querySelector('input[role="combobox"]')
-        .getAttribute('aria-owns'),
-      'aria-activedescendant': selectRef.current
-        ?.querySelector('input[role="combobox"]')
-        .getAttribute('aria-activedescendant'),
+      'aria-controls': input.getAttribute('aria-controls'),
+      'aria-owns': input.getAttribute('aria-owns'),
+      'aria-activedescendant': input.getAttribute('aria-activedescendant'),
     })
     // remove them from the DOM node
-    selectRef.current
-      ?.querySelector('input[role="combobox"]')
-      .removeAttribute('aria-controls')
-    selectRef.current
-      ?.querySelector('input[role="combobox"]')
-      .removeAttribute('aria-owns')
-    selectRef.current
-      ?.querySelector('input[role="combobox"]')
-      .removeAttribute('aria-activedescendant')
+    input.removeAttribute('aria-controls')
+    input.removeAttribute('aria-owns')
+    input.removeAttribute('aria-activedescendant')
   }
 
   useEffect(() => {
-    const innerWrapper = selectRef.current.querySelector('.ant-select')
-    innerWrapper.removeAttribute('aria-required')
+    const innerWrapper = selectRef.current?.querySelector('.ant-select')
+    innerWrapper?.removeAttribute('aria-required')
 
     // hack to fix accessibility errors
     // apply with delay to make sure attrs are already there
@@ -135,29 +127,31 @@ const Select = props => {
   }, [])
 
   useEffect(() => {
-    if (open && !!ariaAttributes) {
+    if (open && ariaAttributes) {
+      const input = selectRef.current?.querySelector('input[role="combobox"]')
+      if (!input) return
+
       // reapply the stored aria attributes after opening input for the first time
       Object.keys(ariaAttributes).forEach(attr => {
-        selectRef.current
-          .querySelector('input[role="combobox"]')
-          .setAttribute(attr, ariaAttributes[attr])
+        const value = ariaAttributes[attr]
+        if (value) {
+          input.setAttribute(attr, value)
+        }
       })
 
       setAriaAttributes(null)
     }
   }, [open])
 
-  const handleSearch = searchValue => {
-    onSearch(searchValue)
+  const handleSearch = (searchValue: string): void => {
+    onSearch?.(searchValue)
   }
 
-  // const useDebounce = async ? true : debounce
-
   const searchFunc = async
-    ? lodashDebounceFunc(handleSearch, debounceTimeout)
+    ? debounceFunc(handleSearch, debounceTimeout)
     : handleSearch
 
-  const customDropdownRender = menu => (
+  const customDropdownRender = (menu: React.ReactElement): React.ReactElement => (
     <StyledDropdown
       $wrapOptionText={wrapOptionText}
       data-testid="select-dropdown"
@@ -182,17 +176,6 @@ const Select = props => {
       />
     </SelectWrapper>
   )
-}
-
-Select.propTypes = {
-  async: PropTypes.bool,
-  // debounce: PropTypes.bool,
-  debounceTimeout: PropTypes.number,
-  notFoundContent: PropTypes.element,
-  isOpen: PropTypes.bool,
-  virtual: PropTypes.bool,
-
-  wrapOptionText: PropTypes.bool,
 }
 
 export default Select

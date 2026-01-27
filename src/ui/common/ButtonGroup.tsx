@@ -1,22 +1,33 @@
-import React from 'react'
-import PropTypes from 'prop-types'
+import React, { ComponentProps } from 'react'
 import styled, { css } from 'styled-components'
 
 import { grid } from '../../toolkit'
+import Button from './Button'
 
-const Wrapper = styled.div`
-  display: ${props => (props.inline ? 'inline-block' : 'flex')};
-  /* display: inline-block; */
+type ButtonElement = React.ReactElement<ComponentProps<typeof Button>>
+
+type ButtonGroupProps = {
+  children: ButtonElement | ButtonElement[]
+  className?: string
+  inline?: boolean
+  justify?: 'left' | 'right' | 'center'
+}
+
+const Wrapper = styled.div<{
+  $inline?: ButtonGroupProps['inline']
+  $justify?: ButtonGroupProps['justify']
+}>`
+  display: ${props => (props.$inline ? 'inline-block' : 'flex')};
 
   ${props => {
-    const { inline, justify } = props
+    const { $inline, $justify } = props
     let justifyValue
 
-    if (inline) return null
+    if ($inline) return null
 
-    if (justify === 'left') justifyValue = 'flex-start'
-    if (justify === 'right') justifyValue = 'flex-end'
-    if (justify === 'center') justifyValue = 'center'
+    if ($justify === 'left') justifyValue = 'flex-start'
+    if ($justify === 'right') justifyValue = 'flex-end'
+    if ($justify === 'center') justifyValue = 'center'
 
     if (justifyValue)
       return css`
@@ -39,34 +50,14 @@ const Wrapper = styled.div`
   }
 `
 
-const ButtonGroup = props => {
+const ButtonGroup = (props: ButtonGroupProps) => {
   const { className, children, inline = false, justify = 'left' } = props
 
   return (
-    <Wrapper className={className} inline={inline} justify={justify}>
+    <Wrapper className={className} $inline={inline} $justify={justify}>
       {children}
     </Wrapper>
   )
-}
-
-ButtonGroup.propTypes = {
-  /** Must be multiple Button components */
-  children: PropTypes.arrayOf(
-    (propValue, key, componentName, location, propFullName) => {
-      const notButton = propValue.find(el => el.type.name !== 'Button')
-
-      if (notButton)
-        return new Error('ButtonGroup children should be instances of Button!')
-
-      return null
-    },
-  ).isRequired,
-
-  /** Sets display to `inline-block` */
-  inline: PropTypes.bool,
-
-  /** Sets position of buttons in the row. Only applies when `inline` is `false` */
-  justify: PropTypes.oneOf(['left', 'right', 'center']),
 }
 
 export default ButtonGroup

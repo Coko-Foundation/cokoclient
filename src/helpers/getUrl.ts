@@ -1,7 +1,22 @@
-const removeTrailingSlashes = url => url.replace(/\/+$/, '')
+declare global {
+  interface Window {
+    env?: {
+      serverUrl?: string
+      websocketServerUrl?: string
+      yjsWebsocketServerUrl?: string
 
-const sanitizeUrl = url => {
-  if (!url) return null
+      sentry?: {
+        dsn: string
+        environment: string
+      }
+    }
+  }
+}
+
+const removeTrailingSlashes = (url: string) => url.replace(/\/+$/, '')
+
+const sanitizeUrl = (url?: string) => {
+  if (!url) return
   return removeTrailingSlashes(url)
 }
 

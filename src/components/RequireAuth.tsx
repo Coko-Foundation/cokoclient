@@ -1,9 +1,8 @@
-import React, { useEffect } from 'react'
+import React, { ReactNode, useEffect } from 'react'
 import { Redirect, useLocation } from 'react-router-dom'
-import PropTypes from 'prop-types'
 import { useApolloClient } from '@apollo/client'
-import get from 'lodash/get'
 
+import { get } from '../toolkit/funcs'
 import { useCurrentUser } from '../helpers/currentUserContext'
 
 const requiredFields = [
@@ -14,26 +13,45 @@ const requiredFields = [
   'defaultIdentity.isVerified',
 ]
 
-const checkForRequiredFields = user => {
+type User = {
+  id: string
+  displayName: string
+  username: string
+  defaultIdentity?: {
+    id: string
+    isVerified: boolean
+  }
+}
+
+const checkForRequiredFields = (user: User): boolean => {
   const fieldsMissing = requiredFields.some(k => {
-    return typeof get(user, k) === 'undefined'
+    return typeof get(user as Record<string, unknown>, k) === 'undefined'
   })
 
   return !fieldsMissing
 }
 
-const RequireAuth = props => {
-  const {
-    notAuthenticatedRedirectTo = '/login',
-    cleanUp = () => {},
-    children,
-    requireIdentityVerification = true,
-    notVerifiedRedirectTo = '/ensure-verified-login',
-  } = props
+type RequireAuthProps = {
+  notAuthenticatedRedirectTo?: string
+  cleanUp?: () => void
+  children?: ReactNode
+  requireIdentityVerification?: boolean
+  notVerifiedRedirectTo?: string
+}
 
+const RequireAuth = ({
+  notAuthenticatedRedirectTo = '/login',
+  cleanUp = () => {},
+  children,
+  requireIdentityVerification = true,
+  notVerifiedRedirectTo = '/ensure-verified-login',
+}: RequireAuthProps): React.ReactNode => {
   const client = useApolloClient()
   const location = useLocation()
-  const { currentUser, setCurrentUser } = useCurrentUser()
+  const { currentUser, setCurrentUser } = useCurrentUser() as {
+    currentUser: User | null | undefined
+    setCurrentUser: (user: User | null) => void
+  }
 
   useEffect(() => {
     if (currentUser) {
@@ -81,13 +99,6 @@ const RequireAuth = props => {
   }
 
   return children
-}
-
-RequireAuth.propTypes = {
-  cleanUp: PropTypes.func,
-  requireIdentityVerification: PropTypes.bool,
-  notVerifiedRedirectTo: PropTypes.string,
-  notAuthenticatedRedirectTo: PropTypes.string,
 }
 
 export default RequireAuth

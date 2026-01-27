@@ -1,12 +1,10 @@
-import React from 'react'
 import { faker } from '@faker-js/faker'
-import { range } from 'lodash'
 
 import { Tabs } from '../../../src/ui'
 
 export const Base = () => (
   <Tabs>
-    {range(3).map(i => (
+    {Array.from(Array(3)).map((_, i) => (
       <Tabs.TabPane key={i} tab={faker.lorem.words(2)}>
         {faker.lorem.sentences(6)}
       </Tabs.TabPane>

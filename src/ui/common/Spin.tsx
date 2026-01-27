@@ -2,16 +2,32 @@
  * Spinner code license here (MIT): https://github.com/tobiasahlin/SpinKit/blob/master/LICENSE
  */
 
-import React from 'react'
-import PropTypes from 'prop-types'
+import React, { ComponentProps } from 'react'
 import styled, { css, keyframes } from 'styled-components'
 import { Spin as AntSpin } from 'antd'
 
 import { grid } from '../../toolkit'
 
-const StyledSpin = styled(({ isNested, renderBackground, ...rest }) => (
-  <AntSpin {...rest} />
-))`
+type IndicatorProps = {
+  size?: number
+  className?: string
+}
+
+type SpinProps = Omit<ComponentProps<typeof AntSpin>, 'size'> & {
+  size?: number
+  renderBackground?: boolean
+}
+
+type StyledSpinProps = ComponentProps<typeof AntSpin> & {
+  isNested: boolean
+  renderBackground: boolean
+}
+
+const StyledSpin = styled(
+  ({ isNested, renderBackground, ...rest }: StyledSpinProps) => (
+    <AntSpin {...rest} />
+  ),
+)<{ isNested: boolean }>`
   ${props =>
     props.isNested &&
     css`
@@ -37,7 +53,7 @@ const bounce = keyframes`
   }
 `
 
-const IndicatorWrapper = styled.div`
+const IndicatorWrapper = styled.div<{ size: number }>`
   &&& {
     height: ${props => grid(props.size)};
     position: relative;
@@ -77,18 +93,14 @@ const NestedWrapper = styled.div`
   }
 `
 
-export const Indicator = ({ size = 10, className }) => (
+export const Indicator = ({ size = 10, className }: IndicatorProps): React.ReactNode => (
   <IndicatorWrapper className={className} size={size}>
     <BounceOne />
     <BounceTwo />
   </IndicatorWrapper>
 )
 
-Indicator.propTypes = {
-  size: PropTypes.number,
-}
-
-const Spin = props => {
+const Spin = (props: SpinProps): React.ReactNode => {
   const {
     className,
     children,
@@ -115,12 +127,6 @@ const Spin = props => {
 
   if (!showChildren) return <NestedWrapper>{spin}</NestedWrapper>
   return spin
-}
-
-Spin.propTypes = {
-  size: PropTypes.number,
-  spinning: PropTypes.bool.isRequired,
-  renderBackground: PropTypes.bool,
 }
 
 export default Spin

@@ -1,8 +1,6 @@
-import React, { useEffect, useRef } from 'react'
+import React, { ComponentProps, useEffect, useRef } from 'react'
 import styled, { css } from 'styled-components'
-import PropTypes from 'prop-types'
 import { Button as AntButton } from 'antd'
-import { omit } from 'lodash'
 
 import { darken, th, grid } from '../../toolkit'
 
@@ -13,14 +11,22 @@ const colors = {
   // warn: 'colorWarning',
 }
 
-const StyledButton = styled(AntButton)`
+type ButtonProps = Omit<ComponentProps<typeof AntButton>, 'danger'> & {
+  direction?: 'rtl' | 'ltr'
+  status?: 'error' | 'danger' | 'success'
+}
+
+const StyledButton = styled(AntButton)<{
+  $direction: ButtonProps['direction']
+  $status?: ButtonProps['status']
+}>`
   box-shadow: none;
   font-size: ${th('fontSizeBase')};
   /* let lineHeight expand the button height */
   height: unset;
   line-height: ${th('lineHeightBase')};
   ${props =>
-    props.direction === 'rtl' &&
+    props.$direction === 'rtl' &&
     css`
       direction: rtl;
 
@@ -31,11 +37,11 @@ const StyledButton = styled(AntButton)`
     `};
 
   ${props => {
-    const { status, theme, type, ghost, disabled } = props
+    const { $status, theme, type, ghost, disabled } = props
 
     if (disabled) return null
 
-    if (!Object.keys(colors).includes(status)) {
+    if (!$status || !Object.keys(colors).includes($status)) {
       if (type === 'primary' && !ghost) {
         return css`
           background-color: ${th('colorPrimary')};
@@ -58,7 +64,7 @@ const StyledButton = styled(AntButton)`
       `
     }
 
-    const color = theme[colors[status]]
+    const color = theme[colors[$status]]
 
     // primary
     if (type === 'primary')
@@ -110,34 +116,35 @@ const StyledButton = styled(AntButton)`
  * `danger` prop, which is ommited in favour of `status`, described below.
  */
 
-const Button = props => {
+const Button = (props: ButtonProps): React.ReactNode => {
   const {
     children,
     className,
     autoFocus = false,
-    status = null,
-    ...rest
+    direction = 'ltr',
+    status,
+    ...passProps
   } = props
-  const passProps = omit(rest, 'danger')
 
-  const buttonRef = useRef(null)
+  const buttonRef = useRef<HTMLButtonElement>(null)
 
   useEffect(() => {
     if (autoFocus) {
       buttonRef.current?.focus()
     }
-  }, [])
+  })
 
   return (
-    <StyledButton className={className} ref={buttonRef} {...passProps}>
+    <StyledButton
+      $direction={direction}
+      $status={status}
+      className={className}
+      ref={buttonRef}
+      {...passProps}
+    >
       {children}
     </StyledButton>
   )
-}
-
-Button.propTypes = {
-  status: PropTypes.oneOf(['error', 'danger', 'success']),
-  autoFocus: PropTypes.bool,
 }
 
 export default Button

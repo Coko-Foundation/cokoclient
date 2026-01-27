@@ -1,12 +1,26 @@
-import React, { useEffect, useState, memo, useCallback } from 'react'
-import PropTypes from 'prop-types'
+import React, {
+  ComponentProps,
+  useEffect,
+  useState,
+  memo,
+  useCallback,
+  useRef,
+} from 'react'
 import styled from 'styled-components'
-import without from 'lodash/without'
-import { DragDropContext, Droppable, Draggable } from 'react-beautiful-dnd'
+import {
+  DragDropContext,
+  Droppable,
+  Draggable,
+  DropResult,
+  DroppableProvided,
+  DraggableProvided,
+  DraggableStateSnapshot,
+} from 'react-beautiful-dnd'
 
 import { List as AntList } from 'antd'
 
 import { grid, th } from '../../toolkit'
+import { without } from '../../toolkit/funcs'
 
 import UICheckBox from './Checkbox'
 import Empty from './Empty'
@@ -15,6 +29,65 @@ import UISelect from './Select'
 import Pagination from './Pagination'
 import VisuallyHiddenElement from './VisuallyHiddenElement'
 import { Indicator } from './Spin'
+
+type SortOption = {
+  label: string
+  value: string
+  isDefault?: boolean
+}
+
+type PaginationConfig = {
+  current?: number
+  pageSize?: number
+  total?: number
+  onChange?: (page: number, pageSize: number) => void
+  onShowSizeChange?: (current: number, size: number) => void
+}
+
+type ItemSelection = {
+  onChange: (selectedItems: string[]) => void
+}
+
+export type ListItem = {
+  id: string
+  [key: string]: unknown
+}
+
+type SelectableItemProps = {
+  id: string
+  index: number
+  renderItem: (item: ListItem, index: number) => React.ReactNode
+  onDeselect: (id: string) => void
+  onSelect: (id: string) => void
+  selected: boolean
+  checkboxLabel?: string
+}
+
+type ListProps = Omit<
+  ComponentProps<typeof AntList>,
+  'dataSource' | 'renderItem' | 'pagination'
+> & {
+  className?: string
+  dataSource: ListItem[]
+  renderItem: (item: ListItem, index: number) => React.ReactNode
+  footerContent?: React.ReactElement | null
+  itemSelection?: ItemSelection | null
+  loading?: boolean
+  onSearch?: ((value: string) => void) | null
+  onSortOptionChange?: ((value: string) => void) | null
+  pagination?: PaginationConfig | false
+  searchLoading?: boolean
+  searchPlaceholder?: string | null
+  showPagination?: boolean
+  showSearch?: boolean
+  showSort?: boolean
+  showTotalCount?: boolean
+  sortOptions?: SortOption[]
+  totalCount?: number | null
+  draggable?: boolean
+  onDragEnd?: (result: DropResult) => void
+  selectedItems?: string[]
+}
 
 // #region styled
 const Wrapper = styled.div`
@@ -58,7 +131,7 @@ const Select = styled(UISelect)`
   width: 150px;
 `
 
-const ListItemWrapper = styled.li`
+const ListItemWrapper = styled.li<{ isDragging?: boolean }>`
   align-items: center;
   display: flex;
   justify-content: stretch;
@@ -74,7 +147,7 @@ const ListItemWrapper = styled.li`
   }
 `
 
-const StyledList = styled(AntList)`
+const StyledList = styled(AntList<ListItem>)`
   flex-grow: 1;
   overflow: auto;
 
@@ -105,14 +178,17 @@ const CheckBox = styled(UICheckBox)`
 `
 // #endregion styled
 
-const compareItem = (preProps, nextProps) => {
+const compareItem = (
+  preProps: SelectableItemProps,
+  nextProps: SelectableItemProps,
+): boolean => {
   if (preProps.id === nextProps.id && preProps.selected === nextProps.selected)
     return true
   return false
 }
 
 // memoize Selectable item to avoid unecessary rerendering every time an item is selected/deselected
-const SelectableItem = memo(props => {
+const SelectableItem = memo((props: SelectableItemProps) => {
   const {
     id,
     index,
@@ -149,33 +225,25 @@ const SelectableItem = memo(props => {
   )
 }, compareItem)
 
-SelectableItem.propTypes = {
-  id: PropTypes.string.isRequired,
-  index: PropTypes.number.isRequired,
-  renderItem: PropTypes.func.isRequired,
-  onDeselect: PropTypes.func.isRequired,
-  onSelect: PropTypes.func.isRequired,
-  selected: PropTypes.bool.isRequired,
-  checkboxLabel: PropTypes.string,
-}
-
 // memoized SelectableItem would use old value of selectedItems when handleSelect and handleDeselect are passed as they are
 // when you wrap them with the below function, they always refer to the List's updated selectedItems
-function useFunction(callback) {
-  const ref = React.useRef(null)
+function useFunction<T extends (...args: any[]) => any>(callback: T): T {
+  const ref = useRef<T | null>(null)
   ref.current = callback
 
-  function callbackFunction(...args) {
-    const cb = ref.current
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  return useCallback(
+    ((...args: Parameters<T>) => {
+      const cb = ref.current
 
-    if (typeof callback === 'function') {
-      return cb.apply(this, args)
-    }
+      if (typeof cb === 'function') {
+        return cb(...args)
+      }
 
-    return false
-  }
-
-  return useCallback(callbackFunction, [])
+      return false
+    }) as T,
+    [],
+  )
 }
 
 // const EmptyList = () => {
@@ -184,17 +252,14 @@ function useFunction(callback) {
 
 const noop = () => {}
 
-const List = props => {
+const List = (props: ListProps): React.ReactNode => {
   const {
     footerContent = null,
     className,
-    // disable prop types for props that exist on the ant component anyway
-    /* eslint-disable react/prop-types */
     dataSource,
     locale,
     pagination,
     renderItem,
-    /* eslint-enable react/prop-types */
     itemSelection = null,
     loading = false,
     onSearch = null,
@@ -213,12 +278,10 @@ const List = props => {
     ...rest
   } = props
 
-  const [selectedItems, setSelectedItems] = useState([])
+  const [selectedItems, setSelectedItems] = useState<string[]>([])
 
   useEffect(() => {
-    itemSelection &&
-      itemSelection.onChange &&
-      itemSelection.onChange(selectedItems)
+    itemSelection?.onChange?.(selectedItems)
   }, [selectedItems])
 
   // Reset selected items to controlledSelectedItems when dataSource changes
@@ -228,19 +291,22 @@ const List = props => {
     setSelectedItems(controlledSelectedItems)
   }, [dataSource])
 
-  const handleSelect = useFunction(id => {
+  const handleSelect = useFunction((id: string) => {
     setSelectedItems([...selectedItems, id])
   })
 
-  const handleDeselect = useFunction(id => {
+  const handleDeselect = useFunction((id: string) => {
     setSelectedItems(without(selectedItems, id))
   })
 
   const listItemToRender = itemSelection
-    ? (itemProps, i) => {
+    ? (itemProps: ListItem, i: number) => {
         return draggable ? (
           <Draggable draggableId={`draggable-${i}`} index={i}>
-            {(provided, snapshot) => (
+            {(
+              provided: DraggableProvided,
+              snapshot: DraggableStateSnapshot,
+            ) => (
               <ListItemWrapper
                 data-testid="list-item-wrapper"
                 key={itemProps?.id}
@@ -273,11 +339,11 @@ const List = props => {
           </ListItemWrapper>
         )
       }
-    : (itemProps, i) => {
+    : (itemProps: ListItem, i: number) => {
         return draggable ? (
           <ListItemWrapper data-testid="list-item-wrapper">
             <Draggable draggableId={`draggable-${i}`} index={i}>
-              {provided => (
+              {(provided: DraggableProvided) => (
                 <div
                   {...provided.draggableProps}
                   {...provided.dragHandleProps}
@@ -312,14 +378,16 @@ const List = props => {
     setPaginationSize(paginationObj.pageSize)
   }, [pagination])
 
-  const triggerPaginationEvent = eventName => (page, pageSize) => {
-    setPaginationCurrent(page)
-    setPaginationSize(pageSize)
+  const triggerPaginationEvent =
+    (eventName: 'onChange' | 'onShowSizeChange') =>
+    (page: number, pageSize: number) => {
+      setPaginationCurrent(page)
+      setPaginationSize(pageSize)
 
-    if (pagination && pagination[eventName]) {
-      pagination[eventName](page, pageSize)
+      if (pagination && pagination[eventName]) {
+        pagination[eventName](page, pageSize)
+      }
     }
-  }
 
   const onPaginationChange = triggerPaginationEvent('onChange')
 
@@ -359,7 +427,7 @@ const List = props => {
   }
 
   const largestPage = Math.ceil(
-    passedPagination.total / passedPagination.pageSize,
+    (passedPagination.total ?? 0) / passedPagination.pageSize,
   )
 
   if (passedPagination.current > largestPage) {
@@ -377,11 +445,9 @@ const List = props => {
 
   const mergedLocale = {
     emptyText: !loading ? (
-      <Empty
-        description="No Data"
-        image={Empty.PRESENTED_IMAGE_SIMPLE}
-        role="status"
-      />
+      <span role="status">
+        <Empty description="No Data" image={Empty.PRESENTED_IMAGE_SIMPLE} />
+      </span>
     ) : (
       <div role="status">Loading</div>
     ),
@@ -392,7 +458,7 @@ const List = props => {
     <DragDropContext onDragEnd={onDragEnd}>
       <DroppableWrapper>
         <Droppable droppableId="dropable-list">
-          {provided => (
+          {(provided: DroppableProvided) => (
             <div {...provided.droppableProps} ref={provided.innerRef}>
               <AntList
                 dataSource={splitDataSource}
@@ -483,33 +549,6 @@ const List = props => {
       )}
     </Wrapper>
   )
-}
-
-List.propTypes = {
-  footerContent: PropTypes.element,
-  itemSelection: PropTypes.shape({
-    onChange: PropTypes.func.isRequired,
-  }),
-  loading: PropTypes.bool,
-  onSearch: PropTypes.func,
-  onSortOptionChange: PropTypes.func,
-  searchLoading: PropTypes.bool,
-  searchPlaceholder: PropTypes.string,
-  showPagination: PropTypes.bool,
-  showSearch: PropTypes.bool,
-  showSort: PropTypes.bool,
-  showTotalCount: PropTypes.bool,
-  sortOptions: PropTypes.arrayOf(
-    PropTypes.shape({
-      label: PropTypes.string.isRequired,
-      value: PropTypes.string.isRequired,
-      isDefault: PropTypes.bool,
-    }),
-  ),
-  totalCount: PropTypes.number,
-  onDragEnd: PropTypes.func,
-  draggable: PropTypes.bool,
-  selectedItems: PropTypes.arrayOf(PropTypes.string),
 }
 
 List.Item = AntList.Item

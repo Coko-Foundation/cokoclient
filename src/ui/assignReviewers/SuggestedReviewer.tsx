@@ -1,8 +1,12 @@
 import React from 'react'
-import PropTypes from 'prop-types'
 import styled from 'styled-components'
 
 import { grid, th } from '../../toolkit'
+
+type SuggestedReviewerProps = {
+  className?: string
+  name: string
+}
 
 const Wrapper = styled.span`
   border: 1px dashed ${th('colorPrimary')};
@@ -15,7 +19,9 @@ const Label = styled.span`
   text-transform: uppercase;
 `
 
-const SuggestedReviewer = props => {
+const SuggestedReviewer = (
+  props: SuggestedReviewerProps,
+): React.ReactNode => {
   const { className, name } = props
 
   return (
@@ -23,11 +29,6 @@ const SuggestedReviewer = props => {
       <Label>Author Suggested Reviewer:</Label> {name}
     </Wrapper>
   )
-}
-
-SuggestedReviewer.propTypes = {
-  /** Display name of suggested reviewer */
-  name: PropTypes.string.isRequired,
 }
 
 export default SuggestedReviewer

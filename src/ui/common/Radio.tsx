@@ -1,10 +1,19 @@
-import React from 'react'
-import PropTypes from 'prop-types'
-import styled, { css } from 'styled-components'
-import { Radio as AntRadio } from 'antd'
+import React, { ComponentProps } from 'react'
+import styled, { css, RuleSet } from 'styled-components'
+import { Radio as AntRadio, RadioChangeEvent } from 'antd'
 
-const StyledRadioGroup = styled(AntRadio.Group)`
-  ${props =>
+type RadioProps = Omit<ComponentProps<typeof AntRadio.Group>, 'onChange'> & {
+  /** Handle change. First argument is the incoming `value`. */
+  onChange?: ((value: string) => void) | null
+  /** Arrange items vertically instead of inline. */
+  vertical?: boolean
+}
+
+const StyledRadioGroup = styled(AntRadio.Group)<{
+  vertical: boolean
+  role: string
+}>`
+  ${(props): RuleSet | false =>
     props.vertical &&
     css`
       display: flex;
@@ -24,10 +33,12 @@ const StyledRadioGroup = styled(AntRadio.Group)`
  * Props are the same as Ant's RadioGroup https://ant.design/components/radio/#RadioGroup
  * with the addition of `vertical` and a slightly modified `onChange`.
  */
-const Radio = props => {
+const Radio = (props: RadioProps): React.ReactNode => {
   const { className, onChange = null, vertical = false, ...rest } = props
 
-  const handleChange = e => onChange(e.target.value)
+  const handleChange = (e: RadioChangeEvent): void => {
+    onChange?.(e.target.value)
+  }
 
   return (
     <StyledRadioGroup
@@ -38,13 +49,6 @@ const Radio = props => {
       {...rest}
     />
   )
-}
-
-Radio.propTypes = {
-  /** Handle change. First argument is the incoming `value`. */
-  onChange: PropTypes.func,
-  /** Arrange items vertically instead of inline. */
-  vertical: PropTypes.bool,
 }
 
 export default Radio

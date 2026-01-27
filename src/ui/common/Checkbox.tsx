@@ -1,6 +1,8 @@
-import React from 'react'
+import React, { ComponentProps } from 'react'
 import styled, { css } from 'styled-components'
 import { Checkbox as AntCheckbox } from 'antd'
+
+type CheckboxProps = ComponentProps<typeof AntCheckbox>
 
 // define css here and export to use in CheckboxGroup as well
 export const checkboxStyles = css`
@@ -15,7 +17,7 @@ const StyledCheckbox = styled(AntCheckbox)`
   ${checkboxStyles}
 `
 
-const Checkbox = props => {
+const Checkbox = (props: CheckboxProps): React.ReactNode => {
   const { children, className, ...rest } = props
 
   return (

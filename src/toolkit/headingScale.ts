@@ -17,7 +17,7 @@
   scale(12, 1.2, 4)   // evaluates to 17.28
 */
 
-const headingScale = (base, scale, heading) =>
+const headingScale = (base: number, scale: number, heading: number): number =>
   base * scale ** Math.abs(heading - 6)
 
 export default headingScale

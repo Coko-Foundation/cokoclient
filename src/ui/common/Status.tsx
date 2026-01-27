@@ -1,10 +1,22 @@
 import React from 'react'
-import PropTypes from 'prop-types'
 import styled from 'styled-components'
 
 import { grid, th, lighten } from '../../toolkit'
 
-const Wrapper = styled.span`
+type StatusVariant =
+  | 'Not Submitted'
+  | 'Submitted'
+  | 'Rejected'
+  | 'Under Review'
+  | 'In Production'
+  | 'Published'
+
+type StatusProps = {
+  className?: string
+  status: StatusVariant
+}
+
+const Wrapper = styled.span<{ variant: StatusVariant }>`
   background-color: ${({ variant }) => {
     switch (variant) {
       case 'Not Submitted':
@@ -32,7 +44,7 @@ const Wrapper = styled.span`
   text-align: center;
 `
 
-const Status = props => {
+const Status = (props: StatusProps): React.ReactNode => {
   const { className, status, ...rest } = props
 
   return (
@@ -40,17 +52,6 @@ const Status = props => {
       {status}
     </Wrapper>
   )
-}
-
-Status.propTypes = {
-  status: PropTypes.oneOf([
-    'Not Submitted',
-    'Submitted',
-    'Rejected',
-    'Under Review',
-    'In Production',
-    'Published',
-  ]).isRequired,
 }
 
 export default Status

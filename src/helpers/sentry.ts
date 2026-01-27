@@ -21,7 +21,7 @@ if (dsn && environment) {
     enableLogs: true,
     replaysSessionSampleRate: 0.1,
     replaysOnErrorSampleRate: 1.0,
-    tracePropagationTargets: [serverUrl],
+    tracePropagationTargets: serverUrl ? [serverUrl] : [],
 
     // debug: true,
   })

@@ -1,25 +1,34 @@
 import './sentry'
 
-import React from 'react'
+import { ReactNode } from 'react'
 import { createRoot } from 'react-dom/client'
-import { createBrowserHistory } from 'history'
+import { DefaultTheme } from 'styled-components'
 
 import Root from '../components/Root'
 
-const history = createBrowserHistory()
+type MakeApolloConfigFn = () => Record<string, unknown>
+
+type StartClientOptions = {
+  makeApolloConfig?: MakeApolloConfigFn
+}
+
 const rootEl = document.getElementById('root')
 
-const startClient = (routes, theme, options = {}) => {
+const startClient = (
+  routes: ReactNode,
+  theme: DefaultTheme,
+  options: StartClientOptions = {},
+): void => {
   const { makeApolloConfig } = options
+
+  if (!rootEl) {
+    throw new Error('Root element not found')
+  }
+
   const root = createRoot(rootEl)
 
   root.render(
-    <Root
-      history={history}
-      makeApolloConfig={makeApolloConfig}
-      routes={routes}
-      theme={theme}
-    />,
+    <Root makeApolloConfig={makeApolloConfig} routes={routes} theme={theme} />,
   )
 }
 

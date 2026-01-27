@@ -1,9 +1,8 @@
-import { useState } from 'react'
-import PropTypes from 'prop-types'
+import React, { useState } from 'react'
 import styled from 'styled-components'
 
 import { grid } from '../../toolkit'
-import SearchBox from './SearchBox'
+import SearchBox, { AdditionalSearchField, SearchResult } from './SearchBox'
 import SuggestedReviewer from './SuggestedReviewer'
 import { InputNumber, Ribbon, Switch } from '../common'
 import ReviewerTable from './ReviewerTable'
@@ -45,29 +44,64 @@ const StyledRibbon = styled(Ribbon)`
   margin-bottom: ${grid(1)};
 `
 
-const AssignReviewers = props => {
-  const {
-    additionalReviewerColumns = [],
-    additionalSearchFields = [],
-    amountOfReviewers,
-    automate,
-    canInviteMore,
-    canDismissReviewer = false,
-    className,
-    onAddReviewers,
-    onAmountOfReviewersChange,
-    onAutomationChange,
-    onClickInvite,
-    onClickRemoveRow,
-    onClickRevokeInvitation,
-    onSearch,
-    onTableChange,
-    reviewerPool = [],
-    searchPlaceholder,
-    suggestedReviewerName = null,
-    useShowEmail = false,
-  } = props
+type AdditionalReviewerColumn = {
+  title: string
+  dataIndex: string
+}
 
+type Reviewer = {
+  id: string
+  displayName: string
+  invited?: boolean
+  acceptedInvitation?: boolean
+  rejectedInvitation?: boolean
+  invitationRevoked?: boolean
+  reviewSubmitted?: boolean
+}
+
+type AssignReviewersProps = {
+  additionalReviewerColumns?: AdditionalReviewerColumn[]
+  additionalSearchFields?: AdditionalSearchField[]
+  amountOfReviewers: number
+  automate: boolean
+  canInviteMore: boolean
+  canDismissReviewer?: boolean
+  className?: string
+  onAddReviewers: (ids: string[]) => Promise<void>
+  onAmountOfReviewersChange: (value: number | string | null) => void
+  onAutomationChange: (checked: boolean) => void
+  onClickInvite: (id: string) => Promise<void>
+  onClickRemoveRow: (id: string) => Promise<void>
+  onClickRevokeInvitation: (id: string) => Promise<void>
+  onSearch: (value: string) => Promise<SearchResult[]>
+  onTableChange: (data: Reviewer[]) => void
+  reviewerPool?: Reviewer[]
+  searchPlaceholder: string
+  suggestedReviewerName?: string
+  useShowEmail?: boolean
+}
+
+const AssignReviewers = ({
+  additionalReviewerColumns = [],
+  additionalSearchFields = [],
+  amountOfReviewers,
+  automate,
+  canInviteMore,
+  canDismissReviewer = false,
+  className,
+  onAddReviewers,
+  onAmountOfReviewersChange,
+  onAutomationChange,
+  onClickInvite,
+  onClickRemoveRow,
+  onClickRevokeInvitation,
+  onSearch,
+  onTableChange,
+  reviewerPool = [],
+  searchPlaceholder,
+  suggestedReviewerName,
+  useShowEmail = false,
+}: AssignReviewersProps): React.ReactNode => {
   const [showEmails, setShowEmails] = useState(false)
   const [manualSorting, setManualSorting] = useState(false)
 
@@ -149,67 +183,6 @@ const AssignReviewers = props => {
       />
     </Wrapper>
   )
-}
-
-AssignReviewers.propTypes = {
-  /** Additional column definitions of type `ColumnsType` from `antd/es/table` */
-  additionalReviewerColumns: PropTypes.arrayOf(
-    PropTypes.shape({
-      title: PropTypes.string.isRequired,
-      dataIndex: PropTypes.string.isRequired,
-    }),
-  ),
-  /** Additional search fields definitions to display on search */
-  additionalSearchFields: PropTypes.arrayOf(
-    PropTypes.shape({
-      label: PropTypes.string.isRequired,
-      value: PropTypes.string.isRequired,
-      items: PropTypes.arrayOf(PropTypes.string),
-    }),
-  ),
-  /** Maximum amount of reviewers that can be invited at the same time */
-  amountOfReviewers: PropTypes.number.isRequired,
-  /** Whether reviewer invitation automation is on for this manuscript version */
-  automate: PropTypes.bool.isRequired,
-  /** Whether more reviewers can be invited */
-  canInviteMore: PropTypes.bool.isRequired,
-  /** Whether more reviewers can be invited */
-  canDismissReviewer: PropTypes.bool,
-  /** Function to run on selecting a reviewer in the search box */
-  onAddReviewers: PropTypes.func.isRequired,
-  /** Handle change in amount of reviewers input */
-  onAmountOfReviewersChange: PropTypes.func.isRequired,
-  /** Function to run when "Automate invites" is toggled */
-  onAutomationChange: PropTypes.func.isRequired,
-  /** Function to run when "invite" is clicked on a row from the pool */
-  onClickInvite: PropTypes.func.isRequired,
-  /** Function to run when the "X" button is clicked on a row from the pool */
-  onClickRemoveRow: PropTypes.func.isRequired,
-  /** Function to run when "revoke invitation" is clicked on a row from the pool */
-  onClickRevokeInvitation: PropTypes.func.isRequired,
-  /** Function that returns a promise. Must resolve to an array objects, each with shape `{ value: <String>, label: <String>, isDisabled: <Boolean>, status: <String>}` */
-  onSearch: PropTypes.func.isRequired,
-  /** Function to run when data is filtered/sorted */
-  onTableChange: PropTypes.func.isRequired,
-  /** Reviewers added to the pool list. Shape defined in ReviewerRow */
-  reviewerPool: PropTypes.arrayOf(
-    PropTypes.shape({
-      id: PropTypes.string.isRequired,
-      displayName: PropTypes.string.isRequired,
-      invited: PropTypes.bool,
-      acceptedInvitation: PropTypes.bool,
-      rejectedInvitation: PropTypes.bool,
-      invitationRevoked: PropTypes.bool,
-      reviewSubmitted: PropTypes.bool,
-    }),
-  ),
-  /** Placeholder for the search bar */
-  searchPlaceholder: PropTypes.string,
-  /** Display name of suggested reviewer */
-  suggestedReviewerName: PropTypes.string,
-  /** Whether to display the option to show `Show reviewer emails` checkbox.
-   * Alternatively, the email renders can be customised using `additionalReviewerColumns`  */
-  useShowEmail: PropTypes.bool,
 }
 
 export default AssignReviewers

@@ -1,4 +1,3 @@
-// eslint-disable-next-line import/no-cycle
 export { default as AuthenticationForm } from './AuthenticationForm'
 export { default as AuthenticationHeader } from './AuthenticationHeader'
 export { default as AuthenticationWrapper } from './AuthenticationWrapper'

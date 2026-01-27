@@ -1,11 +1,10 @@
-import React from 'react'
-import PropTypes from 'prop-types'
 import styled from 'styled-components'
 
 import { grid } from '../../toolkit'
 
 import ChatInput from './ChatInput'
 import ChatMessageList from './ChatMessageList'
+import { ChatMessageProps } from './ChatMessage'
 
 const Wrapper = styled.div`
   > div:first-child {
@@ -13,7 +12,13 @@ const Wrapper = styled.div`
   }
 `
 
-const ChatThread = props => {
+type ChatThreadProps = {
+  className?: string
+  messages?: Omit<ChatMessageProps, 'className'>[]
+  onSend: (value: string) => void
+}
+
+const ChatThread = (props: ChatThreadProps) => {
   const { className, messages = [], onSend } = props
 
   return (
@@ -22,18 +27,6 @@ const ChatThread = props => {
       <ChatInput onSend={onSend} />
     </Wrapper>
   )
-}
-
-ChatThread.propTypes = {
-  messages: PropTypes.arrayOf(
-    PropTypes.shape({
-      content: PropTypes.string,
-      date: PropTypes.string,
-      own: PropTypes.bool,
-      user: PropTypes.string,
-    }),
-  ),
-  onSend: PropTypes.func.isRequired,
 }
 
 export default ChatThread

@@ -1,9 +1,23 @@
-import React from 'react'
-import PropTypes from 'prop-types'
+import React, { ReactNode } from 'react'
 import styled from 'styled-components'
+import { FormInstance } from 'antd'
 
 import { grid } from '../../toolkit'
 import { Form, Button, VisuallyHiddenElement } from '../common'
+
+type ProfileFormProps = {
+  children?: ReactNode
+  className?: string
+  form?: FormInstance
+  loading?: boolean
+  message?: string
+  onSubmit: () => void
+  showSecondaryButton?: boolean
+  secondaryButtonAction?: () => void
+  secondaryButtonLabel?: string
+  submitButtonLabel?: string
+  submissionStatus?: 'success' | 'error' | 'danger'
+}
 
 const Wrapper = styled.div``
 
@@ -14,19 +28,19 @@ const FormButtonsContainer = styled.div`
   padding: 0 ${grid(4)};
 `
 
-const ProfileForm = props => {
+const ProfileForm = (props: ProfileFormProps): React.ReactNode => {
   const {
     children,
     className,
     message = '',
-    form = null,
+    form,
     loading = false,
     onSubmit,
     showSecondaryButton = false,
     secondaryButtonAction = () => {},
     secondaryButtonLabel = 'Cancel',
     submitButtonLabel = 'Save',
-    submissionStatus = null,
+    submissionStatus,
     ...rest
   } = props
 
@@ -68,20 +82,6 @@ const ProfileForm = props => {
       </Form>
     </Wrapper>
   )
-}
-
-ProfileForm.propTypes = {
-  /** optional form instance to control the form from the parent */
-  form: PropTypes.shape(),
-  loading: PropTypes.bool,
-  message: PropTypes.string,
-  /** Function that receives the values as parameter */
-  onSubmit: PropTypes.func.isRequired,
-  showSecondaryButton: PropTypes.bool,
-  secondaryButtonAction: PropTypes.func,
-  secondaryButtonLabel: PropTypes.string,
-  submitButtonLabel: PropTypes.string,
-  submissionStatus: PropTypes.oneOf(['success', 'error', 'danger']),
 }
 
 export default ProfileForm

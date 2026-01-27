@@ -1,9 +1,10 @@
-import React from 'react'
-// import PropTypes from 'prop-types'
+import React, { ComponentProps } from 'react'
 import styled from 'styled-components'
 import { Input } from 'antd'
 
 import { inputShadow } from './_reusableStyles'
+
+type SearchProps = ComponentProps<typeof Input.Search>
 
 const StyledSearch = styled(Input.Search)`
   input {
@@ -11,12 +12,10 @@ const StyledSearch = styled(Input.Search)`
   }
 `
 
-const Search = props => {
+const Search = (props: SearchProps): React.ReactNode => {
   const { className, ...rest } = props
 
   return <StyledSearch className={className} {...rest} />
 }
-
-Search.propTypes = {}
 
 export default Search

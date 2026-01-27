@@ -27,26 +27,27 @@
   Now both of the above scenarios will work.
 */
 
-import { css } from 'styled-components'
-import { get, has } from 'lodash'
-
+import { css, RuleSet, DefaultTheme } from 'styled-components'
 import { th } from './themeHelper'
+import { get } from './funcs'
+
+type ThemedProps = { theme: DefaultTheme }
 
 /*
   Will be using ui.Button as an example component override to explain the code.
 */
 const override =
-  (name, overrideKey = 'cssOverrides') =>
-  props => {
+  (name: string, overrideKey = 'cssOverrides') =>
+  (props: ThemedProps): RuleSet | null => {
     // Find (props.theme.cssOverrides.) ui.Button
-    const target = get(props.theme[overrideKey], name)
+    const overrides = props.theme[overrideKey] as Record<string, unknown>
+    const target = get(overrides ?? {}, name)
 
     // ui.Button is not there.
     if (!target) return null
 
     // css`` functions from styled components come in as arrays
     const isStyledCss = Array.isArray(target)
-    const hasRoot = has(target, 'Root')
 
     /*
     ui.Button is there, but there is no ui.Button.Root or ui.Button: css``.
@@ -56,10 +57,10 @@ const override =
     In this case, there would be no overrides for ui.Button, but only for
     ui.Button.Icon, which would have its own override.
   */
-    if (!isStyledCss && !hasRoot) return null
+    if (!isStyledCss && !target.Root) return null
 
     // ui.Button.Root exists
-    if (hasRoot) {
+    if (target.Root) {
       return css`
         ${th(`${overrideKey}.${name}.Root`)};
       `

@@ -1,13 +1,21 @@
 import React from 'react'
-import PropTypes from 'prop-types'
-// import styled from 'styled-components'
 
 import AuthenticationForm from './AuthenticationForm'
 import AuthenticationHeader from './AuthenticationHeader'
 import AuthenticationWrapper from './AuthenticationWrapper'
 import { Form, Input, Paragraph, Result, Spin, Page } from '../common'
 
-const ResetPassword = props => {
+type ResetPasswordProps = {
+  className?: string
+  hasError?: boolean
+  hasSuccess?: boolean
+  onSubmit: () => void
+  verifying?: boolean
+  redirectToLogin: () => void
+  redirectToLoginDelay?: number
+}
+
+const ResetPassword = (props: ResetPasswordProps): React.ReactNode => {
   const {
     className,
     hasError = false,
@@ -98,16 +106,6 @@ const ResetPassword = props => {
       </AuthenticationWrapper>
     </Page>
   )
-}
-
-ResetPassword.propTypes = {
-  redirectToLogin: PropTypes.func.isRequired,
-  onSubmit: PropTypes.func.isRequired,
-
-  hasError: PropTypes.bool,
-  hasSuccess: PropTypes.bool,
-  verifying: PropTypes.bool,
-  redirectToLoginDelay: PropTypes.number,
 }
 
 export default ResetPassword

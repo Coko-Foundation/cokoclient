@@ -1,5 +1,4 @@
-import React, { Fragment } from 'react'
-import PropTypes from 'prop-types'
+import React, { ComponentType, ReactNode } from 'react'
 import { Route } from 'react-router-dom'
 import styled, { createGlobalStyle, css } from 'styled-components'
 
@@ -34,20 +33,33 @@ const padPage = css`
   padding: ${grid(2)} ${grid(2)} 50px ${grid(2)};
 `
 
-const Page = styled.div`
+type PageProps = {
+  $padPages?: boolean
+  $fadeInPages?: boolean
+}
+
+const Page = styled.div<PageProps>`
   flex: auto;
   font-family: ${th('fontInterface')};
   height: 100%;
   overflow-y: auto;
 
   /* stylelint-disable-next-line order/properties-alphabetical-order */
-  ${props => props.padPages && padPage}
+  ${props => props.$padPages && padPage}
 
   /* stylelint-disable-next-line no-descending-specificity */
   > div {
-    ${props => props.fadeInPages && fadeInPage}
+    ${props => props.$fadeInPages && fadeInPage}
   }
 `
+
+type LayoutProps = {
+  children?: ReactNode
+  className?: string
+  fadeInPages?: boolean
+  padPages?: boolean
+  navComponent?: ComponentType | null
+}
 
 // TO DO -- move global style to root when you export that from this client
 const Layout = ({
@@ -56,22 +68,16 @@ const Layout = ({
   fadeInPages = true,
   padPages = true,
   navComponent = null,
-}) => (
+}: LayoutProps): React.ReactNode => (
   <>
     <GlobalStyle />
     <PageLayout className={className}>
       <Route component={navComponent} />
-      <Page fadeInPages={fadeInPages} padPages={padPages}>
+      <Page $fadeInPages={fadeInPages} $padPages={padPages}>
         {children}
       </Page>
     </PageLayout>
   </>
 )
-
-Layout.propTypes = {
-  fadeInPages: PropTypes.bool,
-  padPages: PropTypes.bool,
-  navComponent: PropTypes.elementType,
-}
 
 export default Layout

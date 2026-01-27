@@ -1,14 +1,74 @@
-import React, { useEffect, useState } from 'react'
-import PropTypes from 'prop-types'
+import React, { ReactNode, useEffect, useState } from 'react'
 import styled from 'styled-components'
-import { Table as AntTable } from 'antd'
-import { DragDropContext, Droppable, Draggable } from 'react-beautiful-dnd'
+import { Table as AntTable, TablePaginationConfig } from 'antd'
+import {
+  DragDropContext,
+  Droppable,
+  Draggable,
+  DropResult,
+  DroppableProvided,
+  DroppableStateSnapshot,
+  DraggableProvided,
+  DraggableStateSnapshot,
+} from 'react-beautiful-dnd'
 
 import { MenuOutlined } from '@ant-design/icons'
 
+import {
+  FilterValue,
+  SorterResult,
+  SortOrder,
+  TableCurrentDataSource,
+} from 'antd/es/table/interface'
 import { th } from '../../toolkit'
 
 import InviteRowProp from './InviteRowProp'
+
+type Reviewer = {
+  id: string
+  displayName: string
+  email?: string
+  invited?: boolean
+  acceptedInvitation?: boolean
+  rejectedInvitation?: boolean
+  invitationRevoked?: boolean
+  reviewSubmitted?: boolean
+}
+
+type AdditionalColumn = {
+  title: string
+  dataIndex: string
+}
+
+type ReviewerTableProps = {
+  additionalColumns?: AdditionalColumn[]
+  canInviteMore: boolean
+  canDismissReviewer?: boolean
+  className?: string
+  manualSorting?: boolean
+  onChange: (data: Reviewer[]) => void
+  onInvite: (id: string) => Promise<void>
+  onRemoveRow: (id: string) => Promise<void>
+  onRevokeInvitation: (id: string) => Promise<void>
+  reviewers?: Reviewer[]
+  showEmails?: boolean
+}
+
+type TableSorter = SorterResult<Reviewer>
+
+type TableBodyProps = {
+  children: ReactNode
+  className?: string
+}
+
+type TableRowProps = {
+  children: ReactNode
+  index: number
+  manualSorting: boolean
+  'data-row-key': string
+  record: Reviewer
+  style: React.CSSProperties
+}
 
 const Wrapper = styled.div`
   border: 1px solid grey;
@@ -21,14 +81,18 @@ const EmptyMessage = styled.div`
   font-style: italic;
 `
 
-const StyledTable = styled(AntTable)``
+const StyledTable = styled(AntTable<Reviewer>)``
 
 const StyledMenuOutlined = styled(MenuOutlined)`
   cursor: move;
   touch-action: none;
 `
 
-const TableBody = ({ children, className, ...props }) => {
+const TableBody = ({
+  children,
+  className,
+  ...props
+}: TableBodyProps): React.ReactNode => {
   return (
     <Droppable
       droppableId="droppable-table"
@@ -36,7 +100,7 @@ const TableBody = ({ children, className, ...props }) => {
       isCombineEnabled={false}
       isDropDisabled={false}
     >
-      {(provided, snapshot) => (
+      {(provided: DroppableProvided, _snapshot: DroppableStateSnapshot) => (
         <tbody
           className={className}
           ref={provided.innerRef}
@@ -51,14 +115,19 @@ const TableBody = ({ children, className, ...props }) => {
   )
 }
 
-const TableRow = ({ children, index, manualSorting, ...props }) => {
+const TableRow = ({
+  children,
+  index,
+  manualSorting,
+  ...props
+}: TableRowProps): React.ReactNode => {
   return manualSorting ? (
     <Draggable
       draggableId={props['data-row-key'].toString()}
       index={index}
       key={props['data-row-key']}
     >
-      {(provided, snapshot) => (
+      {(provided: DraggableProvided, _snapshot: DraggableStateSnapshot) => (
         <tr
           ref={provided.innerRef}
           {...props}
@@ -66,10 +135,16 @@ const TableRow = ({ children, index, manualSorting, ...props }) => {
           {...provided.dragHandleProps}
         >
           {React.Children.map(children, child => {
-            if (child.key === 'sort') {
-              return React.cloneElement(child, {
-                children: <StyledMenuOutlined />,
-              })
+            if (
+              React.isValidElement(child) &&
+              (child as React.ReactElement<{ key?: string }>).key === 'sort'
+            ) {
+              return React.cloneElement(
+                child as React.ReactElement<{ children?: ReactNode }>,
+                {
+                  children: <StyledMenuOutlined />,
+                },
+              )
             }
 
             return child
@@ -82,15 +157,7 @@ const TableRow = ({ children, index, manualSorting, ...props }) => {
   )
 }
 
-TableRow.propTypes = {
-  'data-row-key': PropTypes.string.isRequired,
-  index: PropTypes.number.isRequired,
-  manualSorting: PropTypes.bool.isRequired,
-  record: PropTypes.shape({ id: PropTypes.string }).isRequired,
-  style: PropTypes.shape().isRequired,
-}
-
-const ReviewerTable = props => {
+const ReviewerTable = (props: ReviewerTableProps): React.ReactNode => {
   const {
     additionalColumns = [],
     canInviteMore,
@@ -105,11 +172,11 @@ const ReviewerTable = props => {
     showEmails = false,
   } = props
 
-  const [tableSorter, setTableSorter] = useState({})
+  const [tableSorter, setTableSorter] = useState<TableSorter>({})
 
   useEffect(() => {
     setTableSorter(manualSorting ? {} : tableSorter)
-  }, [manualSorting])
+  }, [manualSorting, tableSorter])
 
   if (reviewers.length === 0) {
     return (
@@ -119,12 +186,18 @@ const ReviewerTable = props => {
     )
   }
 
-  const handleChange = (pagination, filters, sorter, extra) => {
+  const handleChange = (
+    _pagination: TablePaginationConfig,
+    _filters: Record<string, FilterValue | null>,
+    sorter: SorterResult<Reviewer> | SorterResult<Reviewer>[],
+    extra: TableCurrentDataSource<Reviewer>,
+  ): void => {
     onChange(extra.currentDataSource)
-    setTableSorter(manualSorting ? {} : sorter)
+    const singleSorter = Array.isArray(sorter) ? sorter[0] : sorter
+    setTableSorter(manualSorting ? {} : singleSorter)
   }
 
-  const onDragEnd = result => {
+  const onDragEnd = (result: DropResult): void => {
     const { destination, source } = result
 
     if (!destination) return
@@ -154,15 +227,15 @@ const ReviewerTable = props => {
       title: 'Name',
       dataIndex: 'displayName',
       key: 'displayName',
-      sorter: (a, b) =>
+      sorter: (a: Reviewer, b: Reviewer) =>
         a.displayName.toLowerCase().localeCompare(b.displayName.toLowerCase()),
-      sortDirections: ['ascend', 'descend'],
+      sortDirections: ['ascend', 'descend'] as SortOrder[],
     },
     {
       title: '',
       dataIndex: 'inviteStatus',
       key: 'inviteStatus',
-      render: (text, rowData) => (
+      render: (_text: unknown, rowData: Reviewer) => (
         <InviteRowProp className={className} data={rowData} type="status" />
       ),
     },
@@ -172,9 +245,9 @@ const ReviewerTable = props => {
             title: 'Email',
             dataIndex: 'email',
             key: 'email',
-            sorter: (a, b) =>
-              a.email.toLowerCase().localeCompare(b.email.toLowerCase()),
-            sortDirections: ['ascend', 'descend'],
+            sorter: (a: Reviewer, b: Reviewer) =>
+              (a.email ?? '').toLowerCase().localeCompare((b.email ?? '').toLowerCase()),
+            sortDirections: ['ascend', 'descend'] as SortOrder[],
           },
         ]
       : []),
@@ -183,7 +256,7 @@ const ReviewerTable = props => {
       title: '',
       dataIndex: 'inviteAction',
       key: 'inviteAction',
-      render: (text, rowData) => (
+      render: (_text: unknown, rowData: Reviewer) => (
         <InviteRowProp
           canInvite={canInviteMore}
           className={className}
@@ -193,13 +266,13 @@ const ReviewerTable = props => {
           type="action"
         />
       ),
-      align: 'right',
+      align: 'right' as const,
     },
     {
       title: '',
       dataIndex: 'removeRow',
       key: 'removeRow',
-      render: (text, rowData) => (
+      render: (_text: unknown, rowData: Reviewer) => (
         <InviteRowProp
           canDismissReviewer={canDismissReviewer}
           canInvite={canInviteMore}
@@ -211,21 +284,23 @@ const ReviewerTable = props => {
       ),
     },
   ].map(col => {
+    const colWithKey = col as { key?: string; sorter?: unknown }
     if (manualSorting) {
-      const { sorter, ...rest } = col
+      const { sorter: _sorter, ...rest } = colWithKey
       return {
         ...rest,
-        sortOrder: false,
+        sortOrder: undefined,
       }
     }
 
     return {
       ...col,
-      sortOrder: tableSorter.columnKey === col.key && tableSorter.order,
+      sortOrder:
+        tableSorter.columnKey === colWithKey.key ? tableSorter.order : undefined,
     }
   })
 
-  const rows = reviewers.map(r => ({ ...r, key: r.id }))
+  const rows = reviewers.map((r: Reviewer) => ({ ...r, key: r.id }))
 
   return (
     <Wrapper className={className}>
@@ -241,51 +316,15 @@ const ReviewerTable = props => {
           dataSource={rows}
           key={`manual-sorting-${manualSorting}`}
           onChange={handleChange}
-          onRow={(record, index) => ({ record, index, manualSorting })}
+          onRow={(record, index) =>
+            ({ record, index, manualSorting }) as React.HTMLAttributes<HTMLElement>
+          }
           pagination={false}
           rowKey="id"
         />
       </DragDropContext>
     </Wrapper>
   )
-}
-
-ReviewerTable.propTypes = {
-  /** Column definitions of type `ColumnsType` from `antd/es/table` */
-  additionalColumns: PropTypes.arrayOf(
-    PropTypes.shape({
-      title: PropTypes.string.isRequired,
-      dataIndex: PropTypes.string.isRequired,
-    }),
-  ),
-  /** Whether more reviewers can be invited */
-  canInviteMore: PropTypes.bool.isRequired,
-  /** Whether a reviewer can be removed even after accepting invitation */
-  canDismissReviewer: PropTypes.bool,
-  /** Enable drag and drop, but also disable auto-sorted columns */
-  manualSorting: PropTypes.bool,
-  /** Function to run when data is filtered/sorted */
-  onChange: PropTypes.func.isRequired,
-  /** Function to run when "invite" is clicked on a row from the pool */
-  onInvite: PropTypes.func.isRequired,
-  /** Function to run when the "X" button is clicked on a row from the pool */
-  onRemoveRow: PropTypes.func.isRequired,
-  /** Function to run when "revoke invitation" is clicked on a row from the pool */
-  onRevokeInvitation: PropTypes.func.isRequired,
-  /** List of reviewers */
-  reviewers: PropTypes.arrayOf(
-    PropTypes.shape({
-      id: PropTypes.string.isRequired,
-      displayName: PropTypes.string.isRequired,
-      invited: PropTypes.bool,
-      acceptedInvitation: PropTypes.bool,
-      rejectedInvitation: PropTypes.bool,
-      invitationRevoked: PropTypes.bool,
-      reviewSubmitted: PropTypes.bool,
-    }),
-  ),
-  /** Shorthand flag to indicate if the emails should be shown */
-  showEmails: PropTypes.bool,
 }
 
 export default ReviewerTable

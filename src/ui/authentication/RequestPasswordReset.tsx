@@ -1,6 +1,4 @@
 import React from 'react'
-import PropTypes from 'prop-types'
-// import styled from 'styled-components'
 import { Link } from 'react-router-dom'
 import AuthenticationForm from './AuthenticationForm'
 import AuthenticationHeader from './AuthenticationHeader'
@@ -8,9 +6,24 @@ import AuthenticationWrapper from './AuthenticationWrapper'
 import SuccessSubTitle from './SuccessSubTitle'
 import { Form, Input, Paragraph, Result, Page } from '../common'
 
-const RequestPasswordResetForm = props => {
-  // disable prop types that will be checked in the exported component anyway
-  // eslint-disable-next-line react/prop-types
+type RequestPasswordResetFormProps = {
+  hasError?: boolean
+  loading?: boolean
+  onSubmit: () => void
+}
+
+type RequestPasswordResetProps = {
+  className?: string
+  hasError?: boolean
+  hasSuccess?: boolean
+  loading?: boolean
+  onSubmit: () => void
+  userEmail?: string
+}
+
+const RequestPasswordResetForm = (
+  props: RequestPasswordResetFormProps,
+): React.ReactNode => {
   const { hasError, loading, onSubmit } = props
 
   return (
@@ -41,7 +54,9 @@ const RequestPasswordResetForm = props => {
   )
 }
 
-const RequestPasswordReset = props => {
+const RequestPasswordReset = (
+  props: RequestPasswordResetProps,
+): React.ReactNode => {
   const {
     className,
     hasError = false,
@@ -82,15 +97,6 @@ const RequestPasswordReset = props => {
       </AuthenticationWrapper>
     </Page>
   )
-}
-
-RequestPasswordReset.propTypes = {
-  onSubmit: PropTypes.func.isRequired,
-
-  hasError: PropTypes.bool,
-  hasSuccess: PropTypes.bool,
-  loading: PropTypes.bool,
-  userEmail: PropTypes.string,
 }
 
 export default RequestPasswordReset

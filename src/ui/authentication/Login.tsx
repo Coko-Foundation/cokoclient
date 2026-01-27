@@ -1,16 +1,22 @@
 import React from 'react'
-import PropTypes from 'prop-types'
-// import styled from 'styled-components'
 
 import { Form, Input, Page } from '../common'
 import AuthenticationForm from './AuthenticationForm'
 import AuthenticationHeader from './AuthenticationHeader'
 import AuthenticationWrapper from './AuthenticationWrapper'
 
-const Login = props => {
+type LoginProps = {
+  className?: string
+  errorMessage?: string
+  hasError?: boolean
+  loading?: boolean
+  onSubmit: () => void
+}
+
+const Login = (props: LoginProps): React.ReactNode => {
   const {
     className,
-    errorMessage = null,
+    errorMessage,
     hasError = false,
     loading = false,
     onSubmit,
@@ -68,13 +74,6 @@ const Login = props => {
       </AuthenticationWrapper>
     </Page>
   )
-}
-
-Login.propTypes = {
-  errorMessage: PropTypes.string,
-  hasError: PropTypes.bool,
-  loading: PropTypes.bool,
-  onSubmit: PropTypes.func.isRequired,
 }
 
 export default Login

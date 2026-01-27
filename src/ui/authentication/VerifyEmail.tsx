@@ -1,12 +1,24 @@
 import React from 'react'
-import PropTypes from 'prop-types'
 import styled from 'styled-components'
 
 import { Button, Spin, Result } from '../common'
 
+type VerifyEmailProps = {
+  className?: string
+  verifying?: boolean
+  successfullyVerified?: boolean
+  alreadyVerified?: boolean
+  expired?: boolean
+  resend: () => void
+  resending?: boolean
+  resent?: boolean
+  redirectToLogin: () => void
+  redirectDelay?: number
+}
+
 const Wrapper = styled.div``
 
-const VerifyEmail = props => {
+const VerifyEmail = (props: VerifyEmailProps): React.ReactNode => {
   const {
     className,
     verifying = false,
@@ -112,18 +124,6 @@ const VerifyEmail = props => {
   )
 
   // return null
-}
-
-VerifyEmail.propTypes = {
-  verifying: PropTypes.bool,
-  successfullyVerified: PropTypes.bool,
-  alreadyVerified: PropTypes.bool,
-  expired: PropTypes.bool,
-  resend: PropTypes.func.isRequired,
-  resending: PropTypes.bool,
-  resent: PropTypes.bool,
-  redirectToLogin: PropTypes.func.isRequired,
-  redirectDelay: PropTypes.number,
 }
 
 export default VerifyEmail

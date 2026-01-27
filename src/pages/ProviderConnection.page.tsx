@@ -1,18 +1,25 @@
 import React, { useState } from 'react'
-import PropTypes from 'prop-types'
 import { useHistory, useParams } from 'react-router-dom'
 import { useMutation } from '@apollo/client'
 import { CREATE_OAUTH_IDENTITY } from './ProviderConnection.queries'
 // import { useCurrentUser } from '../helpers/currentUserContext'
 import ProviderConnection from '../ui/authentication/ProviderConnection'
 
-const ProviderConnectionPage = props => {
+type ProviderConnectionPageProps = {
+  closeOnSuccess?: boolean
+  delayOnSuccess?: number
+  loadingMinimumTime?: number
+  redirectOnSuccess?: boolean
+  redirectUrlLabel?: string
+}
+
+const ProviderConnectionPage = (props: ProviderConnectionPageProps) => {
   const {
     closeOnSuccess = false,
     delayOnSuccess = 1000,
     loadingMinimumTime = 1000,
     redirectOnSuccess = false,
-    redirectUrlLabel = null,
+    redirectUrlLabel,
   } = props
 
   const { provider } = useParams()
@@ -26,7 +33,7 @@ const ProviderConnectionPage = props => {
     session_state: sessionState,
     code,
     next,
-  } = Object.fromEntries(new URL(window.location).searchParams)
+  } = Object.fromEntries(new URLSearchParams(window.location.search))
 
   const [createOAuthIdentity, { called: createOAuthIdentityCalled }] =
     useMutation(CREATE_OAUTH_IDENTITY, {
@@ -70,14 +77,6 @@ const ProviderConnectionPage = props => {
       successfullyConnected={successfullyConnected}
     />
   )
-}
-
-ProviderConnectionPage.propTypes = {
-  closeOnSuccess: PropTypes.bool,
-  delayOnSuccess: PropTypes.number,
-  loadingMinimumTime: PropTypes.number,
-  redirectOnSuccess: PropTypes.bool,
-  redirectUrlLabel: PropTypes.string,
 }
 
 export default ProviderConnectionPage

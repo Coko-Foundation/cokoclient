@@ -1,5 +1,5 @@
 import styled from 'styled-components'
-import { Modal } from 'antd'
+import { Modal as AntModal } from 'antd'
 
 import { grid } from '../../toolkit'
 
@@ -17,7 +17,9 @@ const ModalHeader = styled.h2`
   margin: 0;
 `
 
-Modal.header = ModalHeader
-Modal.footer = ModalFooter
+const Modal = Object.assign(AntModal, {
+  header: ModalHeader,
+  footer: ModalFooter,
+})
 
 export default Modal

@@ -1,10 +1,23 @@
 import React from 'react'
-import PropTypes from 'prop-types'
-import styled, { css } from 'styled-components'
+import styled, { css, RuleSet } from 'styled-components'
 
 import { grid, override } from '../../toolkit'
 
-const Wrapper = styled.div`
+type Status = 'success' | 'error' | 'danger'
+
+type RibbonProps = {
+  className?: string
+  children?: React.ReactNode
+  hide?: boolean
+  status?: Status | null
+}
+
+type WrapperProps = {
+  $hide: boolean
+  $status: Status | null
+}
+
+const Wrapper = styled.div<WrapperProps>`
   background: ${props => {
     const { $status } = props
     if ($status === 'success') return props.theme.colorSuccess
@@ -23,7 +36,7 @@ const Wrapper = styled.div`
   text-align: center;
 
   /* stylelint-disable-next-line order/properties-alphabetical-order */
-  ${props =>
+  ${(props): RuleSet | false =>
     props.$hide &&
     css`
       visibility: hidden;
@@ -32,7 +45,7 @@ const Wrapper = styled.div`
   ${override('ui.Ribbon')};
 `
 
-const Ribbon = props => {
+const Ribbon = (props: RibbonProps): React.ReactNode => {
   const { className, children, hide = false, status = null, ...rest } = props
 
   return (
@@ -40,11 +53,6 @@ const Ribbon = props => {
       {children}
     </Wrapper>
   )
-}
-
-Ribbon.propTypes = {
-  hide: PropTypes.bool,
-  status: PropTypes.oneOf(['success', 'error', 'danger']),
 }
 
 export default Ribbon

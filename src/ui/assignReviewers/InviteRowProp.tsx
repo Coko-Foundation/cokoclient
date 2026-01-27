@@ -1,10 +1,29 @@
 import React from 'react'
-import PropTypes from 'prop-types'
 import styled from 'styled-components'
 import { CloseOutlined } from '@ant-design/icons'
 
 import { grid } from '../../toolkit'
 import { Button, InviteStatus } from '../common'
+
+type ReviewerData = {
+  id: string
+  invited?: boolean
+  acceptedInvitation?: boolean
+  rejectedInvitation?: boolean
+  invitationRevoked?: boolean
+  reviewSubmitted?: boolean
+}
+
+type InviteRowPropProps = {
+  canInvite?: boolean
+  canDismissReviewer?: boolean
+  className?: string
+  data: ReviewerData
+  onClickInvite?: (id: string) => void
+  onClickRemove?: (id: string) => void
+  onClickRevokeInvitation?: (id: string) => void
+  type: 'status' | 'action' | 'remove'
+}
 
 const StyledInviteStatus = styled(InviteStatus)`
   font-size: 12px;
@@ -23,9 +42,9 @@ const RemoveInviteWrapper = styled.div`
   }
 `
 
-const noop = () => {}
+const noop = (): void => {}
 
-const InviteRowProp = props => {
+const InviteRowProp = (props: InviteRowPropProps): React.ReactNode => {
   const {
     canInvite = false,
     canDismissReviewer = false,
@@ -131,31 +150,6 @@ const InviteRowProp = props => {
   }
 
   return null
-}
-
-InviteRowProp.propTypes = {
-  /** Whether more reviewers can be invited */
-  canInvite: PropTypes.bool,
-  /** Whether a reviewer can be removed even after accepting invitation */
-  canDismissReviewer: PropTypes.bool,
-  /** Current row's invite status fields */
-  data: PropTypes.shape({
-    id: PropTypes.string.isRequired,
-    invited: PropTypes.bool,
-    acceptedInvitation: PropTypes.bool,
-    rejectedInvitation: PropTypes.bool,
-    invitationRevoked: PropTypes.bool,
-    reviewSubmitted: PropTypes.bool,
-  }).isRequired,
-
-  /** Function to run when "invite" is clicked on a row from the pool */
-  onClickInvite: PropTypes.func,
-  /** Function to run when the  "X" is clicked on a row from the pool */
-  onClickRemove: PropTypes.func,
-  /** Function to run when "Revoke invitiation" is clicked on a row from the pool */
-  onClickRevokeInvitation: PropTypes.func,
-  /** Type of invite prop being rendered */
-  type: PropTypes.string.isRequired,
 }
 
 export default InviteRowProp

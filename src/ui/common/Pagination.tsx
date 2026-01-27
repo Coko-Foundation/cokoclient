@@ -1,8 +1,29 @@
 import React, { useEffect, useRef, useImperativeHandle } from 'react'
-import PropTypes from 'prop-types'
 import styled from 'styled-components'
 import { Pagination as AntPagination } from 'antd'
 import { grid, th } from '../../toolkit'
+
+type PaginationConfig = {
+  current?: number
+  total?: number
+  pageSize?: number
+  itemRender?:
+    | ((
+        page: number,
+        type: string,
+        originalElement: React.ReactNode,
+      ) => React.ReactNode)
+    | null
+  showSizeChanger?: boolean
+  onShowSizeChange?: (current: number, size: number) => void
+  onChange?: (page: number, pageSize: number) => void
+}
+
+type PaginationProps = {
+  pagination?: PaginationConfig
+  onChange?: (page: number, pageSize: number) => void
+  onShowSizeChange?: (current: number, size: number) => void
+}
 
 const PaginationNav = styled.nav`
   .ant-pagination li {
@@ -38,146 +59,134 @@ const PaginationNav = styled.nav`
   }
 `
 
-const defaultPagination = {
+const defaultPagination: PaginationConfig = {
   current: 1,
   pageSize: 10,
   itemRender: null,
   showSizeChanger: false,
 }
 
-const Pagination = React.forwardRef((props, forwardRef) => {
-  const {
-    pagination = defaultPagination,
-    onChange = () => {},
-    onShowSizeChange = () => {},
-    ...rest
-  } = props
+const Pagination = React.forwardRef<HTMLElement, PaginationProps>(
+  (props, forwardRef) => {
+    const {
+      pagination = defaultPagination,
+      onChange = () => {},
+      onShowSizeChange = () => {},
+      ...rest
+    } = props
 
-  const { current, pageSize, total } = pagination
+    const { current, pageSize, total } = pagination
 
-  const paginationRef = useRef(null)
+    const paginationRef = useRef<HTMLElement>(null)
 
-  useImperativeHandle(forwardRef, () => paginationRef.current)
+    useImperativeHandle(forwardRef, () => paginationRef.current as HTMLElement)
 
-  useEffect(() => {
-    // enhance accessibility of pagination, only if no custom render method was provided
-    if (pagination && !pagination.itemRender) {
-      paginationRef.current
-        .querySelectorAll('li.ant-pagination-item')
-        .forEach((page, index) => {
-          const counter = index + 1
-          let label = `Go to page ${counter}`
+    useEffect(() => {
+      // enhance accessibility of pagination, only if no custom render method was provided
+      if (pagination && !pagination.itemRender && paginationRef.current) {
+        paginationRef.current
+          .querySelectorAll('li.ant-pagination-item')
+          .forEach((page, index) => {
+            const counter = index + 1
+            let label = `Go to page ${counter}`
+            const child = page.querySelector(':scope > *')
 
-          if (page.classList.contains('ant-pagination-item-active')) {
-            page
-              .querySelector(':scope > *')
-              .setAttribute('aria-current', 'page')
-            label = `Page ${counter} , Current Page`
-          } else {
-            page.querySelector(':scope > *').removeAttribute('aria-current')
-          }
+            if (page.classList.contains('ant-pagination-item-active')) {
+              child?.setAttribute('aria-current', 'page')
+              label = `Page ${counter} , Current Page`
+            } else {
+              child?.removeAttribute('aria-current')
+            }
 
-          page.querySelector(':scope > *').setAttribute('aria-label', label)
-        })
+            child?.setAttribute('aria-label', label)
+          })
 
-      paginationRef.current
-        .querySelectorAll('.ant-pagination li:not([class*="custom-icon"])')
-        .forEach(item => {
-          item.removeAttribute('tabindex')
+        paginationRef.current
+          .querySelectorAll('.ant-pagination li:not([class*="custom-icon"])')
+          .forEach(item => {
+            item.removeAttribute('tabindex')
+            const child = item.querySelector(':scope > *')
 
-          if (item.getAttribute('aria-disabled') === 'true') {
-            item.querySelector(':scope > *').removeAttribute('disabled')
-            item
-              .querySelector(':scope > *')
-              .setAttribute('aria-disabled', 'true')
-          } else {
-            item.querySelector(':scope > *').removeAttribute('aria-disabled')
-          }
-        })
-    }
-  }, [current, pageSize, total])
+            if (item.getAttribute('aria-disabled') === 'true') {
+              child?.removeAttribute('disabled')
+              child?.setAttribute('aria-disabled', 'true')
+            } else {
+              child?.removeAttribute('aria-disabled')
+            }
+          })
+      }
+    }, [current, pageSize, total])
 
-  const paginationLinkClick = e => {
-    e.preventDefault()
-  }
-
-  const paginationKeyDown = e => {
-    if (e.key === 'Enter') {
+    const paginationLinkClick = (e: React.MouseEvent<HTMLAnchorElement>) => {
       e.preventDefault()
-      e.stopPropagation()
-      e.currentTarget.parentNode.click()
     }
-  }
 
-  const itemRender =
-    pagination.itemRender ||
-    ((page, type, originalElement) => {
-      if (type === 'jump-next' || type === 'jump-prev') {
-        return originalElement
+    const paginationKeyDown = (e: React.KeyboardEvent<HTMLAnchorElement>) => {
+      if (e.key === 'Enter') {
+        e.preventDefault()
+        e.stopPropagation()
+        ;(e.currentTarget.parentNode as HTMLElement)?.click()
       }
+    }
 
-      if (type === 'prev') {
+    const itemRender =
+      pagination.itemRender ||
+      ((page: number, type: string, originalElement: React.ReactNode) => {
+        if (type === 'jump-next' || type === 'jump-prev') {
+          return originalElement
+        }
+
+        if (type === 'prev') {
+          return (
+            <a
+              href="/previous/page"
+              onClick={paginationLinkClick}
+              onKeyDown={paginationKeyDown}
+            >
+              Previous
+            </a>
+          )
+        }
+
+        if (type === 'next') {
+          return (
+            <a
+              href="/next/page"
+              onClick={paginationLinkClick}
+              onKeyDown={paginationKeyDown}
+            >
+              Next
+            </a>
+          )
+        }
+
         return (
           <a
-            href="/previous/page"
+            href={`/page/${page}`}
             onClick={paginationLinkClick}
             onKeyDown={paginationKeyDown}
           >
-            Previous
+            {page}
           </a>
         )
-      }
+      })
 
-      if (type === 'next') {
-        return (
-          <a
-            href="/next/page"
-            onClick={paginationLinkClick}
-            onKeyDown={paginationKeyDown}
-          >
-            Next
-          </a>
-        )
-      }
-
-      return (
-        <a
-          href={`/page/${page}`}
-          onClick={paginationLinkClick}
-          onKeyDown={paginationKeyDown}
-        >
-          {page}
-        </a>
-      )
-    })
-
-  return (
-    <PaginationNav
-      aria-label="Pagination"
-      ref={paginationRef}
-      role="navigation"
-      {...rest}
-    >
-      <AntPagination
-        {...pagination}
-        itemRender={itemRender}
-        onChange={onChange}
-        onShowSizeChange={onShowSizeChange}
-      />
-    </PaginationNav>
-  )
-})
-
-Pagination.propTypes = {
-  pagination: PropTypes.shape({
-    current: PropTypes.number,
-    total: PropTypes.number,
-    pageSize: PropTypes.number,
-    itemRender: PropTypes.func,
-    showSizeChanger: PropTypes.bool,
-  }),
-  onChange: PropTypes.func,
-  onShowSizeChange: PropTypes.func,
-}
+    return (
+      <PaginationNav
+        aria-label="Pagination"
+        ref={paginationRef}
+        role="navigation"
+        {...rest}
+      >
+        <AntPagination
+          {...pagination}
+          itemRender={itemRender}
+          onChange={onChange}
+          onShowSizeChange={onShowSizeChange}
+        />
+      </PaginationNav>
+    )
+  },
+)
 
 export default Pagination
