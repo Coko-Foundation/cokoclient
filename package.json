@@ -47,7 +47,7 @@
     "@vitejs/plugin-react-swc": "^4.2.2",
     "antd": "^5.6.1",
     "apollo-upload-client": "^18.0.1",
-    "color": "^4.2.3",
+    "color": "^5.0.3",
     "dayjs": "^1.11.19",
     "graphql": "^16.8.1",
     "graphql-ws": "^5.16.0",
