@@ -1,5 +1,8 @@
-import React from 'react'
 import { faker } from '@faker-js/faker'
+
+import { uuid } from '../../../src'
+
+console.log('here', uuid())
 
 import { Button } from '../../../src/ui'
 
