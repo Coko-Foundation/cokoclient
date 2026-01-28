@@ -2,9 +2,9 @@ import React, { useEffect, useRef } from 'react'
 import styled, { css } from 'styled-components'
 import PropTypes from 'prop-types'
 import { Button as AntButton } from 'antd'
-import { omit } from 'lodash'
 
 import { darken, th, grid } from '../../../../../src'
+import { omit } from '../../../../../src/toolkit/funcs'
 
 const colors = {
   danger: 'colorError',

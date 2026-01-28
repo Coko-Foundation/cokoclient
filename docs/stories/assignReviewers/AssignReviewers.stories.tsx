@@ -1,10 +1,9 @@
 import React, { useEffect, useState } from 'react'
 import styled from 'styled-components'
-import PropTypes from 'prop-types'
-import { range, uniq } from 'lodash'
 import { faker } from '@faker-js/faker'
 
 import { grid } from '../../../src/toolkit'
+import { uniq } from '../../../src/toolkit/funcs'
 import AssignReviewers from '../../../src/ui/assignReviewers/AssignReviewers'
 import { DateParser, Note } from '../../../src/ui'
 
@@ -30,7 +29,7 @@ const ButtonsWrapper = styled.div`
 `
 
 const makeReviewers = n =>
-  range(n).map(() => ({
+  Array.from(Array(n)).map(() => ({
     displayName: faker.person.fullName(),
     email: faker.internet.email(),
     id: faker.string.uuid(),
@@ -52,7 +51,7 @@ const isActive = r => r.invited && !r.invitationRevoked && !r.rejectedInvitation
 
 const isAvailable = r => !r.invited
 
-const topics = uniq(range(20).map(() => faker.animal.type()))
+const topics = uniq(Array.from(Array(20)).map(() => faker.animal.type()))
 
 const additionalColumns = [
   {

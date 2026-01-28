@@ -2,7 +2,6 @@ import React from 'react'
 import styled from 'styled-components'
 // eslint-disable-next-line import/no-extraneous-dependencies
 import { faker } from '@faker-js/faker'
-import { range } from 'lodash'
 
 /**
  * Wrap components around this to show what they will look like
@@ -70,7 +69,8 @@ export const randomBool = () => randomPick([true, false])
 /**
  * Creates an array of length n of whatever the callback returns
  */
-export const createData = (n, callback) => range(n).map(callback)
+export const createData = (n: number, callback) =>
+  Array.from(Array(n)).map((_, i) => callback(i))
 
 /**
  * Just an empty function to use as a placeholder for required functions

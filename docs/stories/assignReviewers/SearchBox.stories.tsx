@@ -1,17 +1,16 @@
-import React from 'react'
 import styled from 'styled-components'
-import { range, uniq } from 'lodash'
 import { faker } from '@faker-js/faker'
 
+import { uniq } from '../../../src/toolkit/funcs'
 import SearchBox from '../../../src/ui/assignReviewers/SearchBox'
 
 const Wrapper = styled.div`
   height: 400px;
 `
 
-const topics = uniq(range(20).map(() => faker.animal.type()))
+const topics = uniq(Array.from(Array(20)).map(() => faker.animal.type()))
 
-const people = range(40).map(() => ({
+const people = Array.from(Array(40)).map(() => ({
   value: faker.string.uuid(),
   label: faker.person.fullName(),
   isDisabled: Math.random() > 0.5,
@@ -96,4 +95,3 @@ export const AdditionalSearchFields = () => {
     </Wrapper>
   )
 }
-

@@ -1,17 +1,16 @@
 import React, { useState } from 'react'
 import { faker } from '@faker-js/faker'
-import { range } from 'lodash'
 
 import { Select } from '../../../src/ui'
 
 const makeOptions = n =>
-  range(n).map(i => ({
+  Array.from(Array(n)).map(() => ({
     label: faker.person.fullName(),
     value: faker.string.uuid(),
   }))
 
 const makeLongOptions = n =>
-  range(n).map(i => ({
+  Array.from(Array(n)).map(() => ({
     label: faker.lorem.sentences(5),
     value: faker.string.uuid(),
   }))

@@ -1,11 +1,10 @@
 import React from 'react'
 import { faker } from '@faker-js/faker'
-import { range } from 'lodash'
 import { Collapse } from '../../../src/ui/common'
 
 export const Base = () => (
   <Collapse>
-    {range(3).map(i => (
+    {Array.from(Array(3)).map((_, i) => (
       <Collapse.Panel header={faker.lorem.words(4)} key={i}>
         {faker.lorem.sentences(6)}
       </Collapse.Panel>
@@ -15,7 +14,7 @@ export const Base = () => (
 
 export const AccordionMode = () => (
   <Collapse accordion>
-    {range(3).map(i => (
+    {Array.from(Array(3)).map((_, i) => (
       <Collapse.Panel header={faker.lorem.words(4)} key={i}>
         {faker.lorem.sentences(6)}
       </Collapse.Panel>

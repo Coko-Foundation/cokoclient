@@ -1,12 +1,10 @@
 import React from 'react'
 import { faker } from '@faker-js/faker'
 
-import { range } from 'lodash'
-
 import { CheckboxGroup } from '../../../src/ui'
 
 const makeOptions = n =>
-  range(n).map(i => ({
+  Array.from(Array(n)).map((_, i) => ({
     value: i,
     label: faker.lorem.words(3),
   }))

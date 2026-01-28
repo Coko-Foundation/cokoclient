@@ -1,11 +1,10 @@
 import React, { useState } from 'react'
 import { faker } from '@faker-js/faker'
-import { range } from 'lodash'
 
 import { Radio } from '../../../src/ui'
 
 const makeOptions = n =>
-  range(n).map(i => ({
+  Array.from(Array(n)).map((_, i) => ({
     id: i,
     label: faker.lorem.words(3),
     value: i,
