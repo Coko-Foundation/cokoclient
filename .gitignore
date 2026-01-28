@@ -46,11 +46,6 @@ typings/
 config/local*
 */config/local*
 
-# Storybook build outputs
-.out
-.storybook-out
-storybook-static
-
 # Bundles
 _build/
 dist/
@@ -85,7 +80,5 @@ uploads/
 !**/.yarn/releases
 !**/.yarn/sdks
 !**/.yarn/versions
-
-*storybook.log
 
 .claude

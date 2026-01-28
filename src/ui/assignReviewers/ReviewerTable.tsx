@@ -2,15 +2,20 @@ import React, { ReactNode, useEffect, useState } from 'react'
 import styled from 'styled-components'
 import { Table as AntTable, TablePaginationConfig } from 'antd'
 import {
-  DragDropContext,
-  Droppable,
-  Draggable,
-  DropResult,
-  DroppableProvided,
-  DroppableStateSnapshot,
-  DraggableProvided,
-  DraggableStateSnapshot,
-} from 'react-beautiful-dnd'
+  DndContext,
+  closestCenter,
+  PointerSensor,
+  useSensor,
+  useSensors,
+  DragEndEvent,
+} from '@dnd-kit/core'
+import {
+  SortableContext,
+  useSortable,
+  verticalListSortingStrategy,
+  arrayMove,
+} from '@dnd-kit/sortable'
+import { CSS } from '@dnd-kit/utilities'
 
 import { MenuOutlined } from '@ant-design/icons'
 
@@ -56,18 +61,8 @@ type ReviewerTableProps = {
 
 type TableSorter = SorterResult<Reviewer>
 
-type TableBodyProps = {
-  children: ReactNode
-  className?: string
-}
-
-type TableRowProps = {
-  children: ReactNode
-  index: number
-  manualSorting: boolean
+interface RowProps extends React.HTMLAttributes<HTMLTableRowElement> {
   'data-row-key': string
-  record: Reviewer
-  style: React.CSSProperties
 }
 
 const Wrapper = styled.div`
@@ -81,80 +76,40 @@ const EmptyMessage = styled.div`
   font-style: italic;
 `
 
-const StyledTable = styled(AntTable<Reviewer>)``
+const StyledTable = styled(AntTable<Reviewer>)`
+  /* Ensure table rows can be transformed for drag and drop */
+  .ant-table-tbody > tr {
+    &.ant-table-row {
+      position: relative;
+    }
+  }
+`
 
 const StyledMenuOutlined = styled(MenuOutlined)`
-  cursor: move;
+  cursor: grab;
   touch-action: none;
 `
 
-const TableBody = ({
-  children,
-  className,
-  ...props
-}: TableBodyProps): React.ReactNode => {
-  return (
-    <Droppable
-      droppableId="droppable-table"
-      ignoreContainerClipping={false}
-      isCombineEnabled={false}
-      isDropDisabled={false}
-    >
-      {(provided: DroppableProvided, _snapshot: DroppableStateSnapshot) => (
-        <tbody
-          className={className}
-          ref={provided.innerRef}
-          {...props}
-          {...provided.droppableProps}
-        >
-          {children}
-          {provided.placeholder}
-        </tbody>
-      )}
-    </Droppable>
-  )
+const SortableRow: React.FC<Readonly<RowProps>> = (props) => {
+  const { attributes, listeners, setNodeRef, transform, isDragging } = useSortable({
+    id: props['data-row-key'],
+  })
+
+  const shouldAnimate = !isDragging && transform !== null
+
+  const style: React.CSSProperties = {
+    ...props.style,
+    transform: CSS.Translate.toString(transform),
+    transition: shouldAnimate ? 'transform 200ms ease' : undefined,
+    cursor: isDragging ? 'grabbing' : 'grab',
+    ...(isDragging ? { position: 'relative', zIndex: 9999, opacity: 0.8, background: 'white' } : {}),
+  }
+
+  return <tr {...props} ref={setNodeRef} style={style} {...attributes} {...listeners} />
 }
 
-const TableRow = ({
-  children,
-  index,
-  manualSorting,
-  ...props
-}: TableRowProps): React.ReactNode => {
-  return manualSorting ? (
-    <Draggable
-      draggableId={props['data-row-key'].toString()}
-      index={index}
-      key={props['data-row-key']}
-    >
-      {(provided: DraggableProvided, _snapshot: DraggableStateSnapshot) => (
-        <tr
-          ref={provided.innerRef}
-          {...props}
-          {...provided.draggableProps}
-          {...provided.dragHandleProps}
-        >
-          {React.Children.map(children, child => {
-            if (
-              React.isValidElement(child) &&
-              (child as React.ReactElement<{ key?: string }>).key === 'sort'
-            ) {
-              return React.cloneElement(
-                child as React.ReactElement<{ children?: ReactNode }>,
-                {
-                  children: <StyledMenuOutlined />,
-                },
-              )
-            }
-
-            return child
-          })}
-        </tr>
-      )}
-    </Draggable>
-  ) : (
-    <tr {...props}>{children}</tr>
-  )
+const RegularRow: React.FC<Readonly<RowProps>> = (props) => {
+  return <tr {...props} />
 }
 
 const ReviewerTable = (props: ReviewerTableProps): React.ReactNode => {
@@ -178,6 +133,22 @@ const ReviewerTable = (props: ReviewerTableProps): React.ReactNode => {
     setTableSorter(manualSorting ? {} : tableSorter)
   }, [manualSorting, tableSorter])
 
+  const sensors = useSensors(
+    useSensor(PointerSensor, {
+      activationConstraint: {
+        distance: 1,
+      },
+    }),
+  )
+
+  const handleDragEnd = ({ active, over }: DragEndEvent): void => {
+    if (active.id !== over?.id) {
+      const oldIndex = reviewers.findIndex(r => r.id === active.id)
+      const newIndex = reviewers.findIndex(r => r.id === over?.id)
+      onChange(arrayMove(reviewers, oldIndex, newIndex))
+    }
+  }
+
   if (reviewers.length === 0) {
     return (
       <Wrapper className={className}>
@@ -197,29 +168,13 @@ const ReviewerTable = (props: ReviewerTableProps): React.ReactNode => {
     setTableSorter(manualSorting ? {} : singleSorter)
   }
 
-  const onDragEnd = (result: DropResult): void => {
-    const { destination, source } = result
-
-    if (!destination) return
-
-    if (
-      destination.droppableId === source.droppableId &&
-      destination.index === source.index
-    )
-      return
-
-    const newDataSource = [...reviewers]
-    const draggedElement = newDataSource.splice(source.index, 1)
-    newDataSource.splice(destination.index, 0, ...draggedElement)
-
-    onChange(newDataSource)
-  }
-
   const columns = [
     ...(manualSorting
       ? [
           {
             key: 'sort',
+            width: 40,
+            render: () => <StyledMenuOutlined />,
           },
         ]
       : []),
@@ -301,28 +256,38 @@ const ReviewerTable = (props: ReviewerTableProps): React.ReactNode => {
   })
 
   const rows = reviewers.map((r: Reviewer) => ({ ...r, key: r.id }))
+  const sortableIds = rows.map(r => r.key)
+
+  const tableContent = (
+    <StyledTable
+      columns={columns}
+      components={manualSorting ? { body: { row: SortableRow } } : { body: { row: RegularRow } }}
+      dataSource={rows}
+      key={`manual-sorting-${manualSorting}`}
+      onChange={handleChange}
+      pagination={false}
+      rowKey="key"
+    />
+  )
 
   return (
     <Wrapper className={className}>
-      <DragDropContext onDragEnd={onDragEnd}>
-        <StyledTable
-          columns={columns}
-          components={{
-            body: {
-              row: TableRow,
-              wrapper: TableBody,
-            },
-          }}
-          dataSource={rows}
-          key={`manual-sorting-${manualSorting}`}
-          onChange={handleChange}
-          onRow={(record, index) =>
-            ({ record, index, manualSorting }) as React.HTMLAttributes<HTMLElement>
-          }
-          pagination={false}
-          rowKey="id"
-        />
-      </DragDropContext>
+      {manualSorting ? (
+        <DndContext
+          sensors={sensors}
+          collisionDetection={closestCenter}
+          onDragEnd={handleDragEnd}
+        >
+          <SortableContext
+            items={sortableIds}
+            strategy={verticalListSortingStrategy}
+          >
+            {tableContent}
+          </SortableContext>
+        </DndContext>
+      ) : (
+        tableContent
+      )}
     </Wrapper>
   )
 }

@@ -3,10 +3,9 @@
 import React, { useState } from 'react'
 import styled from 'styled-components'
 import { faker } from '@faker-js/faker'
-import { range } from 'lodash'
 
-import { List, Button } from '../../../src/ui'
-// import { Avatar } from 'antd'
+import { List, Button, dndArrayMove } from '../../../src/ui'
+import type { DragEndEvent } from '../../../src/ui'
 import { createData } from '../_helpers'
 
 const Item = styled.div`
@@ -18,11 +17,17 @@ const Item = styled.div`
 
 // returns the position of the item in a paginated list (as a String)
 // eg. third item on page 2 will be 13
-const getItemListNumber = (i, currentPage) =>
+const getItemListNumber = (i: number, currentPage: number) =>
   String(i + 1 + (currentPage - 1) * 10)
 
-const makeData = n =>
-  range(n).map(i => ({
+type StoryDataItem = {
+  id: string
+  value: string
+  index: number
+}
+
+const makeData = (n: number): StoryDataItem[] =>
+  Array.from(Array(n)).map((_, i) => ({
     id: String(i + 1),
     value: faker.lorem.sentence(),
     index: i,
@@ -34,38 +39,31 @@ const Wrapper = styled.div`
   /* height: 700px; */
 `
 
-export const Base = args => (
+export const Base = () => (
   <Wrapper>
     <List
       dataSource={data}
+      loading={false}
       pagination={{
         pageSize: 10,
       }}
-      renderItem={item => <Item>{item.value}</Item>}
-      // eslint-disable-next-line react/jsx-props-no-spreading
-      {...args}
+      renderItem={item => <Item>{item.value as string}</Item>}
+      onSortOptionChange={null}
+      searchLoading={false}
+      showSearch={false}
+      showSort={false}
+      showTotalCount={false}
+      sortOptions={[]}
+      totalCount={null}
     />
   </Wrapper>
 )
-
-Base.args = {
-  loading: false,
-  onSearch: null,
-  onSortOptionChange: null,
-  searchLoading: false,
-  searchPlaceholder: null,
-  showSearch: false,
-  showSort: false,
-  showTotalCount: false,
-  sortOptions: [],
-  totalCount: null,
-}
 
 export const Loading = () => (
   <List
     dataSource={makeData(5)}
     loading
-    renderItem={item => <Item>{item.value}</Item>}
+    renderItem={item => <Item>{item.value as string}</Item>}
   />
 )
 
@@ -91,7 +89,7 @@ export const Search = () => {
       pagination={{
         pageSize: 10,
       }}
-      renderItem={item => <Item>{item.value}</Item>}
+      renderItem={item => <Item>{item.value as string}</Item>}
       searchLoading={searchLoading}
       searchPlaceholder={faker.lorem.words(5)}
       showSearch
@@ -109,7 +107,7 @@ export const TotalCount = () => {
         pageSize: 10,
         showSizeChanger: false,
       }}
-      renderItem={(item, i) => <Item>{item.value}</Item>}
+      renderItem={(item, i) => <Item>{item.value as string}</Item>}
       showTotalCount
       totalCount={N}
     />
@@ -134,7 +132,7 @@ export const Sort = () => {
     },
   ]
 
-  const handleSortOptionChange = newValue => {
+  const handleSortOptionChange = () => {
     setLoading(true)
 
     setTimeout(() => {
@@ -151,7 +149,7 @@ export const Sort = () => {
       pagination={{
         pageSize: 10,
       }}
-      renderItem={item => <Item>{item.value}</Item>}
+      renderItem={item => <Item>{item.value as string}</Item>}
       showSort
       sortOptions={sortOptions}
     />
@@ -167,7 +165,7 @@ export const AsyncPagination = () => {
   const [currentPage, setCurrentPage] = useState(INITIAL_PAGE)
   const [loading, setLoading] = useState(false)
 
-  const handlePageChange = (pageNumber, pageSize) => {
+  const handlePageChange = (pageNumber: number, _pageSize: number) => {
     setLoading(true)
 
     setTimeout(() => {
@@ -198,7 +196,7 @@ export const AsyncPagination = () => {
         <Item>
           {getItemListNumber(i, currentPage)}
           {'. '}
-          {item.value}
+          {item.value as string}
         </Item>
       )}
     />
@@ -210,18 +208,18 @@ export const SelectableRows = () => {
   const TOTAL = 20
   const INITIAL_PAGE = 1
 
-  const allData = React.useMemo(() =>
-    createData(TOTAL, i => ({
+  const allData = React.useMemo(() => {
+    return createData(TOTAL, (i: number) => ({
       id: String(i + 1),
       value: faker.lorem.sentences(2),
-    })),
-  )
+    }))
+  }, [])
 
   const [dataSource, setDataSource] = useState(allData.slice(0, 10))
   const [currentPage, setCurrentPage] = useState(INITIAL_PAGE)
   const [loading, setLoading] = useState(false)
 
-  const handlePageChange = (pageNumber, pageSize) => {
+  const handlePageChange = (pageNumber: number, _pageSize: number) => {
     setLoading(true)
 
     setTimeout(() => {
@@ -235,7 +233,7 @@ export const SelectableRows = () => {
     }, 1000)
   }
 
-  const handleSelectionChange = selectedIds => {
+  const handleSelectionChange = (selectedIds: string[]) => {
     console.log('handled', selectedIds)
   }
 
@@ -263,7 +261,7 @@ export const SelectableRows = () => {
       }}
       renderItem={(item, i) => (
         <Item>
-          {item.id}: {item.value}
+          {item.id}: {item.value as string}
         </Item>
       )}
     />
@@ -275,21 +273,21 @@ export const preserveSelection = () => {
   const TOTAL = 20
   const INITIAL_PAGE = 1
 
-  const allData = React.useMemo(() =>
-    createData(TOTAL, i => ({
+  const allData = React.useMemo(() => {
+    return createData(TOTAL, (i: number) => ({
       id: String(i + 1),
       value: faker.lorem.sentences(2),
-    })),
-  )
+    }))
+  }, [])
 
   const [dataSource, setDataSource] = useState(allData.slice(0, 10))
   const [currentPage, setCurrentPage] = useState(INITIAL_PAGE)
   const [loading, setLoading] = useState(false)
 
   // keep track of selected items in the parent component and pass them down to preserve selection between page changes
-  const [selectedItems, setSelectedItems] = useState([])
+  const [selectedItems, setSelectedItems] = useState<string[]>([])
 
-  const handlePageChange = (pageNumber, pageSize) => {
+  const handlePageChange = (pageNumber: number, _pageSize: number) => {
     setLoading(true)
 
     setTimeout(() => {
@@ -303,7 +301,7 @@ export const preserveSelection = () => {
     }, 1000)
   }
 
-  const handleSelectionChange = selectedIds => {
+  const handleSelectionChange = (selectedIds: string[]) => {
     console.log('selected', selectedIds)
     setSelectedItems(selectedIds)
   }
@@ -335,7 +333,7 @@ export const preserveSelection = () => {
         }}
         renderItem={(item, i) => (
           <Item>
-            {item.id}: {item.value}
+            {item.id}: {item.value as string}
           </Item>
         )}
         selectedItems={selectedItems}
@@ -344,33 +342,12 @@ export const preserveSelection = () => {
   )
 }
 
-// commenting out DefaultAntItem because it is not usable anymore
-// export const DefaultAntItem = () => {
-//   const N = 7
-
-//   const dataSource = createData(N, i => ({
-//     avatar: image.avatar(),
-//     description: lorem.sentences(4),
-//     title: lorem.words(6),
-//   }))
-
-//   return (
-//     <List
-//       dataSource={dataSource}
-//       renderItem={item => (
-//         <List.Item>
-//           <List.Item.Meta
-//             avatar={<Avatar src={item.avatar} />}
-//             description={item.description}
-//             title={item.title}
-//           />
-//         </List.Item>
-//       )}
-//     />
-//   )
-// }
-
-export const EmptyList = () => <List dataSource={[]} />
+export const EmptyList = () => (
+  <List
+    dataSource={[]}
+    renderItem={item => <Item>{item.value as string}</Item>}
+  />
+)
 
 export const HidePagination = () => {
   const N = 9
@@ -378,7 +355,7 @@ export const HidePagination = () => {
   return (
     <List
       dataSource={makeData(N)}
-      renderItem={item => <Item>{item.value}</Item>}
+      renderItem={item => <Item>{item.value as string}</Item>}
       showPagination={false}
       showTotalCount
       totalCount={N}
@@ -400,7 +377,7 @@ export const HidePaginationButUseAction = () => {
     <List
       dataSource={makeData(N)}
       footerContent={BulkAction}
-      renderItem={item => <Item>{item.value}</Item>}
+      renderItem={item => <Item>{item.value as string}</Item>}
       showPagination={false}
       showTotalCount
       totalCount={N}
@@ -411,26 +388,16 @@ export const HidePaginationButUseAction = () => {
 export const DraggableItems = () => {
   const [dataSource, setDataSource] = useState(makeData(10))
 
-  // console.log(dataSource)
-
-  const handleDragEnd = result => {
-    const { destination, source /* draggableId */ } = result
+  const handleDragEnd = (event: DragEndEvent) => {
+    const { active, over } = event
 
     // check if no destination, or if no rearrangement happened
-    if (!destination) return
+    if (!over || active.id === over.id) return
 
-    if (
-      destination.droppableId === source.droppableId &&
-      destination.index === source.index
-    )
-      return
+    const oldIndex = dataSource.findIndex(item => item.id === active.id)
+    const newIndex = dataSource.findIndex(item => item.id === over.id)
 
-    // reorder the elements (depends on how we want to persist data, this is just a demo)
-    const newDataSource = [...dataSource]
-    const draggedElement = newDataSource.splice(source.index, 1)
-    newDataSource.splice(destination.index, 0, ...draggedElement)
-
-    setDataSource(newDataSource)
+    setDataSource(dndArrayMove(dataSource, oldIndex, newIndex))
   }
 
   return (
@@ -444,7 +411,7 @@ export const DraggableItems = () => {
       }}
       renderItem={item => (
         <Item>
-          {item.id} - {item.value}
+          {item.id} - {item.value as string}
         </Item>
       )}
       showTotalCount

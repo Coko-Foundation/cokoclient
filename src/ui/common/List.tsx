@@ -8,14 +8,22 @@ import React, {
 } from 'react'
 import styled from 'styled-components'
 import {
-  DragDropContext,
-  Droppable,
-  Draggable,
-  DropResult,
-  DroppableProvided,
-  DraggableProvided,
-  DraggableStateSnapshot,
-} from 'react-beautiful-dnd'
+  DndContext,
+  closestCenter,
+  KeyboardSensor,
+  PointerSensor,
+  useSensor,
+  useSensors,
+  DragEndEvent,
+} from '@dnd-kit/core'
+import {
+  SortableContext,
+  sortableKeyboardCoordinates,
+  useSortable,
+  verticalListSortingStrategy,
+  arrayMove as dndArrayMove,
+} from '@dnd-kit/sortable'
+import { CSS } from '@dnd-kit/utilities'
 
 import { List as AntList } from 'antd'
 
@@ -42,6 +50,7 @@ type PaginationConfig = {
   total?: number
   onChange?: (page: number, pageSize: number) => void
   onShowSizeChange?: (current: number, size: number) => void
+  showSizeChanger?: boolean
 }
 
 type ItemSelection = {
@@ -73,11 +82,11 @@ type ListProps = Omit<
   footerContent?: React.ReactElement | null
   itemSelection?: ItemSelection | null
   loading?: boolean
-  onSearch?: ((value: string) => void) | null
+  onSearch?: (value: string) => void
   onSortOptionChange?: ((value: string) => void) | null
   pagination?: PaginationConfig | false
   searchLoading?: boolean
-  searchPlaceholder?: string | null
+  searchPlaceholder?: string
   showPagination?: boolean
   showSearch?: boolean
   showSort?: boolean
@@ -85,7 +94,7 @@ type ListProps = Omit<
   sortOptions?: SortOption[]
   totalCount?: number | null
   draggable?: boolean
-  onDragEnd?: (result: DropResult) => void
+  onDragEnd?: (event: DragEndEvent) => void
   selectedItems?: string[]
 }
 
@@ -131,19 +140,18 @@ const Select = styled(UISelect)`
   width: 150px;
 `
 
-const ListItemWrapper = styled.li<{ isDragging?: boolean }>`
+const ListItemWrapper = styled.li<{ $isDragging?: boolean }>`
   align-items: center;
   display: flex;
   justify-content: stretch;
 
-  &:focus {
-    outline: 2px solid ${th('colorPrimary')};
-    outline-offset: -2px;
-  }
+  > div {
+    border: 2px solid
+      ${({ $isDragging }) => ($isDragging ? th('colorPrimary') : 'transparent')};
 
-  &&&& {
-    background-color: ${({ isDragging }) =>
-      isDragging ? th('colorSelection') : 'transparent'};
+    &:focus {
+      border: 2px solid ${th('colorPrimary')};
+    }
   }
 `
 
@@ -225,6 +233,41 @@ const SelectableItem = memo((props: SelectableItemProps) => {
   )
 }, compareItem)
 
+type SortableItemProps = {
+  id: string
+  children: React.ReactNode
+}
+
+const SortableItem = ({ id, children }: SortableItemProps): React.ReactNode => {
+  const {
+    attributes,
+    listeners,
+    setNodeRef,
+    transform,
+    transition,
+    isDragging,
+  } = useSortable({ id })
+
+  const style: React.CSSProperties = {
+    transform: CSS.Translate.toString(transform),
+    transition,
+    cursor: isDragging ? 'grabbing' : 'grab',
+  }
+
+  return (
+    <ListItemWrapper
+      ref={setNodeRef}
+      style={style}
+      $isDragging={isDragging}
+      data-testid="list-item-wrapper"
+      {...attributes}
+      {...listeners}
+    >
+      {children}
+    </ListItemWrapper>
+  )
+}
+
 // memoized SelectableItem would use old value of selectedItems when handleSelect and handleDeselect are passed as they are
 // when you wrap them with the below function, they always refer to the List's updated selectedItems
 function useFunction<T extends (...args: any[]) => any>(callback: T): T {
@@ -262,10 +305,10 @@ const List = (props: ListProps): React.ReactNode => {
     renderItem,
     itemSelection = null,
     loading = false,
-    onSearch = null,
+    onSearch,
     onSortOptionChange = null,
     searchLoading = false,
-    searchPlaceholder = null,
+    searchPlaceholder,
     showPagination = true,
     showSearch = false,
     showSort = false,
@@ -302,30 +345,16 @@ const List = (props: ListProps): React.ReactNode => {
   const listItemToRender = itemSelection
     ? (itemProps: ListItem, i: number) => {
         return draggable ? (
-          <Draggable draggableId={`draggable-${i}`} index={i}>
-            {(
-              provided: DraggableProvided,
-              snapshot: DraggableStateSnapshot,
-            ) => (
-              <ListItemWrapper
-                data-testid="list-item-wrapper"
-                key={itemProps?.id}
-                {...provided.draggableProps}
-                {...provided.dragHandleProps}
-                isDragging={snapshot.isDragging}
-                ref={provided.innerRef}
-              >
-                <SelectableItem
-                  index={i}
-                  onDeselect={handleDeselect}
-                  onSelect={handleSelect}
-                  renderItem={renderItem}
-                  selected={selectedItems.includes(itemProps?.id)}
-                  {...itemProps}
-                />
-              </ListItemWrapper>
-            )}
-          </Draggable>
+          <SortableItem id={itemProps.id} key={itemProps.id}>
+            <SelectableItem
+              index={i}
+              onDeselect={handleDeselect}
+              onSelect={handleSelect}
+              renderItem={renderItem}
+              selected={selectedItems.includes(itemProps?.id)}
+              {...itemProps}
+            />
+          </SortableItem>
         ) : (
           <ListItemWrapper data-testid="list-item-wrapper" key={itemProps?.id}>
             <SelectableItem
@@ -341,19 +370,9 @@ const List = (props: ListProps): React.ReactNode => {
       }
     : (itemProps: ListItem, i: number) => {
         return draggable ? (
-          <ListItemWrapper data-testid="list-item-wrapper">
-            <Draggable draggableId={`draggable-${i}`} index={i}>
-              {(provided: DraggableProvided) => (
-                <div
-                  {...provided.draggableProps}
-                  {...provided.dragHandleProps}
-                  ref={provided.innerRef}
-                >
-                  {renderItem(itemProps, i)}
-                </div>
-              )}
-            </Draggable>
-          </ListItemWrapper>
+          <SortableItem id={itemProps.id} key={itemProps.id}>
+            {renderItem(itemProps, i)}
+          </SortableItem>
         ) : (
           <ListItemWrapper data-testid="list-item-wrapper">
             {renderItem(itemProps, i)}
@@ -454,30 +473,41 @@ const List = (props: ListProps): React.ReactNode => {
     ...locale,
   }
 
+  const sensors = useSensors(
+    useSensor(PointerSensor),
+    useSensor(KeyboardSensor, {
+      coordinateGetter: sortableKeyboardCoordinates,
+    }),
+  )
+
+  const sortableIds = splitDataSource.map(item => item.id)
+
   const ListToRender = draggable ? (
-    <DragDropContext onDragEnd={onDragEnd}>
-      <DroppableWrapper>
-        <Droppable droppableId="dropable-list">
-          {(provided: DroppableProvided) => (
-            <div {...provided.droppableProps} ref={provided.innerRef}>
-              <AntList
-                dataSource={splitDataSource}
-                loading={
-                  loading
-                    ? { spinning: true, indicator: <StyledLoader /> }
-                    : { spinning: false, indicator: <StyledLoader /> }
-                }
-                locale={mergedLocale}
-                renderItem={listItemToRender}
-                {...rest}
-                pagination={false}
-              />
-              {provided.placeholder}
-            </div>
-          )}
-        </Droppable>
-      </DroppableWrapper>
-    </DragDropContext>
+    <DndContext
+      sensors={sensors}
+      collisionDetection={closestCenter}
+      onDragEnd={onDragEnd}
+    >
+      <SortableContext
+        items={sortableIds}
+        strategy={verticalListSortingStrategy}
+      >
+        <DroppableWrapper>
+          <AntList
+            dataSource={splitDataSource}
+            loading={
+              loading
+                ? { spinning: true, indicator: <StyledLoader /> }
+                : { spinning: false, indicator: <StyledLoader /> }
+            }
+            locale={mergedLocale}
+            renderItem={listItemToRender}
+            {...rest}
+            pagination={false}
+          />
+        </DroppableWrapper>
+      </SortableContext>
+    </DndContext>
   ) : (
     <StyledList
       dataSource={splitDataSource}
@@ -524,7 +554,11 @@ const List = (props: ListProps): React.ReactNode => {
                   data-testid="sort-select"
                   defaultValue={defaultSortOption && defaultSortOption.value}
                   id="sortBy"
-                  onChange={onSortOptionChange}
+                  onChange={
+                    onSortOptionChange
+                      ? (value: unknown) => onSortOptionChange(value as string)
+                      : undefined
+                  }
                   options={sanitizedSortOptions}
                 />
               </label>
@@ -553,4 +587,6 @@ const List = (props: ListProps): React.ReactNode => {
 
 List.Item = AntList.Item
 
+export { dndArrayMove }
+export type { DragEndEvent }
 export default List

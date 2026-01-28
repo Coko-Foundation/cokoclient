@@ -22,8 +22,8 @@
     "src/**/*.d.ts",
     "src/**/*.js",
     "src/**/*.jsx",
-    "stories/**/*.ts",
-    "stories/**/*.tsx",
+    "docs/**/*.ts",
+    "docs/**/*.tsx",
     "vite/**/*.ts"
   ]
 }
