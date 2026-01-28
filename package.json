@@ -52,11 +52,9 @@
     "graphql": "^16.8.1",
     "graphql-ws": "^5.16.0",
     "picocolors": "^1.1.1",
-    "prop-types": "^15.7.2",
     "react": "^19.2.3",
     "react-dom": "^19.2.3",
     "react-is": "^19.2.3",
-    "react-refresh": "^0.10.0",
     "react-router-dom": "^5.2.0",
     "styled-components": "^6.3.8",
     "styled-normalize": "^8.1.1",
@@ -78,7 +76,6 @@
   },
   "peerDependencies": {
     "@apollo/client": "^3.3.13",
-    "prop-types": "^15.7.2",
     "react": "^19.2.3",
     "react-router-dom": "^5.2.0",
     "styled-components": "^6.3.8"

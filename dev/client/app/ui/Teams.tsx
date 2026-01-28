@@ -1,5 +1,3 @@
-import React from 'react'
-import PropTypes from 'prop-types'
 import styled from 'styled-components'
 import { v4 as uuid } from 'uuid'
 
@@ -7,10 +5,21 @@ import Button from './common/Button'
 
 const Wrapper = styled.div``
 
-const Teams = props => {
+type Team = {
+  role: string
+}
+
+type TeamsProps = {
+  className?: string
+  teams: Team[]
+  addToReviewerTeam: (id: string) => void
+  removeFromReviewerTeam: (id: string) => void
+}
+
+const Teams = (props: TeamsProps) => {
   const {
     className,
-    teams = null,
+    teams = [],
     addToReviewerTeam,
     removeFromReviewerTeam,
   } = props
@@ -35,12 +44,6 @@ const Teams = props => {
       </Button>
     </Wrapper>
   )
-}
-
-Teams.propTypes = {
-  teams: PropTypes.array,
-  addToReviewerTeam: PropTypes.func.isRequired,
-  removeFromReviewerTeam: PropTypes.func.isRequired,
 }
 
 export default Teams

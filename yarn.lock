@@ -465,11 +465,9 @@ __metadata:
     inversify: "npm:^7.11.0"
     nodemon: "npm:^2.0.7"
     picocolors: "npm:^1.1.1"
-    prop-types: "npm:^15.7.2"
     react: "npm:^19.2.3"
     react-dom: "npm:^19.2.3"
     react-is: "npm:^19.2.3"
-    react-refresh: "npm:^0.10.0"
     react-router-dom: "npm:^5.2.0"
     standard-version: "npm:^9.2.0"
     styled-components: "npm:^6.3.8"
@@ -479,7 +477,6 @@ __metadata:
     vite: "npm:^7.3.1"
   peerDependencies:
     "@apollo/client": ^3.3.13
-    prop-types: ^15.7.2
     react: ^19.2.3
     react-router-dom: ^5.2.0
     styled-components: ^6.3.8
@@ -8334,13 +8331,6 @@ __metadata:
   version: 19.2.3
   resolution: "react-is@npm:19.2.3"
   checksum: 10c0/2b54c422c21b8dbd68a435a1cce21ecd5b6f06f48659531f7d53dd7368365da5a67e946f352fb2010d11ca40658aa67bec90995f0f1ec5556c0f71dbffe54994
-  languageName: node
-  linkType: hard
-
-"react-refresh@npm:^0.10.0":
-  version: 0.10.0
-  resolution: "react-refresh@npm:0.10.0"
-  checksum: 10c0/616e82bed3787bf4e55dcc1c9836f251b93523dd4b0ffb1c24c2dcf5d09f686fbf3cffc7d489cd7f12429f76ddf66eb431748fc07df56b18a888a7705cbc079e
   languageName: node
   linkType: hard
 

@@ -1,10 +1,17 @@
-import React from 'react'
-import PropTypes from 'prop-types'
 import styled from 'styled-components'
 
 const Wrapper = styled.div``
 
-const SubscriptionsTest = props => {
+type Datum = {
+  id: string
+  value: string
+}
+
+type SubscriptionsTestProps = {
+  data: Datum[]
+}
+
+const SubscriptionsTest = (props: SubscriptionsTestProps) => {
   const { data = [] } = props
 
   return (
@@ -14,15 +21,6 @@ const SubscriptionsTest = props => {
       })}
     </Wrapper>
   )
-}
-
-SubscriptionsTest.propTypes = {
-  data: PropTypes.arrayOf(
-    PropTypes.shape({
-      id: PropTypes.string,
-      value: PropTypes.string,
-    }),
-  ),
 }
 
 export default SubscriptionsTest

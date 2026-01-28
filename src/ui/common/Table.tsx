@@ -80,10 +80,8 @@ const Table = (props: TableProps) => {
     searchLoading = false,
     onSearch = noop,
     searchPlaceholder,
-    /* eslint-disable react/prop-types */
     dataSource,
     pagination,
-    /* eslint-enable react/prop-types */
     ...rest
   } = props
 

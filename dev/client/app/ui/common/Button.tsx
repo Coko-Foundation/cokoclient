@@ -1,6 +1,5 @@
-import React, { useEffect, useRef } from 'react'
+import { useEffect, useRef } from 'react'
 import styled, { css } from 'styled-components'
-import PropTypes from 'prop-types'
 import { Button as AntButton } from 'antd'
 
 import { darken, th, grid } from '../../../../../src'
@@ -107,14 +106,13 @@ const StyledButton = styled(AntButton)`
  * `danger` prop, which is ommited in favour of `status`, described below.
  */
 
-const Button = props => {
-  const {
-    children,
-    className,
-    autoFocus = false,
-    status = null,
-    ...rest
-  } = props
+type ButtonProps = {
+  status?: 'error' | 'danger' | 'success'
+  autoFocus?: boolean
+}
+
+const Button = (props: ButtonProps) => {
+  const { children, className, autoFocus = false, status, ...rest } = props
   const passProps = omit(rest, 'danger')
 
   const buttonRef = useRef(null)
@@ -135,11 +133,6 @@ const Button = props => {
       {children}
     </StyledButton>
   )
-}
-
-Button.propTypes = {
-  status: PropTypes.oneOf(['error', 'danger', 'success']),
-  autoFocus: PropTypes.bool,
 }
 
 export default Button
