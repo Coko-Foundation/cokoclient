@@ -1,14 +1,11 @@
-/* eslint-disable react/jsx-props-no-spreading */
-
-import React, { useState } from 'react'
-// import { faker } from '@faker-js/faker'
+import { useState } from 'react'
 
 import { Login } from '../../../src/ui'
 import { Background } from '../_helpers'
 
-export const Base = args => (
+export const Base = () => (
   <Background>
-    <Login {...args} />
+    <Login onSubmit={() => {}} />
   </Background>
 )
 

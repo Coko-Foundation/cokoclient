@@ -1,23 +1,13 @@
-import React from 'react'
 import { faker } from '@faker-js/faker'
 import { Collapse } from '../../../src/ui/common'
 
-export const Base = () => (
-  <Collapse>
-    {Array.from(Array(3)).map((_, i) => (
-      <Collapse.Panel header={faker.lorem.words(4)} key={i}>
-        {faker.lorem.sentences(6)}
-      </Collapse.Panel>
-    ))}
-  </Collapse>
-)
+const makeItems = (n: number) =>
+  Array.from(Array(n)).map((_, i) => ({
+    key: String(i),
+    label: faker.lorem.words(4),
+    children: faker.lorem.sentences(6),
+  }))
 
-export const AccordionMode = () => (
-  <Collapse accordion>
-    {Array.from(Array(3)).map((_, i) => (
-      <Collapse.Panel header={faker.lorem.words(4)} key={i}>
-        {faker.lorem.sentences(6)}
-      </Collapse.Panel>
-    ))}
-  </Collapse>
-)
+export const Base = () => <Collapse items={makeItems(3)} />
+
+export const AccordionMode = () => <Collapse accordion items={makeItems(3)} />

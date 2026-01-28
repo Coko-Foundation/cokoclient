@@ -18,21 +18,21 @@ type PopupProps = {
 }
 
 type PopupContainerProps = {
-  visible: boolean
-  position: Position
-  alignment: Alignment
+  $visible: boolean
+  $position: Position
+  $alignment: Alignment
 }
 
 const PopupContainer = styled.div<PopupContainerProps>`
   background: ${cokoTheme.colorBackground};
   border: 1px solid ${cokoTheme.colorBorder};
   border-radius: 10px;
-  display: ${({ visible }) => (visible ? 'block' : 'none')};
+  display: ${({ $visible }) => ($visible ? 'block' : 'none')};
 
   ${props => {
-    const { position, alignment } = props
+    const { $position, $alignment } = props
 
-    switch (`${position}/${alignment}`) {
+    switch (`${$position}/${$alignment}`) {
       case 'block-start/start':
         return `inset-block-end: 100%; inset-inline-start: 0; margin-block-end: ${props.theme.gridUnit};`
       case 'block-start/end':
@@ -55,7 +55,6 @@ const PopupContainer = styled.div<PopupContainerProps>`
   }}
   padding: ${grid(5)};
   position: absolute;
-
   z-index: 1000;
 `
 
@@ -90,7 +89,8 @@ const Popup = ({
   const WrapperRef = useRef<HTMLDivElement>(null)
   const popupRef = useRef<HTMLDivElement>(null)
 
-  const [focusableElements, setFocusableElements] = useState<NodeListOf<HTMLElement> | null>(null)
+  const [focusableElements, setFocusableElements] =
+    useState<NodeListOf<HTMLElement> | null>(null)
   const [visible, setVisible] = useState(false)
 
   const onClickToggle = () => {
@@ -156,14 +156,14 @@ const Popup = ({
         'aria-haspopup': 'dialog',
       } as React.HTMLAttributes<HTMLElement>)}
       <PopupContainer
-        alignment={alignment}
+        $alignment={alignment}
+        $position={position}
+        $visible={visible}
         id={id}
         onBlur={handleBlur}
         onKeyDown={handleKeyDown}
-        position={position}
         ref={popupRef}
         tabIndex={0}
-        visible={visible}
       >
         {children}
       </PopupContainer>

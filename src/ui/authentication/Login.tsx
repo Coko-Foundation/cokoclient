@@ -1,4 +1,5 @@
-import React from 'react'
+import React, { useMemo } from 'react'
+import { v4 as uuid } from 'uuid'
 
 import { Form, Input, Page } from '../common'
 import AuthenticationForm from './AuthenticationForm'
@@ -21,6 +22,8 @@ const Login = (props: LoginProps): React.ReactNode => {
     loading = false,
     onSubmit,
   } = props
+
+  const formId = useMemo(() => uuid(), [])
 
   return (
     <Page maxWidth={600}>
@@ -54,6 +57,7 @@ const Login = (props: LoginProps): React.ReactNode => {
           >
             <Input
               autoComplete="email"
+              id={`form-${formId}-email`}
               placeholder="Please enter your email"
               type="email"
             />
@@ -66,6 +70,7 @@ const Login = (props: LoginProps): React.ReactNode => {
           >
             <Input
               autoComplete="current-password"
+              id={`form-${formId}-current-password`}
               placeholder="Please enter your password"
               type="password"
             />

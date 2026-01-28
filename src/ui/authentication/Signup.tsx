@@ -1,4 +1,5 @@
-import React, { ReactNode } from 'react'
+import React, { ReactNode, useMemo } from 'react'
+import { v4 as uuid } from 'uuid'
 
 import AuthenticationForm from './AuthenticationForm'
 import AuthenticationHeader from './AuthenticationHeader'
@@ -39,6 +40,8 @@ const Signup = (props: SignupProps): React.ReactNode => {
     onSubmit,
     termsAndConditionsContent,
   } = props
+
+  const formId = useMemo(() => uuid(), [])
 
   const [modal, contextHolder] = Modal.useModal()
 
@@ -108,6 +111,7 @@ const Signup = (props: SignupProps): React.ReactNode => {
             >
               <Input
                 autoComplete="given-name"
+                id={`form-${formId}-given-name`}
                 placeholder="Fill in your first name"
               />
             </Form.Item>
@@ -119,6 +123,7 @@ const Signup = (props: SignupProps): React.ReactNode => {
             >
               <Input
                 autoComplete="family-name"
+                id={`form-${formId}-family-name`}
                 placeholder="Fill in your last name"
               />
             </Form.Item>
@@ -139,6 +144,7 @@ const Signup = (props: SignupProps): React.ReactNode => {
             >
               <Input
                 autoComplete="email"
+                id={`form-${formId}-email`}
                 placeholder="Fill in your email"
                 type="email"
               />
@@ -151,6 +157,7 @@ const Signup = (props: SignupProps): React.ReactNode => {
             >
               <Input
                 autoComplete="new-password"
+                id={`form-${formId}-new-password`}
                 placeholder="Fill in your password"
                 type="password"
               />
@@ -159,7 +166,7 @@ const Signup = (props: SignupProps): React.ReactNode => {
             <Form.Item
               dependencies={['password']}
               label="Confirm Password"
-              name="confirmPassword"
+              name="confirm-password"
               rules={[
                 {
                   required: true,
@@ -182,6 +189,7 @@ const Signup = (props: SignupProps): React.ReactNode => {
             >
               <Input
                 autoComplete="new-password"
+                id={`form-${formId}-confirm-password`}
                 placeholder="Fill in your password again"
                 type="password"
               />

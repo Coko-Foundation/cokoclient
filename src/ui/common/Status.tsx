@@ -16,9 +16,9 @@ type StatusProps = {
   status: StatusVariant
 }
 
-const Wrapper = styled.span<{ variant: StatusVariant }>`
-  background-color: ${({ variant }) => {
-    switch (variant) {
+const Wrapper = styled.span<{ $variant: StatusVariant }>`
+  background-color: ${({ $variant }) => {
+    switch ($variant) {
       case 'Not Submitted':
         return lighten('colorBorder', 0.5)
       case 'Submitted':
@@ -36,8 +36,10 @@ const Wrapper = styled.span<{ variant: StatusVariant }>`
     }
   }};
   border-radius: 2px;
-  color: ${({ variant }) =>
-    variant === 'Not Submitted' ? th('colorTextDark') : th('colorTextReverse')};
+  color: ${({ $variant }) =>
+    $variant === 'Not Submitted'
+      ? th('colorTextDark')
+      : th('colorTextReverse')};
   font-size: ${th('fontSizeBaseSmall')};
   /* font-weight: bold; */
   padding: ${grid(1)} ${grid(3)};
@@ -48,7 +50,7 @@ const Status = (props: StatusProps): React.ReactNode => {
   const { className, status, ...rest } = props
 
   return (
-    <Wrapper className={className} variant={status} {...rest}>
+    <Wrapper className={className} $variant={status} {...rest}>
       {status}
     </Wrapper>
   )

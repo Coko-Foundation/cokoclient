@@ -8,8 +8,9 @@ const pullRight = css`
   margin-left: auto;
 `
 
-const Wrapper = styled(({ own, ...rest }) => <div {...rest} />)`
+const Wrapper = styled.div`
   display: flex;
+  width: 100%;
 `
 
 const Message = styled(({ own, ...rest }) => <div {...rest} />)`

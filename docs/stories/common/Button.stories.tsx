@@ -1,9 +1,5 @@
 import { faker } from '@faker-js/faker'
 
-import { uuid } from '../../../src'
-
-console.log('here', uuid())
-
 import { Button } from '../../../src/ui'
 
 export const Base = () => <Button>{faker.lorem.words(2)}</Button>

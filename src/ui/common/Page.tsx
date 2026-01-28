@@ -1,5 +1,5 @@
 import React from 'react'
-import styled, { css } from 'styled-components'
+import styled, { css, RuleSet } from 'styled-components'
 
 type PageProps = {
   className?: string
@@ -7,17 +7,17 @@ type PageProps = {
   maxWidth?: number | null
 }
 
-const Wrapper = styled.div<{ maxWidth?: number | null }>`
+const Wrapper = styled.div<{ $maxWidth?: number | null }>`
   height: 100%;
 
-  ${props =>
-    props.maxWidth &&
+  ${(props): RuleSet | false =>
+    !!props.$maxWidth &&
     css`
       display: flex;
       justify-content: center;
 
       > div {
-        max-width: ${props.maxWidth}px;
+        max-width: ${props.$maxWidth}px;
       }
     `}
 `
@@ -26,7 +26,7 @@ const Page = (props: PageProps): React.ReactNode => {
   const { className, children, maxWidth = null } = props
 
   return (
-    <Wrapper className={className} maxWidth={maxWidth}>
+    <Wrapper $maxWidth={maxWidth} className={className}>
       {children}
     </Wrapper>
   )

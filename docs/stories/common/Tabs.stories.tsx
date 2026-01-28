@@ -2,17 +2,16 @@ import { faker } from '@faker-js/faker'
 
 import { Tabs } from '../../../src/ui'
 
-export const Base = () => (
-  <Tabs>
-    {Array.from(Array(3)).map((_, i) => (
-      <Tabs.TabPane key={i} tab={faker.lorem.words(2)}>
-        {faker.lorem.sentences(6)}
-      </Tabs.TabPane>
-    ))}
-  </Tabs>
-)
+const makeItems = (n: number) =>
+  Array.from(Array(n)).map((_, i) => ({
+    key: String(i),
+    label: faker.lorem.words(2),
+    children: faker.lorem.sentences(6),
+  }))
 
-export const NewSyntax = () => {
+export const Base = () => <Tabs items={makeItems(3)} />
+
+export const WithJSXContent = () => {
   const items = [
     { label: 'Tab 1', key: 'tab-1', children: 'Tab 1 content - simple text' },
     {

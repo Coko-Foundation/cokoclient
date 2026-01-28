@@ -29,15 +29,13 @@ const ChatMessageList = (props: ChatMessageListProps) => {
           const chatItem = item as unknown as ChatItem
 
           return (
-            <li>
-              <ChatMessage
-                content={chatItem.content}
-                date={chatItem.date}
-                id={chatItem.id}
-                own={chatItem.own}
-                user={chatItem.user}
-              />
-            </li>
+            <ChatMessage
+              content={chatItem.content}
+              date={chatItem.date}
+              id={chatItem.id}
+              own={chatItem.own}
+              user={chatItem.user}
+            />
           )
         }}
       />
