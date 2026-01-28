@@ -152,7 +152,7 @@ const Root = () => {
         <Collapse
           items={collapseItems}
           ghost
-          expandIconPosition="end"
+          expandIconPlacement="end"
           defaultActiveKey={
             collapseItems.find(section => section.label === 'common').key
           }

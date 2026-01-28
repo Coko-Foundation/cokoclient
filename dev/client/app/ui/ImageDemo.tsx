@@ -13,7 +13,7 @@ const ImageContainer = styled.div`
 `
 
 const ImageDemo = () => (
-  <Container second>
+  <Container $second>
     <div>
       <Link to="/">Go back</Link>
     </div>

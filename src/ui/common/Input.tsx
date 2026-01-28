@@ -1,8 +1,7 @@
 import React, { ComponentProps } from 'react'
 import styled from 'styled-components'
 import { Input as AntInput } from 'antd'
-import EyeInvisibleOutlined from '@ant-design/icons/EyeInvisibleFilled'
-import EyeOutlined from '@ant-design/icons/EyeOutlined'
+import { EyeInvisibleOutlined, EyeOutlined } from '@ant-design/icons'
 
 import { th } from '../../toolkit'
 import { inputShadow } from './_reusableStyles'

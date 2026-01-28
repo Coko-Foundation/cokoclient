@@ -4,9 +4,9 @@ import styled, { css } from 'styled-components'
 
 import { Layout, Paragraph, Switch } from '../../../src/ui'
 
-const Wrapper = styled.div`
+const Wrapper = styled.div<{ $showBorder?: boolean }>`
   ${props =>
-    props.showBorder &&
+    props.$showBorder &&
     css`
       border: 2px solid coral;
     `}
@@ -25,7 +25,7 @@ export const Base = () => {
         />
       </Paragraph>
 
-      <Wrapper showBorder={showBorder}>
+      <Wrapper $showBorder={showBorder}>
         <Layout>
           <Layout.Header>Header</Layout.Header>
           <Layout.Content>Content</Layout.Content>

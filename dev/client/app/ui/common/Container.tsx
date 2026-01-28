@@ -1,6 +1,6 @@
 import styled, { css } from 'styled-components'
 
-const Container = styled.div`
+const Container = styled.div<{ $second?: boolean }>`
   /* background: ${props => props.theme.colorBackground}; */
   display: flex;
   flex-direction: column;
@@ -23,7 +23,7 @@ const Container = styled.div`
   }
 
   ${props =>
-    props.second &&
+    props.$second &&
     css`
       align-items: center;
       justify-content: center;

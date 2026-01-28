@@ -90,7 +90,7 @@ const StyledMenuOutlined = styled(MenuOutlined)`
   touch-action: none;
 `
 
-const SortableRow: React.FC<Readonly<RowProps>> = (props) => {
+const SortableRow = (props: Readonly<RowProps>): React.ReactNode => {
   const { attributes, listeners, setNodeRef, transform, isDragging } = useSortable({
     id: props['data-row-key'],
   })
@@ -108,7 +108,7 @@ const SortableRow: React.FC<Readonly<RowProps>> = (props) => {
   return <tr {...props} ref={setNodeRef} style={style} {...attributes} {...listeners} />
 }
 
-const RegularRow: React.FC<Readonly<RowProps>> = (props) => {
+const RegularRow = (props: Readonly<RowProps>): React.ReactNode => {
   return <tr {...props} />
 }
 

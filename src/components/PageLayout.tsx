@@ -1,5 +1,4 @@
 import React, { ComponentType, ReactNode } from 'react'
-import { Route } from 'react-router-dom'
 import styled, { createGlobalStyle, css } from 'styled-components'
 
 import { fadeIn, grid, th } from '../toolkit'
@@ -68,16 +67,20 @@ const Layout = ({
   fadeInPages = true,
   padPages = true,
   navComponent = null,
-}: LayoutProps): React.ReactNode => (
-  <>
-    <GlobalStyle />
-    <PageLayout className={className}>
-      <Route component={navComponent} />
-      <Page $fadeInPages={fadeInPages} $padPages={padPages}>
-        {children}
-      </Page>
-    </PageLayout>
-  </>
-)
+}: LayoutProps): React.ReactNode => {
+  const NavComponent = navComponent
+
+  return (
+    <>
+      <GlobalStyle />
+      <PageLayout className={className}>
+        {NavComponent && <NavComponent />}
+        <Page $fadeInPages={fadeInPages} $padPages={padPages}>
+          {children}
+        </Page>
+      </PageLayout>
+    </>
+  )
+}
 
 export default Layout
