@@ -1,21 +1,19 @@
 import React, { ReactNode, useMemo, useState } from 'react'
 import { BrowserRouter } from 'react-router-dom'
 import { ConfigProvider as AntConfigProvider } from 'antd'
-import { DefaultTheme, ThemeProvider, createGlobalStyle } from 'styled-components'
+import {
+  DefaultTheme,
+  ThemeProvider,
+  createGlobalStyle,
+} from 'styled-components'
 import { Normalize } from 'styled-normalize'
 
-import {
-  ApolloClient,
-  ApolloLink,
-  ApolloProvider,
-  InMemoryCache,
-  NormalizedCacheObject,
-  split,
-} from '@apollo/client'
+import { ApolloClient, ApolloLink, InMemoryCache } from '@apollo/client'
+import { ApolloProvider } from '@apollo/client/react'
 import { getMainDefinition } from '@apollo/client/utilities'
 import { GraphQLWsLink } from '@apollo/client/link/subscriptions'
-import { setContext } from '@apollo/client/link/context'
-import createUploadLink from 'apollo-upload-client/createUploadLink.mjs'
+import { SetContextLink } from '@apollo/client/link/context'
+import UploadHttpLink from 'apollo-upload-client/UploadHttpLink.mjs'
 import { loadErrorMessages, loadDevMessages } from '@apollo/client/dev'
 import { createClient } from 'graphql-ws'
 
@@ -36,7 +34,9 @@ const replaceHttpWithWs = (url: string | undefined): string | null => {
   return wsUrl
 }
 
-const pxToNumConverter = (value: string | number | undefined): number | undefined => {
+const pxToNumConverter = (
+  value: string | number | undefined,
+): number | undefined => {
   if (typeof value === 'string') {
     if (value.slice(-2) === 'px') return parseInt(value.slice(0, -2), 10)
   }
@@ -87,23 +87,25 @@ type MakeConfigFn = (config: ApolloConfig) => ApolloConfig
 // Construct an ApolloClient. If a function is passed as the first argument,
 // it will be called with the default client config as an argument, and should
 // return the desired config.
-const makeApolloClient = (makeConfig?: MakeConfigFn | null): ApolloClient<NormalizedCacheObject> => {
+const makeApolloClient = (makeConfig?: MakeConfigFn | null): ApolloClient => {
   const webSocketUrl = `${replaceHttpWithWs(serverUrl)}/subscriptions`
 
-  const uploadLink = createUploadLink({
+  const uploadLink = new UploadHttpLink({
     uri: `${serverUrl}/graphql`,
     headers: { 'Apollo-Require-Preflight': 'true' },
   })
 
-  const authLink = setContext((_, { headers }) => {
-    const token = localStorage.getItem('token')
-    return {
-      headers: {
-        ...headers,
-        authorization: token ? `Bearer ${token}` : '',
-      },
-    }
-  })
+  const authLink = new SetContextLink(
+    ({ headers }: { headers?: Record<string, string> }) => {
+      const token = localStorage.getItem('token')
+      return {
+        headers: {
+          ...headers,
+          authorization: token ? `Bearer ${token}` : '',
+        },
+      }
+    },
+  )
 
   const removeTypename = new ApolloLink((operation, forward) => {
     if (operation.variables) {
@@ -145,7 +147,7 @@ const makeApolloClient = (makeConfig?: MakeConfigFn | null): ApolloClient<Normal
     }),
   )
 
-  const splitLink = split(
+  const splitLink = ApolloLink.split(
     ({ query }) => {
       const definition = getMainDefinition(query)
       return (
@@ -165,7 +167,9 @@ const makeApolloClient = (makeConfig?: MakeConfigFn | null): ApolloClient<Normal
   return new ApolloClient(makeConfig ? makeConfig(config) : config)
 }
 
-export function makeTheme(providedTheme: DefaultTheme): { token: Record<string, unknown> } {
+export function makeTheme(providedTheme: DefaultTheme): {
+  token: Record<string, unknown>
+} {
   const mapper: Record<string, unknown> = {
     borderRadius: pxToNumConverter(providedTheme.borderRadius),
     colorBgBase: providedTheme.colorBackground,
@@ -202,7 +206,11 @@ type RootProps = {
   theme: DefaultTheme
 }
 
-const Root = ({ makeApolloConfig = null, routes, theme }: RootProps): React.ReactNode => {
+const Root = ({
+  makeApolloConfig = null,
+  routes,
+  theme,
+}: RootProps): React.ReactNode => {
   const [currentUser, setCurrentUser] = useState<unknown>()
 
   const client = useMemo(

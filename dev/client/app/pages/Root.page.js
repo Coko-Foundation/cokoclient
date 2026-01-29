@@ -1,5 +1,6 @@
 import React from 'react'
-import { useQuery, gql } from '@apollo/client'
+import { gql } from '@apollo/client'
+import { useQuery } from '@apollo/client/react'
 
 import Root from '../ui/Root'
 

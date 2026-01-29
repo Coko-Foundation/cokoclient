@@ -1,5 +1,7 @@
 import React from 'react'
-import { gql, useMutation } from '@apollo/client'
+import { gql } from '@apollo/client'
+import { useMutation } from '@apollo/client/react'
+
 import { useCurrentUser } from '../../../../src/helpers/currentUserContext'
 
 import Teams from '../ui/Teams'

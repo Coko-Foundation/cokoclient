@@ -1,6 +1,6 @@
 import React, { ReactNode, useEffect } from 'react'
 import { Redirect, useLocation } from 'react-router-dom'
-import { useApolloClient } from '@apollo/client'
+import { useApolloClient } from '@apollo/client/react'
 
 import { get } from '../toolkit/funcs'
 import { useCurrentUser } from '../helpers/currentUserContext'

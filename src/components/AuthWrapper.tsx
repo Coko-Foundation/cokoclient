@@ -1,5 +1,7 @@
-import React, { ComponentType, ReactNode } from 'react'
-import { DocumentNode, useQuery, useSubscription } from '@apollo/client'
+import React, { ComponentType, ReactNode, useEffect } from 'react'
+import { DocumentNode } from '@apollo/client'
+import { useQuery, useSubscription } from '@apollo/client/react'
+
 import { useCurrentUser } from '../helpers/currentUserContext'
 import {
   CURRENT_USER,
@@ -29,12 +31,18 @@ const AuthWrapper = ({
     setCurrentUser: (user: unknown) => void
   }
 
-  const { loading } = useQuery(currentUserQuery, {
+  const { data, error, loading } = useQuery(currentUserQuery, {
     skip: !!currentUser,
-    onCompleted: ({ currentUser: fetchedUser }: { currentUser: unknown }) => {
-      setCurrentUser(fetchedUser)
-    },
-    onError: error => {
+  })
+
+  useEffect(() => {
+    if (data?.currentUser) {
+      setCurrentUser(data.currentUser)
+    }
+  }, [data])
+
+  useEffect(() => {
+    if (error) {
       // Make sure 'currentUser' is defined and null so that RequireAuth knows
       // to clear the current (corrupted) token.
       // Note on session states:
@@ -42,8 +50,8 @@ const AuthWrapper = ({
       //  * null: current user is resolved but unauthorised or token invalid
       setCurrentUser(null)
       console.error(error)
-    },
-  })
+    }
+  }, [error])
 
   useSubscription(USER_UPDATED_SUBSCRIPTION, {
     skip: !currentUser,

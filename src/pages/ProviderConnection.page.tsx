@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 import { useHistory, useParams } from 'react-router-dom'
-import { useMutation } from '@apollo/client'
+import { useMutation } from '@apollo/client/react'
 import { CREATE_OAUTH_IDENTITY } from './ProviderConnection.queries'
 // import { useCurrentUser } from '../helpers/currentUserContext'
 import ProviderConnection from '../ui/authentication/ProviderConnection'
