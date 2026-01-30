@@ -48,10 +48,7 @@ const RequireAuth = ({
 }: RequireAuthProps): React.ReactNode => {
   const client = useApolloClient()
   const location = useLocation()
-  const { currentUser, setCurrentUser } = useCurrentUser() as {
-    currentUser: User | null | undefined
-    setCurrentUser: (user: User | null) => void
-  }
+  const { currentUser } = useCurrentUser()
 
   useEffect(() => {
     if (currentUser) {
@@ -82,7 +79,6 @@ const RequireAuth = ({
 
   // if currentUser is null it was set as a result of a failed authentication attempt (invalid token)
   if (currentUser === null) {
-    setCurrentUser(null)
     client.cache.reset()
     localStorage.removeItem('token')
 

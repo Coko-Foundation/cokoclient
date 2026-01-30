@@ -31,7 +31,7 @@ const ProviderConnection = (
 
   if (connecting) {
     resultProps = {
-      icon: <Spin size={18} spinning />,
+      icon: <Spin spinning />,
       title: 'Authenticating...',
     }
   } else if (successfullyConnected) {

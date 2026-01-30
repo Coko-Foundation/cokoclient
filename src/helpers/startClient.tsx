@@ -3,6 +3,7 @@ import './sentry'
 import { ReactNode } from 'react'
 import { createRoot } from 'react-dom/client'
 import { DefaultTheme } from 'styled-components'
+import { DocumentNode } from '@apollo/client'
 
 import Root from '../components/Root'
 
@@ -10,6 +11,7 @@ type MakeApolloConfigFn = () => Record<string, unknown>
 
 type StartClientOptions = {
   makeApolloConfig?: MakeApolloConfigFn
+  currentUserQuery?: DocumentNode
 }
 
 const rootEl = document.getElementById('root')
@@ -19,7 +21,7 @@ const startClient = (
   theme: DefaultTheme,
   options: StartClientOptions = {},
 ): void => {
-  const { makeApolloConfig } = options
+  const { makeApolloConfig, currentUserQuery } = options
 
   if (!rootEl) {
     throw new Error('Root element not found')
@@ -28,7 +30,12 @@ const startClient = (
   const root = createRoot(rootEl)
 
   root.render(
-    <Root makeApolloConfig={makeApolloConfig} routes={routes} theme={theme} />,
+    <Root
+      currentUserQuery={currentUserQuery}
+      makeApolloConfig={makeApolloConfig}
+      routes={routes}
+      theme={theme}
+    />,
   )
 }
 

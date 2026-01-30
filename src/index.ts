@@ -9,7 +9,7 @@ export {
   yjsWebSocketServerUrl,
 } from './helpers/getUrl'
 
-export { useCurrentUser } from './helpers/currentUserContext'
+export { useCurrentUser } from './helpers/useCurrentUser'
 export { useSubscriptionManager } from './helpers/subscriptionManagerContext'
 
 export { ProviderConnectionPage } from './pages'

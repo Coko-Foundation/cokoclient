@@ -1,4 +1,3 @@
-import React from 'react'
 import { gql } from '@apollo/client'
 import { useMutation } from '@apollo/client/react'
 
@@ -16,7 +15,7 @@ const UPDATE_USER = gql`
 `
 
 const ProfilePage = props => {
-  const { currentUser, setCurrentUser } = useCurrentUser()
+  const { currentUser } = useCurrentUser()
   const [updateUser] = useMutation(UPDATE_USER)
 
   const handleSubmit = username => {
@@ -27,8 +26,6 @@ const ProfilePage = props => {
           username,
         },
       },
-    }).then(() => {
-      setCurrentUser()
     })
   }
 

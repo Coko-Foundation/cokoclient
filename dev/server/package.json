@@ -2,7 +2,6 @@
   "name": "server",
   "version": "1.0.0",
   "description": "",
-  "main": "startServer.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
@@ -12,9 +11,9 @@
     "pg": "8"
   },
   "dependencies": {
-    "@coko/server": "^4.0.0-beta.1",
+    "@coko/server": "^5.0.0-alpha.2",
     "@faker-js/faker": "^7.6.0",
-    "config": "^3.3.9",
     "lodash": "^4.17.21"
-  }
+  },
+  "packageManager": "yarn@4.12.0"
 }

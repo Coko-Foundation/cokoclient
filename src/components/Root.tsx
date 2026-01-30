@@ -1,4 +1,4 @@
-import React, { ReactNode, useMemo, useState } from 'react'
+import React, { ReactNode, useMemo } from 'react'
 import { BrowserRouter } from 'react-router-dom'
 import { ConfigProvider as AntConfigProvider } from 'antd'
 import {
@@ -8,7 +8,12 @@ import {
 } from 'styled-components'
 import { Normalize } from 'styled-normalize'
 
-import { ApolloClient, ApolloLink, InMemoryCache } from '@apollo/client'
+import {
+  ApolloClient,
+  ApolloLink,
+  InMemoryCache,
+  DocumentNode,
+} from '@apollo/client'
 import { ApolloProvider } from '@apollo/client/react'
 import { getMainDefinition } from '@apollo/client/utilities'
 import { GraphQLWsLink } from '@apollo/client/link/subscriptions'
@@ -17,9 +22,8 @@ import UploadHttpLink from 'apollo-upload-client/UploadHttpLink.mjs'
 import { loadErrorMessages, loadDevMessages } from '@apollo/client/dev'
 import { createClient } from 'graphql-ws'
 
-import { CurrentUserContext } from '../helpers/currentUserContext'
+import { CurrentUserQueryContext } from '../helpers/useCurrentUser'
 import { SubscriptionManagerProvider } from '../helpers/subscriptionManagerContext'
-// import AuthWrapper from './AuthWrapper'
 import { serverUrl } from '../helpers/getUrl'
 
 if (process.env.NODE_ENV !== 'production') {
@@ -201,22 +205,19 @@ export function makeTheme(providedTheme: DefaultTheme): {
 }
 
 type RootProps = {
-  makeApolloConfig?: MakeConfigFn | null
+  currentUserQuery?: DocumentNode
+  makeApolloConfig?: MakeConfigFn
   routes: ReactNode
   theme: DefaultTheme
 }
 
 const Root = ({
-  makeApolloConfig = null,
+  currentUserQuery,
+  makeApolloConfig,
   routes,
   theme,
 }: RootProps): React.ReactNode => {
-  const [currentUser, setCurrentUser] = useState<unknown>()
-
-  const client = useMemo(
-    () => makeApolloClient(makeApolloConfig),
-    [currentUser],
-  )
+  const client = useMemo(() => makeApolloClient(makeApolloConfig), [])
 
   const mappedAntTheme = makeTheme(theme)
 
@@ -224,10 +225,7 @@ const Root = ({
     <ApolloProvider client={client}>
       <SubscriptionManagerProvider>
         <BrowserRouter>
-          {/* TO DO -- check how to fix this linting error */}
-          {}
-          <CurrentUserContext.Provider value={{ currentUser, setCurrentUser }}>
-            {/* <AuthWrapper> */}
+          <CurrentUserQueryContext.Provider value={currentUserQuery}>
             <AntConfigProvider theme={mappedAntTheme}>
               <ThemeProvider theme={theme}>
                 <Normalize />
@@ -235,8 +233,7 @@ const Root = ({
                 {routes}
               </ThemeProvider>
             </AntConfigProvider>
-            {/* </AuthWrapper> */}
-          </CurrentUserContext.Provider>
+          </CurrentUserQueryContext.Provider>
         </BrowserRouter>
       </SubscriptionManagerProvider>
     </ApolloProvider>

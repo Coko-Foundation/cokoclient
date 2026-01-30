@@ -41,14 +41,16 @@ services:
       - POSTGRES_PASSWORD=${POSTGRES_PASSWORD:-password}
       - SECRET=${SECRET:-thesecret}
       - SERVER_PORT=${SERVER_PORT:-3000}
-      - CLIENT_URL=${CLIENT_URL:-http://0.0.0.0:4000}
+      - SERVER_URL=http://localhost:3000
+      - CLIENT_URL=${CLIENT_URL:-http://localhost:4000}
+      - ADMIN_USERNAME=admin
+      - ADMIN_PASSWORD=password
+      - ADMIN_GIVEN_NAMES=Admin
+      - ADMIN_SURNAME=Adminov
+      - ADMIN_EMAIL=admin@example.com
     volumes:
       - ./dev/server/api:/home/node/app/api
-      - ./dev/server/config:/home/node/app/config
-      # - ./dev/server/controllers:/home/node/app/controllers
-      # - ./dev/server/models:/home/node/app/models
-      - ./dev/server/scripts:/home/node/app/scripts
-      # - ./dev/server/services:/home/node/app/services
+      - ./dev/server/config.ts:/home/node/app/config.ts
       # - ./dev/server/node_modules/@coko/server:/home/node/app/node_modules/@coko/server
     tty: true
 
