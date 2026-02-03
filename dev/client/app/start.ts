@@ -25,4 +25,8 @@ console.log('Yjs websocket server url:', yjsWebSocketServerUrl)
 //   await console.error('do it')
 // }
 
-startClient(routes, theme)
+const onLogout = () => {
+  console.log('logged out!')
+}
+
+startClient(routes, theme, { onLogout })

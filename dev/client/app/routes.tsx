@@ -1,4 +1,4 @@
-import { Route, Switch } from 'react-router-dom'
+import { Route, Routes } from 'react-router'
 
 import { PageLayout, RequireAuth } from '../../../src'
 
@@ -15,55 +15,53 @@ import {
   SubscriptionsTest,
 } from './pages'
 
-const Routes = (
+const RoutesDeclared = (
   <PageLayout fadeInPages navComponent={NavigationBar} padPages>
-    <Switch>
-      <Route component={Root} exact path="/" />
-      <Route component={ImageDemo} exact path="/imagedemo" />
-      <Route component={AntDemo} exact path="/ant" />
-      <Route component={Teams} exact path="/teams" />
+    <Routes>
+      <Route element={<Root />} path="/" />
+      <Route element={<ImageDemo />} path="/imagedemo" />
+      <Route element={<AntDemo />} path="/ant" />
+      <Route element={<Teams />} path="/teams" />
 
       <Route
-        exact
-        path="/protected"
-        render={() => (
+        element={
           <RequireAuth
             notAuthenticatedRedirectTo="/"
             requireIdentityVerification={false}
           >
             <Protected />
           </RequireAuth>
-        )}
+        }
+        path="/protected"
       />
 
       <Route
-        exact
-        path="/profile"
-        render={() => (
+        element={
           <RequireAuth
             notAuthenticatedRedirectTo="/"
             requireIdentityVerification={false}
           >
             <Profile />
           </RequireAuth>
-        )}
+        }
+        path="/profile"
       />
 
-      <Route exact path="/provider-connection-popup/:provider">
-        <ProviderConnectionPage closeOnSuccess />
-      </Route>
+      <Route
+        element={<ProviderConnectionPage closeOnSuccess />}
+        path="/provider-connection-popup/:provider"
+      />
 
       <Route
-        exact
-        path="/subscriptions-test"
-        render={() => (
+        element={
           <RequireAuth>
             <SubscriptionsTest />
           </RequireAuth>
-        )}
+        }
+        path="/subscriptions-test"
       />
-    </Switch>
+    </Routes>
   </PageLayout>
 )
 
-export default Routes
+export default RoutesDeclared

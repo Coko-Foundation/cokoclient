@@ -1,5 +1,5 @@
 import React from 'react'
-import { Route, Switch } from 'react-router-dom'
+import { Route, Routes } from 'react-router'
 import { createGlobalStyle } from 'styled-components'
 
 import Layout from '../ui/Layout'
@@ -12,13 +12,13 @@ const Global = createGlobalStyle`
   }
 `
 
-const Routes = (
+const RoutesDeclared = (
   <Layout>
     <NavigationBar />
-    <Switch>
-      <Route component={Root} exact path="/" />
-    </Switch>
+    <Routes>
+      <Route element={<Root />} path="/" />
+    </Routes>
   </Layout>
 )
 
-export default Routes
+export default RoutesDeclared

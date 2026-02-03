@@ -72,11 +72,16 @@ const USER_UPDATED_SUBSCRIPTION = gql`
   }
 `
 
-export const CurrentUserQueryContext = React.createContext(null)
+export const CurrentUserQueryContext = React.createContext({
+  currentUserQuery: null,
+  onLogout: () => {},
+})
 
 export const useCurrentUser = () => {
-  const currentUserQuery =
-    React.useContext(CurrentUserQueryContext) || CURRENT_USER
+  const { currentUserQuery: provicdedCurrentUserQuery, onLogout } =
+    React.useContext(CurrentUserQueryContext)
+
+  const currentUserQuery = provicdedCurrentUserQuery || CURRENT_USER
 
   const client = useApolloClient()
   const { data, loading, error, refetch } = useQuery(currentUserQuery)
@@ -96,15 +101,13 @@ export const useCurrentUser = () => {
     },
   })
 
-  if (error) {
-    console.error(error)
-
-    return {
-      currentUser: null,
-      loading: false,
-      refetch,
-    }
+  const logout = (): void => {
+    client.cache.reset()
+    localStorage.removeItem('token')
+    onLogout()
   }
 
-  return { currentUser, loading, refetch }
+  if (error) console.error(error)
+
+  return { currentUser, error, loading, refetch, logout }
 }

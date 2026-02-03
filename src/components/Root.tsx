@@ -1,5 +1,5 @@
 import React, { ReactNode, useMemo } from 'react'
-import { BrowserRouter } from 'react-router-dom'
+import { BrowserRouter } from 'react-router'
 import { ConfigProvider as AntConfigProvider } from 'antd'
 import {
   DefaultTheme,
@@ -209,10 +209,12 @@ type RootProps = {
   makeApolloConfig?: MakeConfigFn
   routes: ReactNode
   theme: DefaultTheme
+  onLogout?: () => void
 }
 
 const Root = ({
   currentUserQuery,
+  onLogout = () => {},
   makeApolloConfig,
   routes,
   theme,
@@ -225,7 +227,9 @@ const Root = ({
     <ApolloProvider client={client}>
       <SubscriptionManagerProvider>
         <BrowserRouter>
-          <CurrentUserQueryContext.Provider value={currentUserQuery}>
+          <CurrentUserQueryContext.Provider
+            value={{ currentUserQuery, onLogout }}
+          >
             <AntConfigProvider theme={mappedAntTheme}>
               <ThemeProvider theme={theme}>
                 <Normalize />

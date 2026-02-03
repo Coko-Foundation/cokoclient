@@ -12,6 +12,7 @@ type MakeApolloConfigFn = () => Record<string, unknown>
 type StartClientOptions = {
   makeApolloConfig?: MakeApolloConfigFn
   currentUserQuery?: DocumentNode
+  onLogout?: () => void
 }
 
 const rootEl = document.getElementById('root')
@@ -21,7 +22,7 @@ const startClient = (
   theme: DefaultTheme,
   options: StartClientOptions = {},
 ): void => {
-  const { makeApolloConfig, currentUserQuery } = options
+  const { makeApolloConfig, currentUserQuery, onLogout } = options
 
   if (!rootEl) {
     throw new Error('Root element not found')
@@ -33,6 +34,7 @@ const startClient = (
     <Root
       currentUserQuery={currentUserQuery}
       makeApolloConfig={makeApolloConfig}
+      onLogout={onLogout}
       routes={routes}
       theme={theme}
     />,

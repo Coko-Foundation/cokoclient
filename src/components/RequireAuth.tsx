@@ -1,5 +1,5 @@
 import React, { ReactNode, useEffect } from 'react'
-import { Redirect, useLocation } from 'react-router-dom'
+import { useNavigate, useLocation } from 'react-router'
 import { useApolloClient } from '@apollo/client/react'
 
 import { get } from '../toolkit/funcs'
@@ -33,7 +33,6 @@ const checkForRequiredFields = (user: User): boolean => {
 
 type RequireAuthProps = {
   notAuthenticatedRedirectTo?: string
-  cleanUp?: () => void
   children?: ReactNode
   requireIdentityVerification?: boolean
   notVerifiedRedirectTo?: string
@@ -41,14 +40,15 @@ type RequireAuthProps = {
 
 const RequireAuth = ({
   notAuthenticatedRedirectTo = '/login',
-  cleanUp = () => {},
   children,
   requireIdentityVerification = true,
   notVerifiedRedirectTo = '/ensure-verified-login',
 }: RequireAuthProps): React.ReactNode => {
   const client = useApolloClient()
   const location = useLocation()
-  const { currentUser } = useCurrentUser()
+  const navigate = useNavigate()
+  const { currentUser, error } = useCurrentUser()
+  const token = localStorage.getItem('token')
 
   useEffect(() => {
     if (currentUser) {
@@ -64,35 +64,29 @@ const RequireAuth = ({
     }
   }, [currentUser])
 
-  if (!localStorage.getItem('token')) {
-    client.cache.reset()
-    cleanUp()
+  useEffect(() => {
+    // not logged in
+    if (!token) {
+      const redirectUrl = `${notAuthenticatedRedirectTo}?next=${location.pathname}`
+      navigate(redirectUrl, { replace: true })
+    }
+  }, [token])
 
-    const redirectUrl = `${notAuthenticatedRedirectTo}?next=${location.pathname}`
-    return <Redirect to={redirectUrl} />
-  }
+  useEffect(() => {
+    // failed authentication attempt
+    if (!currentUser && error) {
+      client.cache.reset()
+      localStorage.removeItem('token')
+      navigate(`${notAuthenticatedRedirectTo}?next=${location.pathname}`, {
+        replace: true,
+      })
+    }
 
-  // if currentUser is undefined the context hasn't been set yet
-  if (currentUser === undefined) {
-    return null
-  }
-
-  // if currentUser is null it was set as a result of a failed authentication attempt (invalid token)
-  if (currentUser === null) {
-    client.cache.reset()
-    localStorage.removeItem('token')
-
-    return (
-      <Redirect
-        to={`${notAuthenticatedRedirectTo}?next=${location.pathname}`}
-      />
-    )
-  }
-
-  if (requireIdentityVerification) {
-    const verified = currentUser?.defaultIdentity?.isVerified
-    if (!verified) return <Redirect to={notVerifiedRedirectTo} />
-  }
+    if (currentUser && requireIdentityVerification) {
+      const verified = currentUser.defaultIdentity?.isVerified
+      if (!verified) navigate(notVerifiedRedirectTo, { replace: true })
+    }
+  }, [currentUser])
 
   return children
 }

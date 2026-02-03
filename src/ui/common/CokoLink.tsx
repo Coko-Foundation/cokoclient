@@ -1,6 +1,6 @@
 import React from 'react'
 import styled from 'styled-components'
-import { Link } from 'react-router-dom'
+import { Link } from 'react-router'
 
 import { th } from '../../toolkit'
 
@@ -23,12 +23,6 @@ const StyledLink = styled(Link)`
 `
 
 const CokoLink = props => {
-  // const { href, ...restProps } = props
-  // if (href) {
-  //   return (
-  //     <StyledLink {...restProps} />
-  //   )
-  // }
   return <StyledLink {...props} />
 }
 

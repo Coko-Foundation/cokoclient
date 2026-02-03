@@ -20,7 +20,7 @@ const LOGIN = gql`
 const NavigationBarPage = () => {
   const client = useApolloClient()
   const [login, { data, loading }] = useMutation(LOGIN)
-  const { currentUser, refetch } = useCurrentUser()
+  const { currentUser, refetch, logout } = useCurrentUser()
 
   React.useEffect(() => {
     if (data) {
@@ -29,11 +29,6 @@ const NavigationBarPage = () => {
       refetch()
     }
   }, [data])
-
-  const logout = () => {
-    client.cache.reset()
-    localStorage.removeItem('token')
-  }
 
   return (
     <NavigationBar

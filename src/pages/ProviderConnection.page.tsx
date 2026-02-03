@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import { useHistory, useParams } from 'react-router-dom'
+import { useNavigate, useParams } from 'react-router'
 import { useMutation } from '@apollo/client/react'
 import { CREATE_OAUTH_IDENTITY } from './ProviderConnection.queries'
 // import { useCurrentUser } from '../helpers/currentUserContext'
@@ -23,7 +23,7 @@ const ProviderConnectionPage = (props: ProviderConnectionPageProps) => {
   } = props
 
   const { provider } = useParams()
-  const history = useHistory()
+  const navigate = useNavigate()
   // const { currentUser } = useCurrentUser()
   const [successfullyConnected, setSuccessfullyConnected] = useState(false)
   const [loading, setLoading] = useState(true)
@@ -51,7 +51,7 @@ const ProviderConnectionPage = (props: ProviderConnectionPageProps) => {
             if (closeOnSuccess) window.close()
 
             if (!closeOnSuccess && redirectOnSuccess && next) {
-              history.push(next)
+              navigate(next)
             }
           }, delayOnSuccess)
         }, loadingMinimumTime)

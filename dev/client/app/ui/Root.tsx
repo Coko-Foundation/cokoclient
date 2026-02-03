@@ -1,6 +1,6 @@
 import React from 'react'
 import styled from 'styled-components'
-import { Link } from 'react-router-dom'
+import { Link } from 'react-router'
 
 import Container from './common/Container'
 import ItemList from './ItemList'
@@ -26,7 +26,7 @@ const Root = props => {
 
     window.open(
       `${baseLuluUrl}?response_type=code&client_id=ketida-editor&redirect_uri=${redirectURL}`,
-      null,
+      undefined,
       'width=600, height=600',
     )
 
