@@ -12,8 +12,7 @@
   },
   "dependencies": {
     "@coko/server": "^5.0.0-alpha.2",
-    "@faker-js/faker": "^7.6.0",
-    "lodash": "^4.17.21"
+    "@faker-js/faker": "^10.2.0"
   },
   "packageManager": "yarn@4.12.0"
 }

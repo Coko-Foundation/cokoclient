@@ -1,6 +1,5 @@
-import merge from 'lodash/merge'
-
 import root from './root'
+import { merge } from './utils'
 
 export default {
   typeDefs: [root.typeDefs].join(' '),
