@@ -15,7 +15,7 @@ const Element = styled.div`
 `
 
 const AntDemo = () => (
-  <Container second>
+  <Container $second>
     <div>
       <Link to="/">Go back</Link>
     </div>

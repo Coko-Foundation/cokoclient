@@ -1,4 +1,4 @@
-import { useEffect, useRef } from 'react'
+import React, { useEffect, useRef } from 'react'
 import styled, { css } from 'styled-components'
 import { Button as AntButton } from 'antd'
 
@@ -109,6 +109,9 @@ const StyledButton = styled(AntButton)`
 type ButtonProps = {
   status?: 'error' | 'danger' | 'success'
   autoFocus?: boolean
+  children: React.ReactNode
+  type?: string
+  className?: string
 }
 
 const Button = (props: ButtonProps) => {

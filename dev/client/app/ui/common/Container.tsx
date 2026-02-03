@@ -26,7 +26,7 @@ const Container = styled.div<{ $second?: boolean }>`
     props.$second &&
     css`
       align-items: center;
-      justify-content: center;
+      /* justify-content: center; */
     `}
 `
 

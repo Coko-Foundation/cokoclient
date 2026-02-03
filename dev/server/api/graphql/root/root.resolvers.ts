@@ -1,10 +1,10 @@
-const { faker } = require('@faker-js/faker')
+import { faker } from '@faker-js/faker'
 
-const { subscriptionManager, uuid } = require('@coko/server')
+import { subscriptionManager, uuid } from '@coko/server'
 
 const TEST_OBECT_ADDED_EVENT = 'TEST_OBJECT_ADDED'
 
-function wait(seconds) {
+function wait(seconds: number): Promise<void> {
   const milliseconds = seconds * 1000
 
   return new Promise(resolve => {
@@ -43,7 +43,7 @@ const testObjects = () => {
   ]
 }
 
-module.exports = {
+export default {
   Query: {
     getRootData,
     testObjects,
