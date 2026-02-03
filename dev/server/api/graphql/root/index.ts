@@ -1,9 +1,10 @@
 import fs from 'node:fs'
-import path from 'node:path'
 
 import rootResolvers from './root.resolvers'
 
+const typeDefsPath = new URL('./root.graphql', import.meta.url)
+
 export default {
-  typeDefs: fs.readFileSync(path.join(__dirname, 'root.graphql'), 'utf-8'),
+  typeDefs: fs.readFileSync(typeDefsPath, 'utf-8'),
   resolvers: rootResolvers,
 }

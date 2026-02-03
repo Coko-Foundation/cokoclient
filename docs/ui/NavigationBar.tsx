@@ -1,4 +1,4 @@
-import React from 'react'
+import { ReactNode } from 'react'
 import styled from 'styled-components'
 
 import { th, grid } from '../../src/toolkit'
@@ -29,11 +29,11 @@ const Logo = styled.img`
   margin-right: ${grid(2)};
 `
 
-const links = {
-  'UI components': '',
-}
+// const links = {
+//   'UI components': '',
+// }
 
-const NavigationBar = () => {
+const NavigationBar = (): ReactNode => {
   return (
     <Wrapper>
       <Title>

@@ -3,7 +3,11 @@ import styled from 'styled-components'
 
 const Wrapper = styled.div``
 
-const Layout = ({children}) => {
+type LayoutProps = {
+  children: React.ReactNode
+}
+
+const Layout = ({ children }: LayoutProps): React.ReactNode => {
   return <Wrapper>{children}</Wrapper>
 }
 

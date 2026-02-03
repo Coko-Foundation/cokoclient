@@ -2,9 +2,9 @@ import { ReactNode } from 'react'
 import styled from 'styled-components'
 
 const StyledItem = styled.div`
-  border: 1px solid ${props => props.theme.colorBorder};
+  border: 1px solid ${(props): string | undefined => props.theme.colorBorder};
   border-radius: 5px;
-  color: ${props => props.theme.colorText};
+  color: ${(props): string | undefined => props.theme.colorText};
   margin: 5px 25px;
   padding: 10px;
 `
