@@ -1,15 +1,19 @@
-import React from 'react'
+import { ReactNode } from 'react'
 import { Form, Input, Button } from 'antd'
 
-const Profile = props => {
+type ProfileProps = {
+  onSubmit: (username: string) => void
+}
+
+const Profile = (props: ProfileProps): ReactNode => {
   const { onSubmit } = props
 
-  const onFinish = values => {
+  const onFinish = (values: { username: string }): void => {
     const { username } = values
     onSubmit(username)
   }
 
-  const onFinishFailed = errorInfo => {
+  const onFinishFailed = (errorInfo: unknown): void => {
     console.error('Username form failed:', errorInfo)
   }
 

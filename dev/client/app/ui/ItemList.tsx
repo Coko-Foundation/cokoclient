@@ -1,4 +1,4 @@
-import React from 'react'
+import { ReactNode } from 'react'
 import styled from 'styled-components'
 import { v4 as uuid } from 'uuid'
 
@@ -10,7 +10,12 @@ const StyledItemList = styled.div`
   margin-top: 20px;
 `
 
-const ItemList = props => {
+type ItemListProps = {
+  data: string[]
+  loading: boolean
+}
+
+const ItemList = (props: ItemListProps): ReactNode => {
   const { data, loading } = props
 
   return (

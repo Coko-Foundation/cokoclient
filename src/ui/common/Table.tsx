@@ -1,4 +1,4 @@
-import React, { useEffect, useState, ComponentProps } from 'react'
+import { useEffect, useState, ComponentProps, useMemo, ReactNode } from 'react'
 import styled from 'styled-components'
 import { Table as AntTable } from 'antd'
 
@@ -13,11 +13,7 @@ type PaginationConfig = {
   total?: number
   pageSize?: number
   itemRender?:
-    | ((
-        page: number,
-        type: string,
-        originalElement: React.ReactNode,
-      ) => React.ReactNode)
+    | ((page: number, type: string, originalElement: ReactNode) => ReactNode)
     | null
   showSizeChanger?: boolean
   onShowSizeChange?: (current: number, size: number) => void
@@ -31,7 +27,7 @@ type TableProps = ComponentProps<typeof AntTable> & {
   onSearch?: (value: string) => void
   searchPlaceholder?: string
   pagination?: PaginationConfig
-  children?: React.ReactNode
+  children?: ReactNode
   className?: string
 }
 
@@ -69,9 +65,9 @@ const PaginationNav = styled(Pagination)`
   text-align: right;
 `
 
-const noop = () => {}
+const noop = (): void => {}
 
-const Table = (props: TableProps) => {
+const Table = (props: TableProps): ReactNode => {
   const {
     className,
     children,
@@ -85,11 +81,14 @@ const Table = (props: TableProps) => {
     ...rest
   } = props
 
-  const paginationObj = {
-    current: 1,
-    pageSize: 10,
-    ...pagination,
-  }
+  const paginationObj = useMemo(
+    () => ({
+      current: 1,
+      pageSize: 10,
+      ...pagination,
+    }),
+    [pagination],
+  )
 
   const [paginationCurrent, setPaginationCurrent] = useState(
     paginationObj.current,
@@ -100,7 +99,7 @@ const Table = (props: TableProps) => {
   useEffect(() => {
     setPaginationCurrent(paginationObj.current)
     setPaginationSize(paginationObj.pageSize)
-  }, [pagination])
+  }, [paginationObj])
 
   const passedPagination = {
     ...paginationObj,
@@ -110,7 +109,7 @@ const Table = (props: TableProps) => {
 
   const triggerPaginationEvent =
     (eventName: 'onChange' | 'onShowSizeChange') =>
-    (page: number, pageSize: number) => {
+    (page: number, pageSize: number): void => {
       setPaginationCurrent(page)
       setPaginationSize(pageSize)
 

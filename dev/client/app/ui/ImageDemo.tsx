@@ -1,4 +1,4 @@
-import React from 'react'
+import { ReactNode } from 'react'
 import { Link } from 'react-router'
 import styled from 'styled-components'
 
@@ -12,7 +12,7 @@ const ImageContainer = styled.div`
   }
 `
 
-const ImageDemo = () => (
+const ImageDemo = (): ReactNode => (
   <Container $second>
     <div>
       <Link to="/">Go back</Link>

@@ -1,4 +1,4 @@
-import React, { ReactNode, useEffect } from 'react'
+import { ReactNode, useEffect } from 'react'
 import { useNavigate, useLocation } from 'react-router'
 import { useApolloClient } from '@apollo/client/react'
 
@@ -43,7 +43,7 @@ const RequireAuth = ({
   children,
   requireIdentityVerification = true,
   notVerifiedRedirectTo = '/ensure-verified-login',
-}: RequireAuthProps): React.ReactNode => {
+}: RequireAuthProps): ReactNode => {
   const client = useApolloClient()
   const location = useLocation()
   const navigate = useNavigate()
@@ -70,7 +70,7 @@ const RequireAuth = ({
       const redirectUrl = `${notAuthenticatedRedirectTo}?next=${location.pathname}`
       navigate(redirectUrl, { replace: true })
     }
-  }, [token])
+  }, [token, notAuthenticatedRedirectTo, location.pathname, navigate])
 
   useEffect(() => {
     // failed authentication attempt
@@ -86,7 +86,16 @@ const RequireAuth = ({
       const verified = currentUser.defaultIdentity?.isVerified
       if (!verified) navigate(notVerifiedRedirectTo, { replace: true })
     }
-  }, [currentUser])
+  }, [
+    currentUser,
+    error,
+    client,
+    notAuthenticatedRedirectTo,
+    location.pathname,
+    navigate,
+    requireIdentityVerification,
+    notVerifiedRedirectTo,
+  ])
 
   return children
 }

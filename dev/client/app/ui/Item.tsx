@@ -1,4 +1,4 @@
-import React from 'react'
+import { ReactNode } from 'react'
 import styled from 'styled-components'
 
 const StyledItem = styled.div`
@@ -9,7 +9,11 @@ const StyledItem = styled.div`
   padding: 10px;
 `
 
-const Item = props => {
+type ItemProps = {
+  text: string
+}
+
+const Item = (props: ItemProps): ReactNode => {
   const { text } = props
 
   return <StyledItem>{text}</StyledItem>

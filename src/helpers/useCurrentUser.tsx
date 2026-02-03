@@ -1,5 +1,6 @@
-import React from 'react'
-import { gql } from '@apollo/client'
+import { createContext, useContext } from 'react'
+import { gql, DocumentNode } from '@apollo/client'
+
 import {
   useQuery,
   useSubscription,
@@ -72,22 +73,73 @@ const USER_UPDATED_SUBSCRIPTION = gql`
   }
 `
 
-export const CurrentUserQueryContext = React.createContext({
-  currentUserQuery: null,
-  onLogout: () => {},
-})
+type CurrentUserQueryContextType = {
+  currentUserQuery: DocumentNode | null
+  onLogout: () => void
+}
 
-export const useCurrentUser = () => {
-  const { currentUserQuery: provicdedCurrentUserQuery, onLogout } =
-    React.useContext(CurrentUserQueryContext)
+export const CurrentUserQueryContext =
+  createContext<CurrentUserQueryContextType>({
+    currentUserQuery: null,
+    onLogout: () => {},
+  })
+
+type User = {
+  id: string
+  displayName: string
+  username: string
+  teams: Array<{
+    id: string
+    role: string
+    objectId: string
+    global: boolean
+    members: Array<{
+      id: string
+      user: { id: string }
+      status: string
+    }>
+  }>
+  isActive: boolean
+  defaultIdentity: {
+    id: string
+    isVerified: boolean
+  }
+  identities: Array<{
+    id: string
+    provider: string
+    hasValidRefreshToken: boolean
+  }>
+}
+
+type CurrentUserQueryData = {
+  currentUser: User | null
+}
+
+type UserUpdatedSubscriptionData = {
+  userUpdated: User
+}
+
+type UseCurrentUserReturn = {
+  currentUser: User | null | undefined
+  error: Error | undefined
+  loading: boolean
+  refetch: () => Promise<unknown>
+  logout: () => void
+}
+
+export const useCurrentUser = (): UseCurrentUserReturn => {
+  const { currentUserQuery: provicdedCurrentUserQuery, onLogout } = useContext(
+    CurrentUserQueryContext,
+  )
 
   const currentUserQuery = provicdedCurrentUserQuery || CURRENT_USER
 
   const client = useApolloClient()
-  const { data, loading, error, refetch } = useQuery(currentUserQuery)
+  const { data, loading, error, refetch } =
+    useQuery<CurrentUserQueryData>(currentUserQuery)
   const currentUser = data?.currentUser
 
-  useSubscription(USER_UPDATED_SUBSCRIPTION, {
+  useSubscription<UserUpdatedSubscriptionData>(USER_UPDATED_SUBSCRIPTION, {
     skip: !currentUser,
     variables: { userId: currentUser?.id },
     onData: ({ data: subscriptionData }) => {

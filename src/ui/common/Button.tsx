@@ -1,4 +1,4 @@
-import React, { ComponentProps, useEffect, useRef } from 'react'
+import { ComponentProps, ReactNode, useEffect, useRef } from 'react'
 import styled, { css } from 'styled-components'
 import { Button as AntButton } from 'antd'
 
@@ -116,7 +116,7 @@ const StyledButton = styled(AntButton)<{
  * `danger` prop, which is ommited in favour of `status`, described below.
  */
 
-const Button = (props: ButtonProps): React.ReactNode => {
+const Button = (props: ButtonProps): ReactNode => {
   const {
     children,
     className,
@@ -132,7 +132,7 @@ const Button = (props: ButtonProps): React.ReactNode => {
     if (autoFocus) {
       buttonRef.current?.focus()
     }
-  })
+  }, [autoFocus])
 
   return (
     <StyledButton

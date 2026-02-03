@@ -14,7 +14,7 @@ function wait(seconds: number): Promise<void> {
   })
 }
 
-function startSendingTestObjects() {
+function startSendingTestObjects(): void {
   wait(3).then(() => {
     setInterval(() => {
       subscriptionManager.publish(TEST_OBECT_ADDED_EVENT, {
@@ -29,12 +29,17 @@ function startSendingTestObjects() {
 
 startSendingTestObjects()
 
-const getRootData = () => {
+const getRootData = (): string[] => {
   const data = Array.from({ length: 10 }).map(() => faker.lorem.sentences(2))
   return data
 }
 
-const testObjects = () => {
+type TestObject = {
+  id: string
+  value: string
+}
+
+const testObjects = (): TestObject[] => {
   return [
     {
       id: uuid(),
@@ -50,7 +55,7 @@ export default {
   },
   Subscription: {
     testObjectAdded: {
-      subscribe: () => {
+      subscribe: (): AsyncIterableIterator<any> => {
         return subscriptionManager.asyncIterator(TEST_OBECT_ADDED_EVENT)
       },
     },

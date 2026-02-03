@@ -1,3 +1,4 @@
+import { ReactNode } from 'react'
 import { gql } from '@apollo/client'
 import { useMutation } from '@apollo/client/react'
 
@@ -21,7 +22,7 @@ const REMOVE = gql`
   }
 `
 
-const TeamsPage = () => {
+const TeamsPage = (): ReactNode => {
   const { currentUser } = useCurrentUser()
 
   const [addMutation] = useMutation(ADD, {

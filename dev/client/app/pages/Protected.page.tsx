@@ -1,8 +1,8 @@
-import React from 'react'
+import { ReactNode } from 'react'
 
 import Protected from '../ui/Protected'
 
-const ProtectedPage = () => {
+const ProtectedPage = (): ReactNode => {
   return <Protected />
 }
 

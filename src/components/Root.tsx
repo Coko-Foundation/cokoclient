@@ -1,4 +1,4 @@
-import React, { ReactNode, useMemo } from 'react'
+import { ReactNode, useMemo } from 'react'
 import { BrowserRouter } from 'react-router'
 import { ConfigProvider as AntConfigProvider } from 'antd'
 import {
@@ -140,7 +140,7 @@ const makeApolloClient = (makeConfig?: MakeConfigFn | null): ApolloClient => {
           /* eslint-disable-next-line no-console */
           console.log(`${subscriptionsLogMessage} Connecting...`)
         },
-        connected: socket => {
+        connected: _socket => {
           /* eslint-disable-next-line no-console */
           console.log(`${subscriptionsLogMessage} Connected.`)
         },
@@ -218,8 +218,11 @@ const Root = ({
   makeApolloConfig,
   routes,
   theme,
-}: RootProps): React.ReactNode => {
-  const client = useMemo(() => makeApolloClient(makeApolloConfig), [])
+}: RootProps): ReactNode => {
+  const client = useMemo(
+    () => makeApolloClient(makeApolloConfig),
+    [makeApolloConfig],
+  )
 
   const mappedAntTheme = makeTheme(theme)
 

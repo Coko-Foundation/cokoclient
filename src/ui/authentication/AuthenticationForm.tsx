@@ -1,4 +1,4 @@
-import React, { ReactNode } from 'react'
+import { ReactNode } from 'react'
 import styled from 'styled-components'
 
 import { grid } from '../../toolkit'
@@ -49,7 +49,7 @@ const AlternativeAction = styled.div`
 
 const AuthenticationForm = (
   props: AuthenticationFormProps,
-): React.ReactNode => {
+): ReactNode => {
   const {
     alternativeActionLabel,
     alternativeActionLink,

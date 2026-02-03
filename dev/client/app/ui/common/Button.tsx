@@ -1,9 +1,8 @@
-import React, { useEffect, useRef } from 'react'
-import styled, { css } from 'styled-components'
+import { ComponentProps, ReactNode, useEffect, useRef } from 'react'
+import styled, { css, RuleSet } from 'styled-components'
 import { Button as AntButton } from 'antd'
 
 import { darken, th, grid } from '../../../../../src'
-import { omit } from '../../../../../src/toolkit/funcs'
 
 const colors = {
   danger: 'colorError',
@@ -12,14 +11,28 @@ const colors = {
   // warn: 'colorWarning',
 }
 
-const StyledButton = styled(AntButton)`
+/**
+ * API is the same as https://ant.design/components/button/#API, except for the
+ * `danger` prop, which is ommited in favour of `status`, described below.
+ */
+
+type ButtonProps = Omit<ComponentProps<typeof AntButton>, 'danger'> & {
+  direction?: 'rtl' | 'ltr'
+  status?: 'error' | 'danger' | 'success'
+  autoFocus?: boolean
+}
+
+const StyledButton = styled(AntButton)<{
+  $direction?: 'rtl' | 'ltr'
+  $status?: 'error' | 'danger' | 'success'
+}>`
   box-shadow: none;
   font-size: ${th('fontSizeBase')};
   /* let lineHeight expand the button height */
   height: unset;
   line-height: ${th('lineHeightBase')};
-  ${props =>
-    props.direction === 'rtl' &&
+  ${(props): RuleSet | false =>
+    props.$direction === 'rtl' &&
     css`
       direction: rtl;
 
@@ -29,12 +42,12 @@ const StyledButton = styled(AntButton)`
       }
     `};
 
-  ${props => {
-    const { status, theme, type, ghost, disabled } = props
+  ${(props): RuleSet | null => {
+    const { $status, theme, type, ghost, disabled } = props
 
     if (disabled) return null
 
-    if (!Object.keys(colors).includes(status)) {
+    if (!$status || ($status && !Object.keys(colors).includes($status))) {
       if (type === 'primary' && !ghost) {
         return css`
           &:hover,
@@ -55,7 +68,7 @@ const StyledButton = styled(AntButton)`
       `
     }
 
-    const color = theme[colors[status]]
+    const color = $status && theme[colors[$status]]
 
     // primary
     if (type === 'primary')
@@ -101,37 +114,31 @@ const StyledButton = styled(AntButton)`
   padding: 0 ${grid(4)};
 `
 
-/**
- * API is the same as https://ant.design/components/button/#API, except for the
- * `danger` prop, which is ommited in favour of `status`, described below.
- */
+const Button = (props: ButtonProps): ReactNode => {
+  const {
+    children,
+    className,
+    direction,
+    autoFocus = false,
+    status,
+    ...rest
+  } = props
 
-type ButtonProps = {
-  status?: 'error' | 'danger' | 'success'
-  autoFocus?: boolean
-  children: React.ReactNode
-  type?: string
-  className?: string
-}
-
-const Button = (props: ButtonProps) => {
-  const { children, className, autoFocus = false, status, ...rest } = props
-  const passProps = omit(rest, 'danger')
-
-  const buttonRef = useRef(null)
+  const buttonRef = useRef<HTMLButtonElement>(null)
 
   useEffect(() => {
     if (autoFocus) {
       buttonRef.current?.focus()
     }
-  }, [])
+  }, [autoFocus])
 
   return (
     <StyledButton
+      $direction={direction}
+      $status={status}
       className={className}
       ref={buttonRef}
-      status={status}
-      {...passProps}
+      {...rest}
     >
       {children}
     </StyledButton>

@@ -1,3 +1,4 @@
+import { ReactNode } from 'react'
 import styled from 'styled-components'
 import { v4 as uuid } from 'uuid'
 
@@ -11,12 +12,12 @@ type Team = {
 
 type TeamsProps = {
   className?: string
-  teams: Team[]
-  addToReviewerTeam: (id: string) => void
-  removeFromReviewerTeam: (id: string) => void
+  teams?: Team[]
+  addToReviewerTeam: () => void
+  removeFromReviewerTeam: () => void
 }
 
-const Teams = (props: TeamsProps) => {
+const Teams = (props: TeamsProps): ReactNode => {
   const {
     className,
     teams = [],
@@ -38,7 +39,6 @@ const Teams = (props: TeamsProps) => {
 
       <Button
         onClick={isInReviewerTeam ? removeFromReviewerTeam : addToReviewerTeam}
-        type="button"
       >
         {isInReviewerTeam ? 'Remove from' : 'Add to'} reviewer team
       </Button>

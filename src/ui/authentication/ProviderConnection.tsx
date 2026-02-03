@@ -1,4 +1,4 @@
-import React, { ComponentProps } from 'react'
+import { ComponentProps, ReactNode } from 'react'
 import styled from 'styled-components'
 
 import Spin from '../common/Spin'
@@ -18,7 +18,7 @@ const Wrapper = styled.div``
 
 const ProviderConnection = (
   props: ProviderConnectionProps,
-): React.ReactNode => {
+): ReactNode => {
   const {
     className,
     closeOnSuccess = false,

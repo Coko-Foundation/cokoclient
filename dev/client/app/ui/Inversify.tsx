@@ -11,7 +11,9 @@ const TYPES = {
 
 @injectable()
 class Logger {
-  log(message: string) {
+  // eslint-disable-next-line class-methods-use-this
+  log(message: string): void {
+    // eslint-disable-next-line no-console
     console.log(`[Log]: ${message}`)
   }
 }
@@ -25,7 +27,7 @@ class UserService {
     this.logger = logger
   }
 
-  signUp(name: string) {
+  signUp(name: string): { id: number; name: string } {
     this.logger.log(`Signing up user: ${name}`)
     return { id: 1, name }
   }

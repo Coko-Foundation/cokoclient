@@ -1,3 +1,4 @@
+import { ReactNode } from 'react'
 import styled from 'styled-components'
 
 const Wrapper = styled.div``
@@ -8,10 +9,10 @@ type Datum = {
 }
 
 type SubscriptionsTestProps = {
-  data: Datum[]
+  data?: Datum[]
 }
 
-const SubscriptionsTest = (props: SubscriptionsTestProps) => {
+const SubscriptionsTest = (props: SubscriptionsTestProps): ReactNode => {
   const { data = [] } = props
 
   return (

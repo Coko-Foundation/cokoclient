@@ -1,8 +1,8 @@
-import React from 'react'
+import { ReactNode } from 'react'
 
 import AntDemo from '../ui/AntDemo'
 
-const AntPage = () => {
+const AntPage = (): ReactNode => {
   return <AntDemo />
 }
 

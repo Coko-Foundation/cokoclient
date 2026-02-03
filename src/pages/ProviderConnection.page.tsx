@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import { ReactNode, useState } from 'react'
 import { useNavigate, useParams } from 'react-router'
 import { useMutation } from '@apollo/client/react'
 import { CREATE_OAUTH_IDENTITY } from './ProviderConnection.queries'
@@ -13,7 +13,7 @@ type ProviderConnectionPageProps = {
   redirectUrlLabel?: string
 }
 
-const ProviderConnectionPage = (props: ProviderConnectionPageProps) => {
+const ProviderConnectionPage = (props: ProviderConnectionPageProps): ReactNode => {
   const {
     closeOnSuccess = false,
     delayOnSuccess = 1000,

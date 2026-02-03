@@ -1,9 +1,10 @@
+import { ReactNode } from 'react'
 import styled from 'styled-components'
 
 import Button from './common/Button'
 
 const StyledNavigationBar = styled.div`
-  background: ${props => props.theme.colorPrimary};
+  background: ${(props): string | undefined => props.theme.colorPrimary};
   color: white;
   display: flex;
   height: 50px;
@@ -20,10 +21,18 @@ const RightSide = styled.div`
   display: flex;
 `
 
-const NavigationBar = props => {
-  const { login, loginLoading, lulu, logout, currentUsername } = props
+type NavigationBarProps = {
+  loginLoading: boolean
+  lulu?: boolean
+  currentUsername?: string
+  login: () => void
+  logout: () => void
+}
 
-  const onClickBtn = () => {
+const NavigationBar = (props: NavigationBarProps): ReactNode => {
+  const { login, loginLoading, lulu = false, logout, currentUsername } = props
+
+  const onClickBtn = (): void => {
     if (currentUsername) {
       logout()
     } else {

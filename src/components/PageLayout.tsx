@@ -1,4 +1,4 @@
-import React, { ComponentType, ReactNode } from 'react'
+import { ComponentType, ReactNode } from 'react'
 import styled, { createGlobalStyle, css } from 'styled-components'
 
 import { fadeIn, grid, th } from '../toolkit'
@@ -67,7 +67,7 @@ const Layout = ({
   fadeInPages = true,
   padPages = true,
   navComponent = null,
-}: LayoutProps): React.ReactNode => {
+}: LayoutProps): ReactNode => {
   const NavComponent = navComponent
 
   return (

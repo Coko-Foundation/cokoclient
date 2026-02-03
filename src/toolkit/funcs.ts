@@ -44,22 +44,6 @@ export function get<T = any>(
   return result === undefined ? defaultValue : (result as T)
 }
 
-export const omit = <T extends object, K extends keyof T>(
-  obj: T,
-  keys?: K | K[],
-): Omit<T, K> => {
-  if (!keys) return { ...obj } as Omit<T, K>
-
-  const result = { ...obj }
-  const keysArray = Array.isArray(keys) ? keys : [keys]
-
-  keysArray.forEach(key => {
-    delete result[key]
-  })
-
-  return result as Omit<T, K>
-}
-
 export const uniq = <T>(arr: T[]): T[] => [...new Set(arr)]
 
 export function without<T>(array: T[], ...values: T[]): T[] {

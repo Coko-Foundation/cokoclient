@@ -1,6 +1,10 @@
-import React, { useEffect } from 'react'
+import { ReactNode } from 'react'
 import { gql } from '@apollo/client'
-import { useQuery } from '@apollo/client/react'
+import {
+  useQuery,
+  useSubscription,
+  useApolloClient,
+} from '@apollo/client/react'
 
 import SubscriptionsTest from '../ui/SubscriptionsTest'
 
@@ -22,28 +26,42 @@ const TEST_OBJECT_ADDED = gql`
   }
 `
 
-const ProfilePage = props => {
-  const { data, subscribeToMore } = useQuery(TEST_OBJECTS)
+type TestObject = {
+  id: string
+  value: string
+}
 
-  useEffect(() => {
-    const unsubscribe = subscribeToMore({
-      document: TEST_OBJECT_ADDED,
-      updateQuery: (prev, { subscriptionData }) => {
-        if (!subscriptionData.data) return prev
-        const newTestObject = subscriptionData.data.testObjectAdded
-        if (!prev) return { testObjects: [newTestObject] }
+type TestObjectsQueryData = {
+  testObjects: TestObject[]
+}
 
-        return {
-          ...prev,
-          testObjects: [...prev.testObjects, newTestObject],
-        }
-      },
-    })
+type TestObjectAddedSubscriptionData = {
+  testObjectAdded: TestObject
+}
 
-    return () => unsubscribe()
-  }, [subscribeToMore])
+const SubscriptionsTestPage = (): ReactNode => {
+  const client = useApolloClient()
+  const { data } = useQuery<TestObjectsQueryData>(TEST_OBJECTS)
+
+  useSubscription<TestObjectAddedSubscriptionData>(TEST_OBJECT_ADDED, {
+    onData: ({ data: subscriptionData }) => {
+      const newTestObject = subscriptionData.data?.testObjectAdded
+      if (!newTestObject) return
+
+      const existingData = client.cache.readQuery<TestObjectsQueryData>({
+        query: TEST_OBJECTS,
+      })
+
+      client.cache.writeQuery({
+        query: TEST_OBJECTS,
+        data: {
+          testObjects: [...(existingData?.testObjects ?? []), newTestObject],
+        },
+      })
+    },
+  })
 
   return <SubscriptionsTest data={data?.testObjects} />
 }
 
-export default ProfilePage
+export default SubscriptionsTestPage

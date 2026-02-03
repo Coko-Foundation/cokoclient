@@ -1,10 +1,14 @@
-import React from 'react'
+import { ReactNode } from 'react'
 import { Link } from 'react-router'
 import styled from 'styled-components'
 
 const Wrapper = styled.div``
 
-const Protected = props => {
+type ProtectedProps = {
+  className?: string
+}
+
+const Protected = (props: ProtectedProps): ReactNode => {
   const { className } = props
   return (
     <Wrapper className={className}>

@@ -1,4 +1,4 @@
-import React from 'react'
+import { ReactNode } from 'react'
 import { gql } from '@apollo/client'
 import { useQuery } from '@apollo/client/react'
 
@@ -10,7 +10,7 @@ const ROOT_DATA = gql`
   }
 `
 
-const RootPage = () => {
+const RootPage = (): ReactNode => {
   const { data, loading, error } = useQuery(ROOT_DATA)
 
   if (error) {

@@ -1,8 +1,8 @@
-import React from 'react'
+import { ReactNode } from 'react'
 
 import ImageDemo from '../ui/ImageDemo'
 
-const ImageDemoPage = () => {
+const ImageDemoPage = (): ReactNode => {
   return <ImageDemo />
 }
 

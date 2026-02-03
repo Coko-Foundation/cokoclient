@@ -1,4 +1,4 @@
-import React from 'react'
+import { ReactNode } from 'react'
 import styled from 'styled-components'
 import { Link } from 'react-router'
 
@@ -13,10 +13,15 @@ const Buttons = styled.div`
   justify-content: center;
 `
 
-const Root = props => {
+type RootProps = {
+  data: string[]
+  loading: boolean
+}
+
+const Root = (props: RootProps): ReactNode => {
   const { data, loading } = props
 
-  const handleConnetToProvider = () => {
+  const handleConnetToProvider = (): void => {
     const redirectURL = encodeURIComponent(
       'http://localhost:4000/provider-connection-popup/lulu?next=/',
     )
