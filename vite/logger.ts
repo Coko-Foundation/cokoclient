@@ -1,15 +1,17 @@
+/* eslint-disable no-console */
+
 import pc from 'picocolors'
 
 const logger = {
-  divider: () => {
+  divider: (): void => {
     console.log(pc.dim('—'.repeat(50)))
   },
 
-  header: (txt: string) => {
+  header: (txt: string): void => {
     console.log(`\n${pc.bgCyan(pc.black(` ${txt.toUpperCase()} `))}`)
   },
 
-  item: (label: string, val: any) => {
+  item: (label: string, val: any): void => {
     const valueColor = val === 'production' ? pc.magenta : pc.yellow
 
     console.log(
@@ -19,7 +21,7 @@ const logger = {
     )
   },
 
-  newLine: () => {
+  newLine: (): void => {
     console.log('')
   },
 }

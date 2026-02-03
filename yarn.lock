@@ -437,7 +437,7 @@ __metadata:
   dependencies:
     "@ant-design/icons": "npm:^6.1.0"
     "@apollo/client": "npm:^4.1.3"
-    "@coko/lint": "npm:^3.0.0-alpha.21"
+    "@coko/lint": "npm:^3.0.0-alpha.23"
     "@dnd-kit/core": "npm:^6.3.1"
     "@dnd-kit/sortable": "npm:^10.0.0"
     "@dnd-kit/utilities": "npm:^3.2.2"
@@ -477,9 +477,9 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@coko/lint@npm:^3.0.0-alpha.21":
-  version: 3.0.0-alpha.21
-  resolution: "@coko/lint@npm:3.0.0-alpha.21"
+"@coko/lint@npm:^3.0.0-alpha.23":
+  version: 3.0.0-alpha.23
+  resolution: "@coko/lint@npm:3.0.0-alpha.23"
   dependencies:
     "@babel/core": "npm:^7.28.6"
     "@babel/eslint-parser": "npm:^7.28.6"
@@ -522,7 +522,7 @@ __metadata:
     typescript-eslint: "npm:^8.53.0"
   bin:
     coko-lint: ./src/cli.mjs
-  checksum: 10c0/4c155acedb5f457a7cc8fe671c89e9d6cfe309c606ae9bdc65cd21f487e8bc5f895bfd6ec11057a2c713848b3157a34cb91b3e8009d279c452a51c15f0f5986b
+  checksum: 10c0/9dee9feb13c1ded1cfff3f4c8085b16de9b037df647e287b9fea5c8b4e372bc5d6865986ef5918f9d59b374f8d4df58af538ce6847d8285a0bbccfb55d24fe7d
   languageName: node
   linkType: hard
 

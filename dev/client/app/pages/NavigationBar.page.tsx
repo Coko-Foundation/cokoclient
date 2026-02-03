@@ -1,4 +1,4 @@
-import React from 'react'
+import { useEffect } from 'react'
 import { gql } from '@apollo/client'
 import { useMutation, useApolloClient } from '@apollo/client/react'
 
@@ -18,11 +18,10 @@ const LOGIN = gql`
 `
 
 const NavigationBarPage = () => {
-  const client = useApolloClient()
   const [login, { data, loading }] = useMutation(LOGIN)
   const { currentUser, refetch, logout } = useCurrentUser()
 
-  React.useEffect(() => {
+  useEffect(() => {
     if (data) {
       const token = data.login?.token
       if (token) localStorage.setItem('token', token)

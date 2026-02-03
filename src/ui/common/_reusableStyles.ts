@@ -7,7 +7,7 @@ export const inputShadow = css`
 
   &:focus {
     box-shadow: 0 0 2px ${th('colorPrimary')};
-    outline: ${props => `${props.theme.lineWidth * 4}`}px solid
+    outline: ${(props): string => `${props.theme.lineWidth * 4}`}px solid
       ${th('colorPrimaryBorder')};
     outline-offset: 1px;
   }

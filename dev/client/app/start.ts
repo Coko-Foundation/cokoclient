@@ -25,7 +25,8 @@ console.log('Yjs websocket server url:', yjsWebSocketServerUrl)
 //   await console.error('do it')
 // }
 
-const onLogout = () => {
+const onLogout = (): void => {
+  /* eslint-disable-next-line no-console */
   console.log('logged out!')
 }
 
