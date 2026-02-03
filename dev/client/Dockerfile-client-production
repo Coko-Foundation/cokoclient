@@ -1,9 +1,5 @@
 # IMAGE FOR BUILDING
-FROM node:20-bookworm-slim
-
-RUN apt-get update \
-    && apt-get upgrade -y \
-    && apt-get install -y
+FROM cokoapps/base:24
 
 WORKDIR /home/node/app
 RUN corepack enable
@@ -32,7 +28,7 @@ RUN node ./scripts/coko-client-build.mjs
 
 # IMAGE FOR RUNNING
 
-FROM node:20-bookworm-slim
+FROM node:24-bookworm-slim
 
 RUN apt-get update && apt-get install -y
 RUN npm install --global serve
