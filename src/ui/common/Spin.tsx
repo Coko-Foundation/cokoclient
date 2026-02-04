@@ -3,7 +3,7 @@
  */
 
 import React, { ComponentProps } from 'react'
-import styled, { css, keyframes } from 'styled-components'
+import styled, { css, keyframes, RuleSet } from 'styled-components'
 import { Spin as AntSpin } from 'antd'
 
 import { grid } from '../../toolkit'
@@ -18,18 +18,14 @@ type SpinProps = Omit<ComponentProps<typeof AntSpin>, 'size'> & {
   renderBackground?: boolean
 }
 
-type StyledSpinProps = ComponentProps<typeof AntSpin> & {
-  isNested: boolean
-  renderBackground: boolean
+type StyledSpinProps = {
+  $isNested?: boolean
+  $renderBackground?: boolean
 }
 
-const StyledSpin = styled(
-  ({ isNested, renderBackground, ...rest }: StyledSpinProps) => (
-    <AntSpin {...rest} />
-  ),
-)<{ isNested: boolean }>`
-  ${props =>
-    props.isNested &&
+const StyledSpin = styled(AntSpin)<StyledSpinProps>`
+  ${(props): RuleSet | false | undefined =>
+    props.$isNested &&
     css`
       z-index: 4;
 
@@ -53,17 +49,17 @@ const bounce = keyframes`
   }
 `
 
-const IndicatorWrapper = styled.div<{ size: number }>`
+const IndicatorWrapper = styled.div<{ $size: number }>`
   &&& {
-    height: ${props => grid(props.size)};
+    height: ${(props): string => grid(props.$size)(props)};
     position: relative;
-    width: ${props => grid(props.size)};
+    width: ${(props): string => grid(props.$size)(props)};
   }
 `
 
 const BounceOne = styled.div`
   animation: ${bounce} 2s infinite ease-in-out;
-  background-color: ${props => props.theme.colorPrimary};
+  background-color: ${(props): string | undefined => props.theme.colorPrimary};
   border-radius: 50%;
   height: 100%;
   left: 0;
@@ -93,8 +89,11 @@ const NestedWrapper = styled.div`
   }
 `
 
-export const Indicator = ({ size = 10, className }: IndicatorProps): React.ReactNode => (
-  <IndicatorWrapper className={className} size={size}>
+export const Indicator = ({
+  size = 10,
+  className,
+}: IndicatorProps): React.ReactNode => (
+  <IndicatorWrapper $size={size} className={className}>
     <BounceOne />
     <BounceTwo />
   </IndicatorWrapper>
@@ -114,10 +113,10 @@ const Spin = (props: SpinProps): React.ReactNode => {
 
   const spin = (
     <StyledSpin
+      $isNested={!!children}
+      $renderBackground={renderBackground}
       className={className}
       indicator={<Indicator size={size} />}
-      isNested={!!children}
-      renderBackground={renderBackground}
       spinning={spinning}
       {...rest}
     >

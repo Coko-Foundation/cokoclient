@@ -1,5 +1,5 @@
 import { ComponentProps, ReactNode, useEffect, useRef } from 'react'
-import styled, { css } from 'styled-components'
+import styled, { css, RuleSet } from 'styled-components'
 import { Button as AntButton } from 'antd'
 
 import { darken, th, grid } from '../../toolkit'
@@ -25,7 +25,7 @@ const StyledButton = styled(AntButton)<{
   /* let lineHeight expand the button height */
   height: unset;
   line-height: ${th('lineHeightBase')};
-  ${props =>
+  ${(props): RuleSet | false =>
     props.$direction === 'rtl' &&
     css`
       direction: rtl;
@@ -36,7 +36,7 @@ const StyledButton = styled(AntButton)<{
       }
     `};
 
-  ${props => {
+  ${(props): RuleSet | null => {
     const { $status, theme, type, ghost, disabled } = props
 
     if (disabled) return null
