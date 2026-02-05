@@ -27,8 +27,8 @@ import { CSS } from '@dnd-kit/utilities'
 
 import { List as AntList } from 'antd'
 
-import { grid, th } from '../../toolkit'
-import { without } from '../../toolkit/funcs'
+import { grid, th, ThemeValue } from '../../toolkit'
+import { without, noop } from '../../toolkit/funcs'
 
 import UICheckBox from './Checkbox'
 import Empty from './Empty'
@@ -147,7 +147,8 @@ const ListItemWrapper = styled.li<{ $isDragging?: boolean }>`
 
   > div {
     border: 2px solid
-      ${({ $isDragging }) => ($isDragging ? th('colorPrimary') : 'transparent')};
+      ${({ $isDragging }): ThemeValue =>
+        $isDragging ? th('colorPrimary') : 'transparent'};
 
     &:focus {
       border: 2px solid ${th('colorPrimary')};
@@ -256,10 +257,10 @@ const SortableItem = ({ id, children }: SortableItemProps): React.ReactNode => {
 
   return (
     <ListItemWrapper
-      ref={setNodeRef}
-      style={style}
       $isDragging={isDragging}
       data-testid="list-item-wrapper"
+      ref={setNodeRef}
+      style={style}
       {...attributes}
       {...listeners}
     >
@@ -274,7 +275,6 @@ function useFunction<T extends (...args: any[]) => any>(callback: T): T {
   const ref = useRef<T | null>(null)
   ref.current = callback
 
-  // eslint-disable-next-line react-hooks/exhaustive-deps
   return useCallback(
     ((...args: Parameters<T>) => {
       const cb = ref.current
@@ -292,8 +292,6 @@ function useFunction<T extends (...args: any[]) => any>(callback: T): T {
 // const EmptyList = () => {
 //   return 'no data'
 // }
-
-const noop = () => {}
 
 const List = (props: ListProps): React.ReactNode => {
   const {
@@ -484,9 +482,9 @@ const List = (props: ListProps): React.ReactNode => {
 
   const ListToRender = draggable ? (
     <DndContext
-      sensors={sensors}
       collisionDetection={closestCenter}
       onDragEnd={onDragEnd}
+      sensors={sensors}
     >
       <SortableContext
         items={sortableIds}
@@ -556,7 +554,8 @@ const List = (props: ListProps): React.ReactNode => {
                   id="sortBy"
                   onChange={
                     onSortOptionChange
-                      ? (value: unknown) => onSortOptionChange(value as string)
+                      ? (value: unknown): void =>
+                          onSortOptionChange(value as string)
                       : undefined
                   }
                   options={sanitizedSortOptions}

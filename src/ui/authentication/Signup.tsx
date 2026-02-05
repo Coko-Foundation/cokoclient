@@ -1,5 +1,6 @@
 import React, { ReactNode, useMemo } from 'react'
 import { v4 as uuid } from 'uuid'
+import { RuleObject } from 'antd/es/form'
 
 import AuthenticationForm from './AuthenticationForm'
 import AuthenticationHeader from './AuthenticationHeader'
@@ -8,7 +9,7 @@ import {
   Button,
   Form,
   Input,
-  CokoLink,
+  Link,
   Modal,
   Result,
   Checkbox,
@@ -45,7 +46,7 @@ const Signup = (props: SignupProps): React.ReactNode => {
 
   const [modal, contextHolder] = Modal.useModal()
 
-  const showTermsAndConditions = (e: React.MouseEvent) => {
+  const showTermsAndConditions = (e: React.MouseEvent): void => {
     e.preventDefault()
     const termsAndConditionsModal = modal.info({})
     termsAndConditionsModal.update({
@@ -53,11 +54,7 @@ const Signup = (props: SignupProps): React.ReactNode => {
       content: <Paragraph>{termsAndConditionsContent}</Paragraph>,
       footer: [
         <ModalFooter key="footer">
-          <Button
-            autoFocus
-            onClick={termsAndConditionsModal.destroy}
-            type="primary"
-          >
+          <Button onClick={termsAndConditionsModal.destroy} type="primary">
             OK
           </Button>
         </ModalFooter>,
@@ -172,8 +169,8 @@ const Signup = (props: SignupProps): React.ReactNode => {
                   required: true,
                   message: 'Please confirm your password!',
                 },
-                ({ getFieldValue }) => ({
-                  validator(_, value) {
+                ({ getFieldValue }): RuleObject => ({
+                  validator(_, value): Promise<void> {
                     if (!value || getFieldValue('password') === value) {
                       return Promise.resolve()
                     }
@@ -215,14 +212,13 @@ const Signup = (props: SignupProps): React.ReactNode => {
                 >
                   <Checkbox aria-label="I agree to the terms and conditions">
                     I agree to the{' '}
-                    <CokoLink
-                      as="a"
-                      href="#termsAndCondition"
+                    <Link
                       id="termsAndConditions"
                       onClick={showTermsAndConditions}
+                      to="#termsAndCondition"
                     >
                       terms and conditions
-                    </CokoLink>
+                    </Link>
                   </Checkbox>
                 </Form.Item>
                 {contextHolder}

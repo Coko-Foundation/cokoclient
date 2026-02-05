@@ -1,3 +1,4 @@
+import { ReactNode } from 'react'
 import styled from 'styled-components'
 
 import { grid } from '../../toolkit'
@@ -18,7 +19,7 @@ type ChatThreadProps = {
   onSend: (value: string) => void
 }
 
-const ChatThread = (props: ChatThreadProps) => {
+const ChatThread = (props: ChatThreadProps): ReactNode => {
   const { className, messages = [], onSend } = props
 
   return (

@@ -11,13 +11,14 @@ type InputNumberProps = ComponentProps<typeof AntInputNumber> & {
 }
 
 const Wrapper = styled.div<{ $isDisabled: boolean }>`
-  cursor: ${props => (props.$isDisabled ? 'not-allowed' : 'default')};
+  cursor: ${(props): string => (props.$isDisabled ? 'not-allowed' : 'default')};
   display: inline;
-  opacity: ${props => (props.$isDisabled ? '0.5' : '1')};
+  opacity: ${(props): string => (props.$isDisabled ? '0.5' : '1')};
 
   label,
   input {
-    cursor: ${props => (props.$isDisabled ? 'not-allowed' : 'default')};
+    cursor: ${(props): string =>
+      props.$isDisabled ? 'not-allowed' : 'default'};
   }
 `
 

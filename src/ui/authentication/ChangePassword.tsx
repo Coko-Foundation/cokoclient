@@ -1,6 +1,7 @@
 import React, { ReactNode } from 'react'
 import styled from 'styled-components'
 import { Row as AntRow, Col as AntCol, FormInstance } from 'antd'
+import { RuleObject } from 'antd/es/form'
 
 import { Form, FormSection, Input } from '../common'
 import ProfileForm from './ProfileForm'
@@ -79,8 +80,8 @@ const ChangePassword = (props: ChangePasswordProps): React.ReactNode => {
                     required: true,
                     message: 'This field is required',
                   },
-                  ({ getFieldValue }) => ({
-                    validator(_, value) {
+                  ({ getFieldValue }): RuleObject => ({
+                    validator(_, value): Promise<void> {
                       if (
                         (value && !!getFieldValue('currentPassword')) ||
                         !value
@@ -115,8 +116,8 @@ const ChangePassword = (props: ChangePasswordProps): React.ReactNode => {
                     required: true,
                     message: 'This field is required',
                   },
-                  ({ getFieldValue }) => ({
-                    validator(_, value) {
+                  ({ getFieldValue }): RuleObject => ({
+                    validator(_, value): Promise<void> {
                       if (!value || getFieldValue('newPassword') === value) {
                         return Promise.resolve()
                       }

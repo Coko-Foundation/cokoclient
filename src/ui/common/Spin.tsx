@@ -3,10 +3,10 @@
  */
 
 import React, { ComponentProps } from 'react'
-import styled, { css, keyframes, RuleSet } from 'styled-components'
+import styled, { css, keyframes } from 'styled-components'
 import { Spin as AntSpin } from 'antd'
 
-import { grid } from '../../toolkit'
+import { grid, type ThemeValue } from '../../toolkit'
 
 type IndicatorProps = {
   size?: number
@@ -24,7 +24,7 @@ type StyledSpinProps = {
 }
 
 const StyledSpin = styled(AntSpin)<StyledSpinProps>`
-  ${(props): RuleSet | false | undefined =>
+  ${(props): ThemeValue =>
     props.$isNested &&
     css`
       z-index: 4;
@@ -59,7 +59,7 @@ const IndicatorWrapper = styled.div<{ $size: number }>`
 
 const BounceOne = styled.div`
   animation: ${bounce} 2s infinite ease-in-out;
-  background-color: ${(props): string | undefined => props.theme.colorPrimary};
+  background-color: ${(props): ThemeValue => props.theme.colorPrimary};
   border-radius: 50%;
   height: 100%;
   left: 0;

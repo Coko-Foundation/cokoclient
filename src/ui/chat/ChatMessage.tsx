@@ -1,6 +1,7 @@
+import { ReactNode } from 'react'
 import styled, { css } from 'styled-components'
 
-import { grid, th } from '../../toolkit'
+import { grid, th, ThemeValue } from '../../toolkit'
 
 import { DateParser } from '../common'
 
@@ -13,18 +14,19 @@ const Wrapper = styled.div`
   width: 100%;
 `
 
-const Message = styled(({ own, ...rest }) => <div {...rest} />)`
-  background: ${props =>
-    props.own ? th('colorPrimary') : th('colorSecondary')};
+const Message = styled.div<{ $own?: boolean }>`
+  background: ${(props): ThemeValue =>
+    props.$own ? th('colorPrimary') : th('colorSecondary')};
   border-radius: 3px;
-  color: ${props => (props.own ? th('colorTextReverse') : th('colorText'))};
+  color: ${(props): ThemeValue =>
+    props.$own ? th('colorTextReverse') : th('colorText')};
   display: inline-block;
   max-width: 90%;
   padding: ${grid(2)};
 
   /* stylelint-disable-next-line order/properties-alphabetical-order */
-  ${props =>
-    props.own &&
+  ${(props): ThemeValue =>
+    props.$own &&
     css`
       ${pullRight}
 
@@ -57,12 +59,12 @@ export type ChatMessageProps = {
   user: string
 }
 
-const ChatMessage = (props: ChatMessageProps) => {
+const ChatMessage = (props: ChatMessageProps): ReactNode => {
   const { className, content, date, own = false, user = null } = props
 
   return (
     <Wrapper className={className}>
-      <Message own={own}>
+      <Message $own={own}>
         {!own && <Name>{user}</Name>}
 
         <Content>{content}</Content>

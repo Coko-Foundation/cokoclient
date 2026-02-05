@@ -22,6 +22,8 @@ import UploadHttpLink from 'apollo-upload-client/UploadHttpLink.mjs'
 import { loadErrorMessages, loadDevMessages } from '@apollo/client/dev'
 import { createClient } from 'graphql-ws'
 
+import { noop } from '../toolkit/funcs'
+import { type ThemeValue } from '../toolkit/themeHelper'
 import { CurrentUserQueryContext } from '../helpers/useCurrentUser'
 import { SubscriptionManagerProvider } from '../helpers/subscriptionManagerContext'
 import { serverUrl } from '../helpers/getUrl'
@@ -31,7 +33,7 @@ if (process.env.NODE_ENV !== 'production') {
   loadErrorMessages()
 }
 
-const replaceHttpWithWs = (url: string | undefined): string | null => {
+const replaceHttpWithWs = (url: string | undefined | null): string | null => {
   if (!url) return null
   let wsUrl = url.replace(/^http:/, 'ws:')
   wsUrl = wsUrl.replace(/^https:/, 'wss:')
@@ -50,11 +52,11 @@ const pxToNumConverter = (
 
 export const GlobalStyle = createGlobalStyle`
   body {
-    background-color: ${props => props.theme.colorBackground};
-    color: ${props => props.theme.colorText};
-    font-family: ${props => props.theme.fontInterface}, sans-serif;
-    font-size: ${props => props.theme.fontSizeBase};
-    line-height: ${props => props.theme.lineHeightBase};
+    background-color: ${(props): ThemeValue => props.theme.colorBackground};
+    color: ${(props): ThemeValue => props.theme.colorText};
+    font-family: ${(props): ThemeValue => props.theme.fontInterface}, sans-serif;
+    font-size: ${(props): ThemeValue => props.theme.fontSizeBase};
+    line-height: ${(props): ThemeValue => props.theme.lineHeightBase};
 
     * {
       box-sizing: border-box;
@@ -86,12 +88,14 @@ type ApolloConfig = {
   cache: InMemoryCache
 }
 
-type MakeConfigFn = (config: ApolloConfig) => ApolloConfig
+export type MakeApolloConfigFn = (config: ApolloConfig) => ApolloConfig
 
 // Construct an ApolloClient. If a function is passed as the first argument,
 // it will be called with the default client config as an argument, and should
 // return the desired config.
-const makeApolloClient = (makeConfig?: MakeConfigFn | null): ApolloClient => {
+const makeApolloClient = (
+  makeConfig?: MakeApolloConfigFn | null,
+): ApolloClient => {
   const webSocketUrl = `${replaceHttpWithWs(serverUrl)}/subscriptions`
 
   const uploadLink = new UploadHttpLink({
@@ -206,7 +210,7 @@ export function makeTheme(providedTheme: DefaultTheme): {
 
 type RootProps = {
   currentUserQuery?: DocumentNode
-  makeApolloConfig?: MakeConfigFn
+  makeApolloConfig?: MakeApolloConfigFn
   routes: ReactNode
   theme: DefaultTheme
   onLogout?: () => void
@@ -214,7 +218,7 @@ type RootProps = {
 
 const Root = ({
   currentUserQuery,
-  onLogout = () => {},
+  onLogout = noop,
   makeApolloConfig,
   routes,
   theme,

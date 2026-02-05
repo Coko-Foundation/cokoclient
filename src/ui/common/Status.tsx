@@ -1,7 +1,7 @@
 import React from 'react'
 import styled from 'styled-components'
 
-import { grid, th, lighten } from '../../toolkit'
+import { grid, th, lighten, type ThemeValue } from '../../toolkit'
 
 type StatusVariant =
   | 'Not Submitted'
@@ -17,8 +17,8 @@ type StatusProps = {
 }
 
 const Wrapper = styled.span<{ $variant: StatusVariant }>`
-  background-color: ${({ $variant }) => {
-    switch ($variant) {
+  background-color: ${(props): ThemeValue => {
+    switch (props.$variant) {
       case 'Not Submitted':
         return lighten('colorBorder', 0.5)
       case 'Submitted':
@@ -36,7 +36,7 @@ const Wrapper = styled.span<{ $variant: StatusVariant }>`
     }
   }};
   border-radius: 2px;
-  color: ${({ $variant }) =>
+  color: ${({ $variant }): ThemeValue =>
     $variant === 'Not Submitted'
       ? th('colorTextDark')
       : th('colorTextReverse')};
@@ -50,7 +50,7 @@ const Status = (props: StatusProps): React.ReactNode => {
   const { className, status, ...rest } = props
 
   return (
-    <Wrapper className={className} $variant={status} {...rest}>
+    <Wrapper $variant={status} className={className} {...rest}>
       {status}
     </Wrapper>
   )

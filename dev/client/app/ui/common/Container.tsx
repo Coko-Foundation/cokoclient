@@ -1,4 +1,6 @@
-import styled, { css, RuleSet } from 'styled-components'
+import styled, { css } from 'styled-components'
+
+import { ThemeValue } from '../../../../../src'
 
 const Container = styled.div<{ $second?: boolean }>`
   display: flex;
@@ -17,12 +19,11 @@ const Container = styled.div<{ $second?: boolean }>`
     text-transform: uppercase;
 
     &:hover {
-      outline: 2px solid
-        ${(props): string | undefined => props.theme.colorBorder};
+      outline: 2px solid ${(props): ThemeValue => props.theme.colorBorder};
     }
   }
 
-  ${(props): RuleSet | false =>
+  ${(props): ThemeValue =>
     !!props.$second &&
     css`
       align-items: center;

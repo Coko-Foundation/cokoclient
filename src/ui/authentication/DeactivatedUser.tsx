@@ -1,7 +1,7 @@
-import React from 'react'
+import { ReactNode } from 'react'
 import { Result } from '../common'
 
-const DeactivateUsers = () => {
+const DeactivateUsers = (): ReactNode => {
   return (
     <Result
       status="403"

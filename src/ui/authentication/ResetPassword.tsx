@@ -1,4 +1,5 @@
 import React from 'react'
+import { RuleObject } from 'antd/es/form'
 
 import AuthenticationForm from './AuthenticationForm'
 import AuthenticationHeader from './AuthenticationHeader'
@@ -84,8 +85,8 @@ const ResetPassword = (props: ResetPasswordProps): React.ReactNode => {
                   required: true,
                   message: 'Please confirm your new password!',
                 },
-                ({ getFieldValue }) => ({
-                  validator(_, value) {
+                ({ getFieldValue }): RuleObject => ({
+                  validator(_, value): Promise<void> {
                     if (!value || getFieldValue('password') === value) {
                       return Promise.resolve()
                     }

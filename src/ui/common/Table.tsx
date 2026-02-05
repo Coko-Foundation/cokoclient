@@ -3,6 +3,7 @@ import styled from 'styled-components'
 import { Table as AntTable } from 'antd'
 
 import { grid } from '../../toolkit'
+import { noop } from '../../toolkit/funcs'
 
 import Search from './Search'
 import Spin from './Spin'
@@ -64,8 +65,6 @@ const PaginationNav = styled(Pagination)`
   padding: ${grid(4)} 0;
   text-align: right;
 `
-
-const noop = (): void => {}
 
 const Table = (props: TableProps): ReactNode => {
   const {

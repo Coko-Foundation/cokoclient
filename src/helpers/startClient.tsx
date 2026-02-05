@@ -6,8 +6,7 @@ import { DefaultTheme } from 'styled-components'
 import { DocumentNode } from '@apollo/client'
 
 import Root from '../components/Root'
-
-type MakeApolloConfigFn = () => Record<string, unknown>
+import type { MakeApolloConfigFn } from '../components/Root'
 
 type StartClientOptions = {
   makeApolloConfig?: MakeApolloConfigFn

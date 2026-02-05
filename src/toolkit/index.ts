@@ -3,7 +3,7 @@ export { fadeIn, fadeOut } from './styles/fadeInOut'
 
 export { default as headingScale } from './headingScale'
 export { default as override } from './override'
-export { grid, th, validationColor } from './themeHelper'
+export { grid, th, validationColor, type ThemeValue } from './themeHelper'
 
 export { default as rotate360 } from './styles/rotate360'
 

@@ -1,8 +1,8 @@
 import React from 'react'
 import styled from 'styled-components'
-import { grid, th } from '../../toolkit'
+import { grid, th, ThemeValue } from '../../toolkit'
 
-type Status =
+export type Status =
   | 'success'
   | 'error'
   | 'warn'
@@ -35,7 +35,7 @@ const statuses = {
 }
 
 const StyledStatus = styled.span<StyledStatusProps>`
-  background: ${props => {
+  background: ${(props): ThemeValue => {
     const { $reverseColors, $status } = props
     if (!$reverseColors) return null
 
@@ -47,7 +47,7 @@ const StyledStatus = styled.span<StyledStatusProps>`
     return th('colorSecondary')
   }};
   border-radius: 3px;
-  color: ${props => {
+  color: ${(props): ThemeValue => {
     const { $reverseColors, $status } = props
     if ($reverseColors) return th('colorTextReverse')
 
@@ -65,7 +65,7 @@ const StyledStatus = styled.span<StyledStatusProps>`
   line-height: ${th('lineHeightBaseSmall')};
   max-width: ${grid(24)};
   min-width: ${grid(12)};
-  padding: ${props => props.$reverseColors && '4px 8px'};
+  padding: ${(props): ThemeValue => props.$reverseColors && '4px 8px'};
   text-transform: uppercase;
   white-space: normal;
 `

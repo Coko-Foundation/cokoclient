@@ -3,7 +3,9 @@ import styled from 'styled-components'
 import { CloseOutlined } from '@ant-design/icons'
 
 import { grid } from '../../toolkit'
+import { noop } from '../../toolkit/funcs'
 import { Button, InviteStatus } from '../common'
+import { type Status } from '../common/InviteStatus'
 
 type ReviewerData = {
   id: string
@@ -42,8 +44,6 @@ const RemoveInviteWrapper = styled.div`
   }
 `
 
-const noop = (): void => {}
-
 const InviteRowProp = (props: InviteRowPropProps): React.ReactNode => {
   const {
     canInvite = false,
@@ -75,7 +75,7 @@ const InviteRowProp = (props: InviteRowPropProps): React.ReactNode => {
 
   const notInvited = !invited && !invitationRevoked
 
-  const makeStatusText = () => {
+  const makeStatusText = (): string | null => {
     if (reviewPending) return 'accepted invitation - pending review'
     if (submitted) return 'review submitted'
     if (rejected) return 'rejected invitation'
@@ -85,7 +85,7 @@ const InviteRowProp = (props: InviteRowPropProps): React.ReactNode => {
     return null
   }
 
-  const makeStatus = () => {
+  const makeStatus = (): Status | null => {
     if (reviewPending) return 'success'
     if (submitted) return 'primary'
     if (rejected) return 'error'
@@ -95,7 +95,7 @@ const InviteRowProp = (props: InviteRowPropProps): React.ReactNode => {
     return null
   }
 
-  const handleRemove = () => {
+  const handleRemove = (): void => {
     onClickRemove(id)
   }
 

@@ -1,7 +1,7 @@
 import React, { ComponentProps } from 'react'
 import styled, { css } from 'styled-components'
 
-import { grid } from '../../toolkit'
+import { grid, type ThemeValue } from '../../toolkit'
 import Button from './Button'
 
 type ButtonElement = React.ReactElement<ComponentProps<typeof Button>>
@@ -17,9 +17,9 @@ const Wrapper = styled.div<{
   $inline?: ButtonGroupProps['inline']
   $justify?: ButtonGroupProps['justify']
 }>`
-  display: ${props => (props.$inline ? 'inline-block' : 'flex')};
+  display: ${(props): ThemeValue => (props.$inline ? 'inline-block' : 'flex')};
 
-  ${props => {
+  ${(props): ThemeValue => {
     const { $inline, $justify } = props
     let justifyValue
 
@@ -50,11 +50,11 @@ const Wrapper = styled.div<{
   }
 `
 
-const ButtonGroup = (props: ButtonGroupProps) => {
+const ButtonGroup = (props: ButtonGroupProps): React.ReactNode => {
   const { className, children, inline = false, justify = 'left' } = props
 
   return (
-    <Wrapper className={className} $inline={inline} $justify={justify}>
+    <Wrapper $inline={inline} $justify={justify} className={className}>
       {children}
     </Wrapper>
   )

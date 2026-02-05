@@ -1,9 +1,9 @@
 import { ReactNode } from 'react'
 import styled from 'styled-components'
 
-import { grid } from '../../toolkit'
+import { grid, type ThemeValue } from '../../toolkit'
 
-import { Form, Button, CokoLink } from '../common'
+import { Form, Button, Link } from '../common'
 
 type AuthenticationFormProps = {
   children?: ReactNode
@@ -28,14 +28,14 @@ const SubmitButton = styled(Button)`
 
 const Footer = styled.div<{ $showForgotPassword?: boolean }>`
   display: flex;
-  justify-content: ${props =>
+  justify-content: ${(props): ThemeValue =>
     props.$showForgotPassword ? 'space-between' : 'flex-end'};
   margin-top: ${grid(4)};
 `
 
 const ForgotPassword = styled.div`
   > a {
-    color: ${props => props.theme.colorText};
+    color: ${(props): ThemeValue => props.theme.colorText};
   }
 `
 
@@ -43,13 +43,11 @@ const AlternativeAction = styled.div`
   font-weight: bold;
 
   > a {
-    color: ${props => props.theme.colorText};
+    color: ${(props): ThemeValue => props.theme.colorText};
   }
 `
 
-const AuthenticationForm = (
-  props: AuthenticationFormProps,
-): ReactNode => {
+const AuthenticationForm = (props: AuthenticationFormProps): ReactNode => {
   const {
     alternativeActionLabel,
     alternativeActionLink,
@@ -79,18 +77,16 @@ const AuthenticationForm = (
         </SubmitButton>
       </Form>
 
-      {!!alternativeActionLabel && (
+      {alternativeActionLabel && alternativeActionLink && (
         <Footer $showForgotPassword={showForgotPassword}>
           {showForgotPassword && (
             <ForgotPassword>
-              <CokoLink to={forgotPasswordUrl}>Forgot your password?</CokoLink>
+              <Link to={forgotPasswordUrl}>Forgot your password?</Link>
             </ForgotPassword>
           )}
 
           <AlternativeAction>
-            <CokoLink to={alternativeActionLink}>
-              {alternativeActionLabel}
-            </CokoLink>
+            <Link to={alternativeActionLink}>{alternativeActionLabel}</Link>
           </AlternativeAction>
         </Footer>
       )}

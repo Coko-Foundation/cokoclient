@@ -27,8 +27,8 @@
   Now both of the above scenarios will work.
 */
 
-import { css, RuleSet, DefaultTheme } from 'styled-components'
-import { th } from './themeHelper'
+import { css, DefaultTheme } from 'styled-components'
+import { th, type ThemeValue } from './themeHelper'
 import { get } from './funcs'
 
 type ThemedProps = { theme: DefaultTheme }
@@ -38,7 +38,7 @@ type ThemedProps = { theme: DefaultTheme }
 */
 const override =
   (name: string, overrideKey = 'cssOverrides') =>
-  (props: ThemedProps): RuleSet | null => {
+  (props: ThemedProps): ThemeValue => {
     // Find (props.theme.cssOverrides.) ui.Button
     const overrides = props.theme[overrideKey] as Record<string, unknown>
     const target = get(overrides ?? {}, name)

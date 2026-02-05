@@ -3,10 +3,10 @@
 /* stylelint-disable selector-descendant-combinator-no-non-space */
 /* stylelint-disable string-quotes */
 import React, { ComponentProps, useEffect, useRef, useState } from 'react'
-import styled, { css, RuleSet } from 'styled-components'
+import styled, { css } from 'styled-components'
 import { Select as AntSelect } from 'antd'
 
-import { th } from '../../toolkit'
+import { th, type ThemeValue } from '../../toolkit'
 import { debounce as debounceFunc } from '../../toolkit/funcs'
 import Empty from './Empty'
 
@@ -23,7 +23,7 @@ const StyledSelect = styled(AntSelect)`
   width: 100%;
 
   &.ant-select-focused {
-    outline: ${props => `${props.theme.lineWidth * 4}`}px solid
+    outline: ${(props): string => `${props.theme.lineWidth * 4}`}px solid
       ${th('colorPrimaryBorder')};
     outline-offset: 1px;
   }
@@ -37,7 +37,7 @@ const StyledSelect = styled(AntSelect)`
     > .ant-select-selector
     .ant-select-selection-item-content {
     background-color: ${th('colorBackgroundHue')};
-    color: ${props => `${props.theme.colorText}cc`};
+    color: ${(props): string => `${props.theme.colorText}cc`};
   }
 `
 
@@ -63,7 +63,7 @@ const StyledDropdown = styled.div<{ $wrapOptionText: boolean }>`
 
   .ant-select-item-option-content {
     /* outline: 2px solid ${th('colorPrimary')}; */
-    ${(props): RuleSet | false =>
+    ${(props): ThemeValue =>
       props.$wrapOptionText &&
       css`
         white-space: normal;
@@ -151,7 +151,9 @@ const Select = (props: SelectProps): React.ReactNode => {
     ? debounceFunc(handleSearch, debounceTimeout)
     : handleSearch
 
-  const customDropdownRender = (menu: React.ReactElement): React.ReactElement => (
+  const customDropdownRender = (
+    menu: React.ReactElement,
+  ): React.ReactElement => (
     <StyledDropdown
       $wrapOptionText={wrapOptionText}
       data-testid="select-dropdown"

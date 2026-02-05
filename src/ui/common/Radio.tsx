@@ -1,6 +1,8 @@
 import React, { ComponentProps } from 'react'
-import styled, { css, RuleSet } from 'styled-components'
+import styled, { css } from 'styled-components'
 import { Radio as AntRadio, RadioChangeEvent } from 'antd'
+
+import { type ThemeValue } from '../../toolkit'
 
 type RadioProps = Omit<ComponentProps<typeof AntRadio.Group>, 'onChange'> & {
   /** Handle change. First argument is the incoming `value`. */
@@ -13,7 +15,7 @@ const StyledRadioGroup = styled(AntRadio.Group)<{
   vertical: boolean
   role: string
 }>`
-  ${(props): RuleSet | false =>
+  ${(props): ThemeValue =>
     props.vertical &&
     css`
       display: flex;

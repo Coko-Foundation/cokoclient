@@ -63,7 +63,7 @@ const RequestPasswordReset = (
     hasSuccess = false,
     loading = false,
     onSubmit,
-    userEmail = null,
+    userEmail,
   } = props
 
   return (

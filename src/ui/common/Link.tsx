@@ -1,10 +1,10 @@
 import React from 'react'
 import styled from 'styled-components'
-import { Link } from 'react-router'
+import { Link as ReactRouterLink, type LinkProps } from 'react-router'
 
 import { th } from '../../toolkit'
 
-const StyledLink = styled(Link)`
+const StyledLink = styled(ReactRouterLink)`
   && {
     color: ${th('colorText')};
     text-decoration: underline;
@@ -22,8 +22,8 @@ const StyledLink = styled(Link)`
   }
 `
 
-const CokoLink = props => {
+const Link = (props: LinkProps): React.ReactNode => {
   return <StyledLink {...props} />
 }
 
-export default CokoLink
+export default Link

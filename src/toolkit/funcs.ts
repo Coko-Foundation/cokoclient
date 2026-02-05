@@ -44,6 +44,9 @@ export function get<T = any>(
   return result === undefined ? defaultValue : (result as T)
 }
 
+export const noop = (): void => {}
+export const asyncNoop = async (): Promise<void> => {}
+
 export const uniq = <T>(arr: T[]): T[] => [...new Set(arr)]
 
 export function without<T>(array: T[], ...values: T[]): T[] {

@@ -1,5 +1,7 @@
 import React from 'react'
-import styled, { css, RuleSet } from 'styled-components'
+import styled, { css } from 'styled-components'
+
+import { type ThemeValue } from '../../toolkit'
 
 type PageProps = {
   className?: string
@@ -10,7 +12,7 @@ type PageProps = {
 const Wrapper = styled.div<{ $maxWidth?: number | null }>`
   height: 100%;
 
-  ${(props): RuleSet | false =>
+  ${(props): ThemeValue =>
     !!props.$maxWidth &&
     css`
       display: flex;

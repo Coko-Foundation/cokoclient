@@ -3,6 +3,7 @@ import styled from 'styled-components'
 import { FormInstance } from 'antd'
 
 import { grid } from '../../toolkit'
+import { noop } from '../../toolkit/funcs'
 import { Form, Button, VisuallyHiddenElement } from '../common'
 
 type ProfileFormProps = {
@@ -37,7 +38,7 @@ const ProfileForm = (props: ProfileFormProps): React.ReactNode => {
     loading = false,
     onSubmit,
     showSecondaryButton = false,
-    secondaryButtonAction = () => {},
+    secondaryButtonAction = noop,
     secondaryButtonLabel = 'Cancel',
     submitButtonLabel = 'Save',
     submissionStatus,

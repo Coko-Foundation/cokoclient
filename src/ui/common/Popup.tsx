@@ -27,9 +27,9 @@ const PopupContainer = styled.div<PopupContainerProps>`
   background: ${cokoTheme.colorBackground};
   border: 1px solid ${cokoTheme.colorBorder};
   border-radius: 10px;
-  display: ${({ $visible }) => ($visible ? 'block' : 'none')};
+  display: ${({ $visible }): string => ($visible ? 'block' : 'none')};
 
-  ${props => {
+  ${(props): string => {
     const { $position, $alignment } = props
 
     switch (`${$position}/${$alignment}`) {
@@ -89,11 +89,10 @@ const Popup = ({
   const WrapperRef = useRef<HTMLDivElement>(null)
   const popupRef = useRef<HTMLDivElement>(null)
 
-  const [focusableElements, setFocusableElements] =
-    useState<NodeListOf<HTMLElement> | null>(null)
+  const [focusableElements, setFocusableElements] = useState<HTMLElement[]>([])
   const [visible, setVisible] = useState(false)
 
-  const onClickToggle = () => {
+  const onClickToggle = (): void => {
     setVisible(!visible)
   }
 
@@ -102,18 +101,22 @@ const Popup = ({
       // focusing the first focusable element of the popup
       focusableElements[0].focus()
     }
-  }, [visible])
+  }, [visible, focusableElements])
 
   useEffect(() => {
     if (popupRef.current) {
       const focusableContentSelector = focusableContent.join(', ')
       setFocusableElements(
-        popupRef.current.querySelectorAll(focusableContentSelector),
+        Array.from(
+          popupRef.current.querySelectorAll<HTMLElement>(
+            focusableContentSelector,
+          ),
+        ),
       )
     }
-  }, [children])
+  }, [children, focusableContent])
 
-  const handleKeyDown = (e: React.KeyboardEvent) => {
+  const handleKeyDown = (e: React.KeyboardEvent): void => {
     const isEscapePress = e.key === 'Escape'
     const isTabPressed = e.key === 'Tab'
 
@@ -140,7 +143,7 @@ const Popup = ({
     }
   }
 
-  const handleBlur = (e: React.FocusEvent) => {
+  const handleBlur = (e: React.FocusEvent): void => {
     // when clicking outside the popup wrapper close the popup
     if (!WrapperRef.current?.contains(e.relatedTarget as Node)) {
       setVisible(false)
@@ -155,6 +158,7 @@ const Popup = ({
         'aria-expanded': visible,
         'aria-haspopup': 'dialog',
       } as React.HTMLAttributes<HTMLElement>)}
+
       <PopupContainer
         $alignment={alignment}
         $position={position}

@@ -1,5 +1,5 @@
-import { css, CSSObject, Interpolation, RuleSet } from 'styled-components'
-import { th } from './themeHelper'
+import { css, CSSObject, Interpolation } from 'styled-components'
+import { th, type ThemeValue } from './themeHelper'
 
 type ThemeGetter = (props: {
   theme: Record<string, unknown>
@@ -15,7 +15,7 @@ type MediaSizes = {
 type MediaFunction = (
   first: CSSObject | TemplateStringsArray,
   ...rest: Interpolation<object>[]
-) => RuleSet
+) => ThemeValue
 
 type Media = {
   [K in keyof MediaSizes]: MediaFunction
@@ -33,7 +33,7 @@ const media = (Object.keys(sizes) as Array<keyof MediaSizes>).reduce(
     acc[label] = (
       first: CSSObject | TemplateStringsArray,
       ...rest: Interpolation<object>[]
-    ) => css`
+    ): ThemeValue => css`
       @media (min-width: ${sizes[label]}px) {
         ${css(first as TemplateStringsArray, ...rest)};
       }

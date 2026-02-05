@@ -13,10 +13,10 @@ declare global {
   }
 }
 
-const removeTrailingSlashes = (url: string) => url.replace(/\/+$/, '')
+const removeTrailingSlashes = (url: string): string => url.replace(/\/+$/, '')
 
-const sanitizeUrl = (url?: string) => {
-  if (!url) return
+const sanitizeUrl = (url?: string): string | null => {
+  if (!url) return null
   return removeTrailingSlashes(url)
 }
 

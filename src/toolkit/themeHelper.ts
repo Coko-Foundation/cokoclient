@@ -2,8 +2,8 @@ import { DefaultTheme, Interpolation } from 'styled-components'
 
 import { get } from './funcs'
 
-type ThemedProps = { theme: DefaultTheme }
-type ThemeValue = Interpolation<object>
+type StyledProps = { theme: DefaultTheme }
+export type ThemeValue = Interpolation<object>
 
 /**
  * Returns multiples of gridUnit.
@@ -16,7 +16,7 @@ type ThemeValue = Interpolation<object>
  */
 const grid =
   (value: number) =>
-  (props: ThemedProps): string =>
+  (props: StyledProps): string =>
     `calc(${props.theme.gridUnit} * ${value})`
 
 /**
@@ -32,7 +32,7 @@ const grid =
  */
 const th =
   (name: string) =>
-  (props: ThemedProps): ThemeValue =>
+  (props: StyledProps): ThemeValue =>
     get(props.theme, name) as ThemeValue
 
 /**

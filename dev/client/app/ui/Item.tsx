@@ -1,10 +1,12 @@
 import { ReactNode } from 'react'
 import styled from 'styled-components'
 
+import { type ThemeValue } from '../../../../src'
+
 const StyledItem = styled.div`
-  border: 1px solid ${(props): string | undefined => props.theme.colorBorder};
+  border: 1px solid ${(props): ThemeValue => props.theme.colorBorder};
   border-radius: 5px;
-  color: ${(props): string | undefined => props.theme.colorText};
+  color: ${(props): ThemeValue => props.theme.colorText};
   margin: 5px 25px;
   padding: 10px;
 `

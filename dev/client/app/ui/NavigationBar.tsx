@@ -2,9 +2,10 @@ import { ReactNode } from 'react'
 import styled from 'styled-components'
 
 import Button from './common/Button'
+import { type ThemeValue } from '../../../../src'
 
 const StyledNavigationBar = styled.div`
-  background: ${(props): string | undefined => props.theme.colorPrimary};
+  background: ${(props): ThemeValue => props.theme.colorPrimary};
   color: white;
   display: flex;
   height: 50px;

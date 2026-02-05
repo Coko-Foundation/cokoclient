@@ -1,4 +1,4 @@
-import React, { ReactNode, useEffect, useState } from 'react'
+import React, { useState } from 'react'
 import styled from 'styled-components'
 import { Table as AntTable, TablePaginationConfig } from 'antd'
 import {
@@ -91,9 +91,10 @@ const StyledMenuOutlined = styled(MenuOutlined)`
 `
 
 const SortableRow = (props: Readonly<RowProps>): React.ReactNode => {
-  const { attributes, listeners, setNodeRef, transform, isDragging } = useSortable({
-    id: props['data-row-key'],
-  })
+  const { attributes, listeners, setNodeRef, transform, isDragging } =
+    useSortable({
+      id: props['data-row-key'],
+    })
 
   const shouldAnimate = !isDragging && transform !== null
 
@@ -102,10 +103,25 @@ const SortableRow = (props: Readonly<RowProps>): React.ReactNode => {
     transform: CSS.Translate.toString(transform),
     transition: shouldAnimate ? 'transform 200ms ease' : undefined,
     cursor: isDragging ? 'grabbing' : 'grab',
-    ...(isDragging ? { position: 'relative', zIndex: 9999, opacity: 0.8, background: 'white' } : {}),
+    ...(isDragging
+      ? {
+          position: 'relative',
+          zIndex: 9999,
+          opacity: 0.8,
+          background: 'white',
+        }
+      : {}),
   }
 
-  return <tr {...props} ref={setNodeRef} style={style} {...attributes} {...listeners} />
+  return (
+    <tr
+      {...props}
+      ref={setNodeRef}
+      style={style}
+      {...attributes}
+      {...listeners}
+    />
+  )
 }
 
 const RegularRow = (props: Readonly<RowProps>): React.ReactNode => {
@@ -127,11 +143,8 @@ const ReviewerTable = (props: ReviewerTableProps): React.ReactNode => {
     showEmails = false,
   } = props
 
-  const [tableSorter, setTableSorter] = useState<TableSorter>({})
-
-  useEffect(() => {
-    setTableSorter(manualSorting ? {} : tableSorter)
-  }, [manualSorting, tableSorter])
+  const [internalSorter, setInternalSorter] = useState<TableSorter>({})
+  const tableSorter = manualSorting ? {} : internalSorter
 
   const sensors = useSensors(
     useSensor(PointerSensor, {
@@ -165,7 +178,7 @@ const ReviewerTable = (props: ReviewerTableProps): React.ReactNode => {
   ): void => {
     onChange(extra.currentDataSource)
     const singleSorter = Array.isArray(sorter) ? sorter[0] : sorter
-    setTableSorter(manualSorting ? {} : singleSorter)
+    setInternalSorter(manualSorting ? {} : singleSorter)
   }
 
   const columns = [
@@ -174,7 +187,7 @@ const ReviewerTable = (props: ReviewerTableProps): React.ReactNode => {
           {
             key: 'sort',
             width: 40,
-            render: () => <StyledMenuOutlined />,
+            render: (): React.ReactNode => <StyledMenuOutlined />,
           },
         ]
       : []),
@@ -182,7 +195,7 @@ const ReviewerTable = (props: ReviewerTableProps): React.ReactNode => {
       title: 'Name',
       dataIndex: 'displayName',
       key: 'displayName',
-      sorter: (a: Reviewer, b: Reviewer) =>
+      sorter: (a: Reviewer, b: Reviewer): number =>
         a.displayName.toLowerCase().localeCompare(b.displayName.toLowerCase()),
       sortDirections: ['ascend', 'descend'] as SortOrder[],
     },
@@ -190,7 +203,7 @@ const ReviewerTable = (props: ReviewerTableProps): React.ReactNode => {
       title: '',
       dataIndex: 'inviteStatus',
       key: 'inviteStatus',
-      render: (_text: unknown, rowData: Reviewer) => (
+      render: (_text: unknown, rowData: Reviewer): React.ReactNode => (
         <InviteRowProp className={className} data={rowData} type="status" />
       ),
     },
@@ -200,8 +213,10 @@ const ReviewerTable = (props: ReviewerTableProps): React.ReactNode => {
             title: 'Email',
             dataIndex: 'email',
             key: 'email',
-            sorter: (a: Reviewer, b: Reviewer) =>
-              (a.email ?? '').toLowerCase().localeCompare((b.email ?? '').toLowerCase()),
+            sorter: (a: Reviewer, b: Reviewer): number =>
+              (a.email ?? '')
+                .toLowerCase()
+                .localeCompare((b.email ?? '').toLowerCase()),
             sortDirections: ['ascend', 'descend'] as SortOrder[],
           },
         ]
@@ -211,7 +226,7 @@ const ReviewerTable = (props: ReviewerTableProps): React.ReactNode => {
       title: '',
       dataIndex: 'inviteAction',
       key: 'inviteAction',
-      render: (_text: unknown, rowData: Reviewer) => (
+      render: (_text: unknown, rowData: Reviewer): React.ReactNode => (
         <InviteRowProp
           canInvite={canInviteMore}
           className={className}
@@ -227,7 +242,7 @@ const ReviewerTable = (props: ReviewerTableProps): React.ReactNode => {
       title: '',
       dataIndex: 'removeRow',
       key: 'removeRow',
-      render: (_text: unknown, rowData: Reviewer) => (
+      render: (_text: unknown, rowData: Reviewer): React.ReactNode => (
         <InviteRowProp
           canDismissReviewer={canDismissReviewer}
           canInvite={canInviteMore}
@@ -251,7 +266,9 @@ const ReviewerTable = (props: ReviewerTableProps): React.ReactNode => {
     return {
       ...col,
       sortOrder:
-        tableSorter.columnKey === colWithKey.key ? tableSorter.order : undefined,
+        tableSorter.columnKey === colWithKey.key
+          ? tableSorter.order
+          : undefined,
     }
   })
 
@@ -261,7 +278,11 @@ const ReviewerTable = (props: ReviewerTableProps): React.ReactNode => {
   const tableContent = (
     <StyledTable
       columns={columns}
-      components={manualSorting ? { body: { row: SortableRow } } : { body: { row: RegularRow } }}
+      components={
+        manualSorting
+          ? { body: { row: SortableRow } }
+          : { body: { row: RegularRow } }
+      }
       dataSource={rows}
       key={`manual-sorting-${manualSorting}`}
       onChange={handleChange}
@@ -274,9 +295,9 @@ const ReviewerTable = (props: ReviewerTableProps): React.ReactNode => {
     <Wrapper className={className}>
       {manualSorting ? (
         <DndContext
-          sensors={sensors}
           collisionDetection={closestCenter}
           onDragEnd={handleDragEnd}
+          sensors={sensors}
         >
           <SortableContext
             items={sortableIds}

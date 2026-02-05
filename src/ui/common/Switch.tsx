@@ -1,8 +1,8 @@
 import React, { ComponentProps } from 'react'
-import styled, { css, RuleSet } from 'styled-components'
+import styled, { css } from 'styled-components'
 import { Switch as AntSwitch } from 'antd'
 
-import { grid } from '../../toolkit'
+import { grid, type ThemeValue } from '../../toolkit'
 
 type LabelPosition = 'left' | 'right'
 
@@ -15,13 +15,13 @@ type SwitchProps = ComponentProps<typeof AntSwitch> & {
 const Wrapper = styled.span``
 
 const Label = styled.span<{ $labelPosition: LabelPosition }>`
-  ${(props): RuleSet | false =>
+  ${(props): ThemeValue =>
     props.$labelPosition === 'left' &&
     css`
       margin-right: ${grid(2)};
     `}
 
-  ${(props): RuleSet | false =>
+  ${(props): ThemeValue =>
     props.$labelPosition === 'right' &&
     css`
       margin-left: ${grid(2)};

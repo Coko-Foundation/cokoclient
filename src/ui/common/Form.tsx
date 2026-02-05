@@ -1,10 +1,9 @@
 import React, { ComponentProps, ComponentType, useState } from 'react'
 import styled from 'styled-components'
-import { debounce } from '../../toolkit/funcs'
-
 import { Form as AntForm, FormInstance } from 'antd'
 
 import { grid, th } from '../../toolkit'
+import { debounce, noop } from '../../toolkit/funcs'
 import UIRibbon from './Ribbon'
 
 type FormItemProps = ComponentProps<typeof AntForm.Item> & {
@@ -54,7 +53,7 @@ const FormItem = (props: FormItemProps): React.ReactNode => {
   const defaultTrigger = !lostFocusOnce ? 'onBlur' : 'onChange'
   const trigger = useDefaultTrigger ? defaultTrigger : validateTrigger
 
-  const handleBlur = () => {
+  const handleBlur = (): void => {
     if (useDefaultTrigger && !lostFocusOnce) setLostFocusOnce(true)
     onBlur?.()
   }
@@ -77,7 +76,7 @@ const Form = (props: FormProps): React.ReactNode => {
     form: propsForm,
     onAutoSave = null,
     onValuesChange,
-    onFinishFailed = () => {},
+    onFinishFailed = noop,
     ribbonMessage = null,
     ribbonPosition = 'top',
     submissionStatus = null,
@@ -97,7 +96,7 @@ const Form = (props: FormProps): React.ReactNode => {
   const handleValuesChange = (
     changedValues: Record<string, unknown>,
     allValues: Record<string, unknown>,
-  ) => {
+  ): void => {
     if (autoSave && onAutoSave) runAutoSave()
     onValuesChange?.(changedValues, allValues)
   }
@@ -113,7 +112,7 @@ const Form = (props: FormProps): React.ReactNode => {
   )
 
   // if form validation fails, scroll to first error field (if applicable) and focus
-  const focusErrorField = (errorFields: ErrorField[]) => {
+  const focusErrorField = (errorFields: ErrorField[]): void => {
     let firstErrorField: HTMLElement | null = document.getElementById(
       errorFields[0].name.join('_'),
     )
@@ -173,7 +172,7 @@ const Form = (props: FormProps): React.ReactNode => {
     })
   }
 
-  const handleFinishFailed = (data: { errorFields: ErrorField[] }) => {
+  const handleFinishFailed = (data: { errorFields: ErrorField[] }): void => {
     if (scrollErrorIntoView) {
       const { errorFields } = data
       focusErrorField(errorFields)

@@ -2,7 +2,16 @@ import React, { useEffect, useRef, useState } from 'react'
 import { CaretRightOutlined, CaretLeftOutlined } from '@ant-design/icons'
 import { Pagination } from '../../../src/ui'
 
-export const Base = () => <Pagination pagination={{ total: 31 }} />
+export const Base = () => {
+  const [currentPage, setCurrentPage] = useState(1)
+
+  return (
+    <Pagination
+      onChange={setCurrentPage}
+      pagination={{ total: 31, current: currentPage }}
+    />
+  )
+}
 
 export const ControlPage = () => {
   const [currentPage, setCurrentPage] = useState(1)
@@ -23,6 +32,9 @@ export const ControlPage = () => {
 }
 
 export const CustomRender = () => {
+  const [currentPage, setCurrentPage] = useState(1)
+  const paginationRef = useRef(null)
+
   const paginationLinkClick = e => {
     e.preventDefault()
   }
@@ -69,8 +81,6 @@ export const CustomRender = () => {
     )
   }
 
-  const paginationRef = useRef(null)
-
   useEffect(() => {
     if (paginationRef.current) {
       paginationRef.current
@@ -106,11 +116,15 @@ export const CustomRender = () => {
           }
         })
     }
-  }, [paginationRef.current])
+  }, [currentPage])
 
   return (
     <>
-      <Pagination pagination={{ total: 31, itemRender }} ref={paginationRef} />
+      <Pagination
+        onChange={setCurrentPage}
+        pagination={{ total: 31, current: currentPage, itemRender }}
+        ref={paginationRef}
+      />
       <br />
       <aside>
         <p>

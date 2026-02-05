@@ -1,7 +1,7 @@
 import { ComponentType, ReactNode } from 'react'
 import styled, { createGlobalStyle, css } from 'styled-components'
 
-import { fadeIn, grid, th } from '../toolkit'
+import { fadeIn, grid, th, type ThemeValue } from '../toolkit'
 
 const GlobalStyle = createGlobalStyle`
   html {
@@ -44,11 +44,11 @@ const Page = styled.div<PageProps>`
   overflow-y: auto;
 
   /* stylelint-disable-next-line order/properties-alphabetical-order */
-  ${props => props.$padPages && padPage}
+  ${(props): ThemeValue => props.$padPages && padPage}
 
   /* stylelint-disable-next-line no-descending-specificity */
   > div {
-    ${props => props.$fadeInPages && fadeInPage}
+    ${(props): ThemeValue => props.$fadeInPages && fadeInPage}
   }
 `
 

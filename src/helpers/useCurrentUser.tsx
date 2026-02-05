@@ -74,13 +74,13 @@ const USER_UPDATED_SUBSCRIPTION = gql`
 `
 
 type CurrentUserQueryContextType = {
-  currentUserQuery: DocumentNode | null
+  currentUserQuery: DocumentNode | undefined
   onLogout: () => void
 }
 
 export const CurrentUserQueryContext =
   createContext<CurrentUserQueryContextType>({
-    currentUserQuery: null,
+    currentUserQuery: undefined,
     onLogout: () => {},
   })
 

@@ -18,7 +18,7 @@ type ChatMessageListProps = {
   messages: ChatItem[]
 }
 
-const ChatMessageList = (props: ChatMessageListProps) => {
+const ChatMessageList = (props: ChatMessageListProps): React.ReactNode => {
   const { className, messages = [] } = props
 
   return (

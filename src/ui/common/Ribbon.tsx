@@ -1,7 +1,7 @@
 import React from 'react'
-import styled, { css, RuleSet } from 'styled-components'
+import styled, { css } from 'styled-components'
 
-import { grid, override } from '../../toolkit'
+import { grid, override, type ThemeValue } from '../../toolkit'
 
 type Status = 'success' | 'error' | 'danger'
 
@@ -10,6 +10,7 @@ type RibbonProps = {
   children?: React.ReactNode
   hide?: boolean
   status?: Status | null
+  role?: string
 }
 
 type WrapperProps = {
@@ -18,15 +19,15 @@ type WrapperProps = {
 }
 
 const Wrapper = styled.div<WrapperProps>`
-  background: ${props => {
+  background: ${(props): ThemeValue => {
     const { $status } = props
     if ($status === 'success') return props.theme.colorSuccess
     if ($status === 'error' || $status === 'danger')
       return props.theme.colorError
     return props.theme.colorSecondary
   }};
-  border-radius: ${props => props.theme.borderRadius};
-  color: ${props => {
+  border-radius: ${(props): ThemeValue => props.theme.borderRadius};
+  color: ${(props): ThemeValue => {
     const { $status } = props
     if ($status === 'success' || $status === 'error' || $status === 'danger')
       return props.theme.colorTextReverse
@@ -36,7 +37,7 @@ const Wrapper = styled.div<WrapperProps>`
   text-align: center;
 
   /* stylelint-disable-next-line order/properties-alphabetical-order */
-  ${(props): RuleSet | false =>
+  ${(props): ThemeValue =>
     props.$hide &&
     css`
       visibility: hidden;

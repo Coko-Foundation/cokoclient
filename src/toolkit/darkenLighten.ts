@@ -43,8 +43,10 @@ const darkenLighten = (
   let converted
 
   try {
+    /* eslint-disable-next-line new-cap */
     converted = Color(color)
   } catch (_) {
+    /* eslint-disable-next-line new-cap */
     converted = Color('black')
   }
 

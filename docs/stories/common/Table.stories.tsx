@@ -1,13 +1,20 @@
 /* eslint-disable no-console */
 
-import React, { useState } from 'react'
+import { ReactNode, useState } from 'react'
 import { faker } from '@faker-js/faker'
 
 import { Table } from '../../../src/ui'
 import { createData, randomPick } from '../_helpers'
 
-const makeData = n =>
-  createData(n, i => ({
+type Datum = {
+  age: number
+  key: number
+  name: string
+  gender: 'Male' | 'Female'
+}
+
+const makeData = (n: number): Datum[] =>
+  createData(n, (i: number) => ({
     age: faker.number.int({ min: 25, max: 55 }),
     key: i,
     name: faker.person.fullName(),
@@ -34,7 +41,7 @@ const columns = [
 
 const data = makeData(8)
 
-export const Base = args => (
+export const Base = (): ReactNode => (
   <Table
     columns={columns}
     dataSource={data}
@@ -47,15 +54,14 @@ export const Base = args => (
         )
       },
     }}
-    {...args}
   />
 )
 
-export const WithoutCheckboxes = () => (
+export const WithoutCheckboxes = (): ReactNode => (
   <Table columns={columns} dataSource={data} pagination={false} />
 )
 
-export const Interactive = () => {
+export const Interactive = (): ReactNode => {
   const TOTAL = 18
   const INITIAL_PAGE = 1
   const PAGE_SIZE = 10
@@ -65,7 +71,7 @@ export const Interactive = () => {
   const [loading, setLoading] = useState(false)
   const [searchLoading, setSearchLoading] = useState(false)
 
-  const handlePageChange = pageNumber => {
+  const handlePageChange = (pageNumber: number): void => {
     console.log(pageNumber)
 
     setLoading(true)
@@ -83,7 +89,7 @@ export const Interactive = () => {
     }, 1000)
   }
 
-  const handleSearch = () => {
+  const handleSearch = (): void => {
     setLoading(true)
     setSearchLoading(true)
 
@@ -95,7 +101,10 @@ export const Interactive = () => {
     }, 1000)
   }
 
-  const handleSelectionChange = (selectedRowKeys, selectedRows) => {
+  const handleSelectionChange = (
+    selectedRowKeys: string[],
+    selectedRows: unknown[],
+  ): void => {
     console.log(
       `selectedRowKeys: ${selectedRowKeys}`,
       `selectedRows: ${selectedRows}`,

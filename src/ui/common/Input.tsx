@@ -31,7 +31,7 @@ const StyledPassword = styled(AntInput.Password)`
 
   :has(input:focus) {
     box-shadow: 0 0 2px ${th('colorPrimary')};
-    outline: ${props => `${props.theme.lineWidth * 4}`}px solid
+    outline: ${(props): string => `${props.theme.lineWidth * 4}`}px solid
       ${th('colorPrimaryBorder')};
     outline-offset: 1px;
   }
@@ -46,11 +46,11 @@ const Input = (props: InputProps): React.ReactNode => {
     ...rest
   } = props
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) =>
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>): void =>
     onChange?.(e.target.value)
 
   // wrap "eye" icon for show/hide password with a button to make it keyboard-focusable
-  const defaultPasswordIconRender = (visible: boolean) => (
+  const defaultPasswordIconRender = (visible: boolean): React.ReactNode => (
     <NoStyleButton
       aria-checked={visible}
       aria-label={visible ? 'Hide password' : 'Show password'}

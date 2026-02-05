@@ -1,29 +1,28 @@
-/* eslint-disable react/jsx-props-no-spreading */
-
 import React, { useState } from 'react'
 import { faker } from '@faker-js/faker'
 
 import { Signup } from '../../../src/ui'
+import { noop } from '../../../src/toolkit/funcs'
 import { Background } from '../_helpers'
 
-export const Base = args => (
+export const Base = (): React.ReactNode => (
   <Background>
-    <Signup {...args} />
+    <Signup
+      errorMessage={faker.lorem.sentence()}
+      onSubmit={noop}
+      termsAndConditionsContent={faker.lorem.sentences(5)}
+      userEmail={faker.internet.email()}
+    />
   </Background>
 )
 
-Base.args = {
-  onSubmit: () => {},
-  errorMessage: faker.lorem.sentence(),
-  termsAndConditionsContent: faker.lorem.sentences(5),
-  userEmail: faker.internet.email(),
-}
+Base.args = {}
 
-export const FailingSignup = () => {
+export const FailingSignup = (): React.ReactNode => {
   const [hasError, setHasError] = useState(false)
   const [loading, setLoading] = useState(false)
 
-  const handleSubmit = () => {
+  const handleSubmit = (): void => {
     setHasError(false)
     setLoading(true)
 
@@ -45,11 +44,11 @@ export const FailingSignup = () => {
   )
 }
 
-export const SuccessfulSignup = () => {
+export const SuccessfulSignup = (): React.ReactNode => {
   const [hasSuccess, setHasSuccess] = useState(false)
   const [loading, setLoading] = useState(false)
 
-  const handleSubmit = () => {
+  const handleSubmit = (): void => {
     setHasSuccess(false)
     setLoading(true)
 
@@ -71,7 +70,7 @@ export const SuccessfulSignup = () => {
   )
 }
 
-export const SuccessScreen = () => {
+export const SuccessScreen = (): React.ReactNode => {
   return (
     <Background>
       <Signup

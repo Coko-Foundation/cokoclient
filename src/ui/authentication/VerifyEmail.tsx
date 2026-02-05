@@ -32,10 +32,11 @@ const VerifyEmail = (props: VerifyEmailProps): React.ReactNode => {
     redirectDelay = 3000,
   } = props
 
-  const redirect = () =>
+  const redirect = (): void => {
     setTimeout(() => {
       redirectToLogin()
     }, redirectDelay)
+  }
 
   if (verifying)
     return (
