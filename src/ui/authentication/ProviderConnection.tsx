@@ -16,9 +16,7 @@ type ResultProps = ComponentProps<typeof Result>
 
 const Wrapper = styled.div``
 
-const ProviderConnection = (
-  props: ProviderConnectionProps,
-): ReactNode => {
+const ProviderConnection = (props: ProviderConnectionProps): ReactNode => {
   const {
     className,
     closeOnSuccess = false,

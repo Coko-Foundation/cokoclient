@@ -11,7 +11,6 @@ export const Base = (): React.ReactNode => (
       errorMessage={faker.lorem.sentence()}
       onSubmit={noop}
       termsAndConditionsContent={faker.lorem.sentences(5)}
-      userEmail={faker.internet.email()}
     />
   </Background>
 )
@@ -64,7 +63,6 @@ export const SuccessfulSignup = (): React.ReactNode => {
         hasSuccess={hasSuccess}
         loading={loading}
         onSubmit={handleSubmit}
-        userEmail={faker.internet.email()}
       />
     </Background>
   )
@@ -73,11 +71,7 @@ export const SuccessfulSignup = (): React.ReactNode => {
 export const SuccessScreen = (): React.ReactNode => {
   return (
     <Background>
-      <Signup
-        hasSuccess
-        onSubmit={() => {}}
-        userEmail={faker.internet.email()}
-      />
+      <Signup hasSuccess onSubmit={() => {}} />
     </Background>
   )
 }

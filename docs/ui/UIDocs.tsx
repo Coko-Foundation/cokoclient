@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { ReactNode } from 'react'
 import styled from 'styled-components'
 import { CodeSandboxOutlined } from '@ant-design/icons'
 
@@ -9,6 +9,7 @@ import { Collapse } from '../../src/ui/common'
 
 import ComponentStories from './ComponentStories'
 
+// #region styled
 const Wrapper = styled.div`
   margin-top: 60px;
   height: calc(100vh - 60px);
@@ -72,48 +73,70 @@ const DisplayArea = styled.div`
   padding: ${grid(10)};
   overflow-y: auto;
 `
+// #endregion
 
-const modules = import.meta.glob('../stories/**/*.stories.tsx', {
-  eager: true,
-})
+type StoriesModule = Record<string, any>
 
-const rawFiles = import.meta.glob('../stories/**/*.stories.tsx', {
-  eager: true,
-  query: '?raw',
-})
+const modules: Record<string, StoriesModule> = import.meta.glob(
+  '../stories/**/*.stories.tsx',
+  {
+    eager: true,
+  },
+)
 
-function structureStories(pathArray) {
-  const grouped = pathArray.reduce((acc, path) => {
-    const parts = path.split('/')
-    const sectionName = parts[parts.length - 2]
-    const fileName = parts[parts.length - 1]
-    const name = fileName.split('.')[0]
-    const module = modules[path]
-    const exports = Object.keys(module).map(p => module[p])
+const rawFiles: Record<string, { default: string }> = import.meta.glob(
+  '../stories/**/*.stories.tsx',
+  {
+    eager: true,
+    query: '?raw',
+  },
+)
 
-    const rawContent = rawFiles[path].default
-    const codeWithoutComments = rawContent.replace(
-      /\/\*[\s\S]*?\*\/|([^\\:]|^)\/\/.*$/gm,
-      '$1',
-    )
-    const exportRegex = /export const (\w+)/g
-    const orderInFile = [...codeWithoutComments.matchAll(exportRegex)].map(
-      match => match[1],
-    )
+type FileEntry = {
+  name: string
+  path: string
+  exports: any[]
+}
 
-    const orderedExports = orderInFile
-      .filter(name => name !== 'default' && module[name]) // Ensure it actually exists
-      .map(name => module[name])
+type Section = {
+  sectionName: string
+  entries: FileEntry[]
+}
 
-    if (!acc[sectionName]) {
-      acc[sectionName] = []
-    }
+function structureStories(pathArray: string[]): Section[] {
+  const grouped: Record<string, FileEntry[]> = pathArray.reduce(
+    (acc, path) => {
+      const parts = path.split('/')
+      const sectionName = parts[parts.length - 2]
+      const fileName = parts[parts.length - 1]
+      const name = fileName.split('.')[0]
+      const module = modules[path]
 
-    acc[sectionName].push({ name, path, exports: orderedExports })
-    return acc
-  }, {})
+      const rawContent = rawFiles[path].default
+      const codeWithoutComments = rawContent.replace(
+        /\/\*[\s\S]*?\*\/|([^\\:]|^)\/\/.*$/gm,
+        '$1',
+      )
+      const exportRegex = /export const (\w+)/g
+      const orderInFile = [...codeWithoutComments.matchAll(exportRegex)].map(
+        match => match[1],
+      )
 
-  const res = Object.keys(grouped).map(section => ({
+      const orderedExports = orderInFile
+        .filter(exportName => exportName !== 'default' && module[exportName]) // Ensure it actually exists
+        .map(exportName => module[exportName])
+
+      if (!acc[sectionName]) {
+        acc[sectionName] = []
+      }
+
+      acc[sectionName].push({ name, path, exports: orderedExports })
+      return acc
+    },
+    {} as Record<string, FileEntry[]>,
+  )
+
+  const res: Section[] = Object.keys(grouped).map(section => ({
     sectionName: section,
     entries: grouped[section],
   }))
@@ -123,7 +146,7 @@ function structureStories(pathArray) {
 
 const structured = structureStories(Object.keys(modules))
 
-const Root = () => {
+const Root = (): ReactNode => {
   const firstComponent = structured[0].entries[0]
   const [currentPath, setCurrentPath] = React.useState(firstComponent)
   const mappedAntTheme = makeTheme(theme)
@@ -150,12 +173,12 @@ const Root = () => {
     <Wrapper>
       <Sidebar>
         <Collapse
-          items={collapseItems}
-          ghost
-          expandIconPlacement="end"
           defaultActiveKey={
-            collapseItems.find(section => section.label === 'common').key
+            collapseItems.find(section => section.label === 'common')?.key
           }
+          expandIconPlacement="end"
+          ghost
+          items={collapseItems}
         />
       </Sidebar>
 

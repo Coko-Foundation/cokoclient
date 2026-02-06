@@ -53,7 +53,7 @@ export const Multi = (): ReactNode => (
 
 export const Async = (): ReactNode => {
   const [loading, setLoading] = useState(false)
-  const [optionsData, setOptionsData] = useState([])
+  const [optionsData, setOptionsData] = useState<Option[]>([])
 
   const handleSearch = (): void => {
     setLoading(true)

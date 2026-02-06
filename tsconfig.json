@@ -1,8 +1,8 @@
 {
   "compilerOptions": {
     "target": "esnext",
-    "module": "nodenext",
-    "moduleResolution": "nodenext",
+    "module": "esnext",
+    "moduleResolution": "bundler",
     "jsx": "react-jsx",
     "strict": true,
     "esModuleInterop": true,
@@ -15,7 +15,12 @@
     "paths": {
       "ui/*": ["src/ui/*"],
       "pages/*": ["src/pages/*"]
-    }
+    },
+    "types": ["vite/client"],
+
+    // 👇 add these for Inversify
+    "experimentalDecorators": true,
+    "emitDecoratorMetadata": true
   },
   "include": [
     "src/**/*.ts",

@@ -1,4 +1,4 @@
-import React from 'react'
+import { ReactNode } from 'react'
 import styled from 'styled-components'
 import cokoTheme from '../../../src/theme'
 import { Button, Input, Popup } from '../../../src/ui'
@@ -27,10 +27,10 @@ const PopupWrapper = styled.div`
   width: 100%;
 `
 
-export const Base = args => {
+export const Base = (): ReactNode => {
   return (
     <PopupWrapper>
-      <Popup {...args} toggle={<Button>Toggle</Button>}>
+      <Popup toggle={<Button>Toggle</Button>}>
         <HeadingText>ADD</HeadingText>
         <InputWrapper>
           <Input placeholder="Question Type" />

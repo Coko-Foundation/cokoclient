@@ -19,9 +19,7 @@ const Label = styled.span`
   text-transform: uppercase;
 `
 
-const SuggestedReviewer = (
-  props: SuggestedReviewerProps,
-): React.ReactNode => {
+const SuggestedReviewer = (props: SuggestedReviewerProps): React.ReactNode => {
   const { className, name } = props
 
   return (

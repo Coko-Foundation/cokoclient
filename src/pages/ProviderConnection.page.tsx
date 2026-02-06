@@ -13,7 +13,9 @@ type ProviderConnectionPageProps = {
   redirectUrlLabel?: string
 }
 
-const ProviderConnectionPage = (props: ProviderConnectionPageProps): ReactNode => {
+const ProviderConnectionPage = (
+  props: ProviderConnectionPageProps,
+): ReactNode => {
   const {
     closeOnSuccess = false,
     delayOnSuccess = 1000,

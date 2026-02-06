@@ -4,6 +4,10 @@ import { useQuery } from '@apollo/client/react'
 
 import Root from '../ui/Root'
 
+type RootDataResponse = {
+  getRootData: string[]
+}
+
 const ROOT_DATA = gql`
   query RootData {
     getRootData
@@ -11,13 +15,13 @@ const ROOT_DATA = gql`
 `
 
 const RootPage = (): ReactNode => {
-  const { data, loading, error } = useQuery(ROOT_DATA)
+  const { data, loading, error } = useQuery<RootDataResponse>(ROOT_DATA)
 
   if (error) {
-    throw new Error(error)
+    throw error
   }
 
-  return <Root data={data && data.getRootData} loading={loading} />
+  return <Root data={data?.getRootData ?? []} loading={loading} />
 }
 
 export default RootPage

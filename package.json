@@ -11,6 +11,7 @@
   },
   "license": "MIT",
   "author": "Yannis Barlas",
+  "type": "module",
   "main": "dist",
   "bin": {
     "coko-client-build": "./scripts/coko-client-build.mjs",

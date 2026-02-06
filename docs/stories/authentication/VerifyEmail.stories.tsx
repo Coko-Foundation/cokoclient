@@ -1,21 +1,37 @@
 /* eslint-disable no-console */
 
-import React from 'react'
+import { ReactNode } from 'react'
 
+import { noop } from '../../../src/toolkit/funcs'
 import { VerifyEmail } from '../../../src/ui'
 
-const resend = () => console.log('resend')
-const redirect = () => console.log('redirect')
+const resend = (): void => console.log('resend')
+const redirect = (): void => console.log('redirect')
 
-export const Base = args => <VerifyEmail verifying />
-export const Success = args => (
-  <VerifyEmail redirectToLogin={redirect} successfullyVerified />
+export const Base = (): ReactNode => (
+  <VerifyEmail redirectToLogin={noop} resend={noop} verifying />
 )
-export const AlreadyVerified = args => (
-  <VerifyEmail alreadyVerified redirectToLogin={redirect} />
-)
-export const Expired = args => <VerifyEmail expired resend={resend} />
-export const Resending = args => <VerifyEmail resending />
-export const Resent = args => <VerifyEmail resent />
-export const Error = args => <VerifyEmail />
 
+export const Success = (): ReactNode => (
+  <VerifyEmail redirectToLogin={redirect} resend={noop} successfullyVerified />
+)
+
+export const AlreadyVerified = (): ReactNode => (
+  <VerifyEmail alreadyVerified redirectToLogin={redirect} resend={noop} />
+)
+
+export const Expired = (): ReactNode => (
+  <VerifyEmail expired redirectToLogin={noop} resend={resend} />
+)
+
+export const Resending = (): ReactNode => (
+  <VerifyEmail redirectToLogin={noop} resend={noop} resending />
+)
+
+export const Resent = (): ReactNode => (
+  <VerifyEmail redirectToLogin={noop} resend={noop} resent />
+)
+
+export const Error = (): ReactNode => (
+  <VerifyEmail redirectToLogin={noop} resend={noop} />
+)

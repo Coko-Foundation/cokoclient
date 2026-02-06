@@ -52,8 +52,8 @@ export const AntModalHooks = (): ReactNode => {
       content: <p>There was an error while performing the action</p>,
       footer: [
         <ModalFooter key="footer">
-          <Button onClick={() => modal.info().destroy()}>Nevermind</Button>{' '}
-          <Button onClick={() => modal.error().destroy()} type="primary">
+          <Button onClick={() => modal.info({}).destroy()}>Nevermind</Button>{' '}
+          <Button onClick={() => modal.error({}).destroy()} type="primary">
             Try again
           </Button>{' '}
         </ModalFooter>,

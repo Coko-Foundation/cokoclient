@@ -9,8 +9,8 @@ export const Base = (): ReactNode => {
   const [loading, setLoading] = useState(false)
   const [message, setMessage] = useState('')
   const [submissionStatus, setSubmissionStatus] = useState<
-  'success' | 'error' | 'danger' | undefined
->()
+    'success' | 'error' | 'danger' | undefined
+  >()
 
   const [error, setError] = useState(false)
 

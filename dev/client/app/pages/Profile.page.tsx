@@ -22,7 +22,7 @@ const ProfilePage = (): ReactNode => {
   const handleSubmit = (username: string): void => {
     updateUser({
       variables: {
-        id: currentUser.id,
+        id: currentUser?.id,
         input: {
           username,
         },

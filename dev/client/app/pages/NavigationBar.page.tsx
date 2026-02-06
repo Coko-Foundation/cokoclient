@@ -5,6 +5,12 @@ import { useMutation } from '@apollo/client/react'
 import NavigationBar from '../ui/NavigationBar'
 import { useCurrentUser } from '../../../../src'
 
+type LoginData = {
+  login: {
+    token: string | null
+  } | null
+}
+
 const LOGIN = gql`
   mutation Login {
     login(input: { username: "admin", password: "password" }) {
@@ -18,7 +24,7 @@ const LOGIN = gql`
 `
 
 const NavigationBarPage = (): ReactNode => {
-  const [login, { data, loading }] = useMutation(LOGIN)
+  const [login, { data, loading }] = useMutation<LoginData>(LOGIN)
   const { currentUser, refetch, logout } = useCurrentUser()
 
   useEffect(() => {

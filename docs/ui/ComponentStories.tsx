@@ -1,11 +1,20 @@
-import React from 'react'
+import { ReactNode } from 'react'
 import styled, { ThemeProvider } from 'styled-components'
 import { ConfigProvider as AntConfigProvider } from 'antd'
+import type { ThemeConfig } from 'antd'
 
 import { grid, th } from '../../src/toolkit'
 
-type ExportType = React.Component & {
+type ExportType = {
   name: string
+} & ((props: any) => ReactNode)
+
+type ComponentStoriesProps = {
+  module: {
+    name: string
+    exports: ExportType[]
+  }
+  theme: ThemeConfig
 }
 
 const Header = styled.h1`
@@ -25,7 +34,10 @@ const StoryName = styled.div`
   border-bottom: ${th('borderWidth')} solid ${th('colorText')};
 `
 
-const ComponentStories = ({ module, theme }) => {
+const ComponentStories = ({
+  module,
+  theme,
+}: ComponentStoriesProps): ReactNode => {
   return (
     <div>
       <Header>{module.name.replace(/([a-z])([A-Z])/g, '$1 $2')}</Header>
@@ -42,7 +54,7 @@ const ComponentStories = ({ module, theme }) => {
             </StoryName>
             <div>
               <AntConfigProvider theme={theme}>
-                <ThemeProvider theme={theme.token}>
+                <ThemeProvider theme={theme.token as any}>
                   <Export />
                 </ThemeProvider>
               </AntConfigProvider>

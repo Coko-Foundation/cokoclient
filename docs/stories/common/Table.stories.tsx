@@ -102,7 +102,7 @@ export const Interactive = (): ReactNode => {
   }
 
   const handleSelectionChange = (
-    selectedRowKeys: string[],
+    selectedRowKeys: (string | number | bigint)[],
     selectedRows: unknown[],
   ): void => {
     console.log(

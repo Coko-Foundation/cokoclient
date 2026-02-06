@@ -1,27 +1,27 @@
-import { React, useState } from 'react'
+import { ReactNode, useState } from 'react'
 
 import { ProviderConnection } from '../../../src/ui'
 
-export const Base = args => <ProviderConnection {...args} />
+export const Base = (): ReactNode => (
+  <ProviderConnection
+    closeOnSuccess={false}
+    connecting
+    redirectUrlLabel="FAKE PAGE"
+    successfullyConnected={false}
+  />
+)
 
-Base.args = {
-  closeOnSuccess: false,
-  connecting: true,
-  redirectUrlLabel: 'FAKE PAGE',
-  successfullyConnected: false,
-}
-
-export const SuccessWithClose = args => (
+export const SuccessWithClose = (): ReactNode => (
   <ProviderConnection closeOnSuccess successfullyConnected />
 )
 
-export const SuccessWithRedirect = args => (
+export const SuccessWithRedirect = (): ReactNode => (
   <ProviderConnection redirectUrlLabel="FAKE PAGE" successfullyConnected />
 )
 
-export const Error = args => <ProviderConnection />
+export const Error = (): ReactNode => <ProviderConnection />
 
-export const SuccessFlow = args => {
+export const SuccessFlow = (): ReactNode => {
   const [connecting, setConnecting] = useState(true)
   const [successfullyConnected, setSuccessfullyConnected] = useState(false)
 
@@ -39,7 +39,7 @@ export const SuccessFlow = args => {
   )
 }
 
-export const ErrorFlow = args => {
+export const ErrorFlow = (): ReactNode => {
   const [connecting, setConnecting] = useState(true)
 
   setTimeout(() => {
@@ -54,4 +54,3 @@ export const ErrorFlow = args => {
     />
   )
 }
-
