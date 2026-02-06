@@ -10,7 +10,7 @@ type FormItemProps = ComponentProps<typeof AntForm.Item> & {
   onBlur?: () => void
 }
 
-type FormProps = ComponentProps<typeof AntForm> & {
+type FormProps = Omit<ComponentProps<typeof AntForm>, 'ref' | 'autoSave'> & {
   autoSave?: boolean
   autoSaveDebounceDelay?: number
   feedbackComponent?: ComponentType<ComponentProps<typeof UIRibbon>>

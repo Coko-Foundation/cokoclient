@@ -1,10 +1,9 @@
-import React, { useState } from 'react'
-// import { lorem } from 'faker'
+import { ReactNode, useState } from 'react'
 
 import { InputNumber } from '../../../src/ui'
 
-export const Base = () => {
-  const [value, setValue] = useState(2)
+export const Base = (): ReactNode => {
+  const [value, setValue] = useState<number | string | null>(2)
 
   return (
     <InputNumber
@@ -15,6 +14,6 @@ export const Base = () => {
   )
 }
 
-export const Disabled = () => (
+export const Disabled = (): ReactNode => (
   <InputNumber disabled label="Choose a number" onChange={() => {}} value={3} />
 )

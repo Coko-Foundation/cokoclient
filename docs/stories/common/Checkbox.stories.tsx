@@ -1,13 +1,13 @@
-import React, { useState } from 'react'
+import { ReactNode, useState } from 'react'
 import { faker } from '@faker-js/faker'
 
 import { Checkbox, Form } from '../../../src/ui'
 
 const label = faker.lorem.words(4)
 
-export const Base = () => {
+export const Base = (): ReactNode => {
   const [checked, setChecked] = useState(false)
-  const handleChange = () => setChecked(!checked)
+  const handleChange = (): void => setChecked(!checked)
 
   return (
     <Checkbox checked={checked} onChange={handleChange}>
@@ -16,7 +16,7 @@ export const Base = () => {
   )
 }
 
-export const SingleCheckboxValidationInsideForm = () => {
+export const SingleCheckboxValidationInsideForm = (): ReactNode => {
   return (
     // eslint-disable-next-line no-alert
     <Form onFinish={() => alert('Checkbox validation passed')}>

@@ -1,17 +1,16 @@
-/* eslint-disable react/jsx-props-no-spreading */
-
-import React, { useState } from 'react'
+import { ReactNode, useState } from 'react'
 import styled, { css } from 'styled-components'
 import { faker } from '@faker-js/faker'
 
 import { Button, ButtonGroup, Checkbox } from '../../../src/ui'
+import { type ThemeValue } from '../../../src/toolkit/themeHelper'
 
 const btn1Text = faker.lorem.words(2)
 const btn2Text = faker.lorem.words(2)
 const btn3Text = faker.lorem.words(2)
 
-const BtnGroup = styled(ButtonGroup)`
-  ${props =>
+const BtnGroup = styled(ButtonGroup)<{ showBorder?: boolean }>`
+  ${(props): ThemeValue =>
     props.showBorder &&
     css`
       border: 2px solid firebrick;
@@ -22,7 +21,7 @@ const Check = styled(Checkbox)`
   margin-bottom: 20px;
 `
 
-export const Base = args => {
+export const Base = (args: Record<string, unknown>): ReactNode => {
   const [showBorder, setShowBorder] = useState(false)
   const [inline, setInline] = useState(false)
 
@@ -39,7 +38,7 @@ export const Base = args => {
       </Check>
 
       <div>
-        <BtnGroup showBorder={showBorder} inline={inline} {...args}>
+        <BtnGroup inline={inline} showBorder={showBorder} {...args}>
           <Button>{btn1Text}</Button>
           <Button status="success">{btn2Text}</Button>
           <Button status="danger">{btn3Text}</Button>
@@ -49,7 +48,7 @@ export const Base = args => {
   )
 }
 
-export const Inline = () => (
+export const Inline = (): ReactNode => (
   <ButtonGroup inline>
     <Button>{btn1Text}</Button>
     <Button status="success">{btn2Text}</Button>
@@ -57,7 +56,7 @@ export const Inline = () => (
   </ButtonGroup>
 )
 
-export const PullRight = () => (
+export const PullRight = (): ReactNode => (
   <ButtonGroup justify="right">
     <Button>{btn1Text}</Button>
     <Button status="success">{btn2Text}</Button>
@@ -65,7 +64,7 @@ export const PullRight = () => (
   </ButtonGroup>
 )
 
-export const Center = () => (
+export const Center = (): ReactNode => (
   <ButtonGroup justify="center">
     <Button>{btn1Text}</Button>
     <Button status="success">{btn2Text}</Button>

@@ -1,12 +1,12 @@
 /* eslint-disable no-alert */
 
-import React, { useState } from 'react'
+import React, { ReactNode, useState } from 'react'
 import { Modal, Button } from '../../../src/ui'
 
-export const Base = () => {
+export const Base = (): ReactNode => {
   const [showModal, setShowModal] = useState(false)
 
-  const handleOk = () => {
+  const handleOk = (): void => {
     alert('Clicked ok!')
     setShowModal(false)
   }
@@ -25,26 +25,28 @@ export const Base = () => {
   )
 }
 
-export const AntModalHooks = () => {
+export const AntModalHooks = (): ReactNode => {
   const ModalContext = React.createContext(null)
 
   const [modal, contextHolder] = Modal.useModal()
   const { info, confirm, error, success } = modal
   const ModalFooter = Modal.footer
 
-  const infoDialog = () =>
+  const infoDialog = (): void => {
     info({
       title: 'Info dialog',
       content: <p>Some important information</p>,
     })
+  }
 
-  const confirmationDialog = () =>
+  const confirmationDialog = (): void => {
     confirm({
       title: 'Confirmation dialog',
       content: <p>Are you sure you want to do this?</p>,
     })
+  }
 
-  const errorDialog = () => {
+  const errorDialog = (): void => {
     error({
       title: 'Error dialog',
       content: <p>There was an error while performing the action</p>,
@@ -60,11 +62,12 @@ export const AntModalHooks = () => {
     })
   }
 
-  const successDialog = () =>
+  const successDialog = (): void => {
     success({
       title: 'Success dialog',
       content: <p>Your request was successfull!</p>,
     })
+  }
 
   return (
     <ModalContext.Provider value={null}>

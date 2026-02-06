@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import { ReactNode, useState } from 'react'
 import { faker } from '@faker-js/faker'
 import styled from 'styled-components'
 
@@ -12,8 +12,8 @@ import {
   Paragraph,
 } from '../../../src/ui'
 
-export const Base = args => (
-  <Form layout="vertical" {...args}>
+export const Base = (): ReactNode => (
+  <Form layout="vertical" ribbonMessage={faker.lorem.sentence()}>
     <Form.Item
       hasFeedback
       label="Name"
@@ -80,11 +80,7 @@ export const Base = args => (
   </Form>
 )
 
-Base.args = {
-  ribbonMessage: faker.lorem.sentence(),
-}
-
-export const Failed = () => (
+export const Failed = (): ReactNode => (
   <Form
     layout="vertical"
     ribbonMessage={faker.lorem.sentence()}
@@ -105,7 +101,7 @@ export const Failed = () => (
   </Form>
 )
 
-export const Succeeded = () => (
+export const Succeeded = (): ReactNode => (
   <Form
     layout="vertical"
     ribbonMessage={faker.lorem.sentence()}
@@ -126,7 +122,7 @@ export const Succeeded = () => (
   </Form>
 )
 
-export const FailedRibbonAtTheBottom = () => (
+export const FailedRibbonAtTheBottom = (): ReactNode => (
   <Form
     layout="vertical"
     ribbonMessage={faker.lorem.sentence()}
@@ -148,12 +144,12 @@ export const FailedRibbonAtTheBottom = () => (
   </Form>
 )
 
-export const Autosave = () => {
+export const Autosave = (): ReactNode => {
   // const [form] = Form.useForm()
 
   const [saved, setSaved] = useState(false)
 
-  const handleAutoSave = vals => {
+  const handleAutoSave = (vals: unknown): void => {
     // eslint-disable-next-line no-console
     console.log('autosaving...', vals)
 
@@ -175,11 +171,7 @@ export const Autosave = () => {
 
       <Paragraph>Ribbon for demo purposes only</Paragraph>
 
-      <Form
-        autoSave
-        // form={form}
-        onAutoSave={handleAutoSave}
-      >
+      <Form autoSave onAutoSave={handleAutoSave}>
         <Form.Item label="Field" name="field">
           <Input placeholder="Say something" />
         </Form.Item>
@@ -196,7 +188,7 @@ const FormWrapper = styled.div`
   padding: 20px;
 `
 
-export const FocusVsNoFocusOnError = () => {
+export const FocusVsNoFocusOnError = (): ReactNode => {
   return (
     <>
       <FormWrapper>
@@ -356,8 +348,8 @@ export const FocusVsNoFocusOnError = () => {
   )
 }
 
-export const RunFunctionWhenValidationFails = () => {
-  const onFinishFailed = () => {
+export const RunFunctionWhenValidationFails = (): ReactNode => {
+  const onFinishFailed = (): void => {
     // eslint-disable-next-line no-alert
     alert('Submission failed!')
   }

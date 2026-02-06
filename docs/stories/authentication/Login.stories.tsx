@@ -1,19 +1,19 @@
-import { useState } from 'react'
+import { ReactNode, useState } from 'react'
 
 import { Login } from '../../../src/ui'
 import { Background } from '../_helpers'
 
-export const Base = () => (
+export const Base = (): ReactNode => (
   <Background>
     <Login onSubmit={() => {}} />
   </Background>
 )
 
-export const FailingLogin = () => {
+export const FailingLogin = (): ReactNode => {
   const [hasError, setHasError] = useState(false)
   const [loading, setLoading] = useState(false)
 
-  const handleSubmit = () => {
+  const handleSubmit = (): void => {
     setHasError(false)
     setLoading(true)
 

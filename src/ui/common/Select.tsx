@@ -96,19 +96,19 @@ const Select = (props: SelectProps): React.ReactNode => {
   } = props
 
   const selectRef = useRef<HTMLSpanElement>(null)
+  const ariaAttributesRef = useRef<AriaAttributes>({})
   const [open, setOpen] = useState(isOpen)
-  const [ariaAttributes, setAriaAttributes] = useState<AriaAttributes>({})
 
   const cleanUpInvalidAttrs = (): void => {
     const input = selectRef.current?.querySelector('input[role="combobox"]')
     if (!input) return
 
-    // store invalid attrs in local state
-    setAriaAttributes({
+    // store invalid attrs in ref
+    ariaAttributesRef.current = {
       'aria-controls': input.getAttribute('aria-controls'),
       'aria-owns': input.getAttribute('aria-owns'),
       'aria-activedescendant': input.getAttribute('aria-activedescendant'),
-    })
+    }
     // remove them from the DOM node
     input.removeAttribute('aria-controls')
     input.removeAttribute('aria-owns')
@@ -127,6 +127,7 @@ const Select = (props: SelectProps): React.ReactNode => {
   }, [])
 
   useEffect(() => {
+    const ariaAttributes = ariaAttributesRef.current
     if (open && ariaAttributes) {
       const input = selectRef.current?.querySelector('input[role="combobox"]')
       if (!input) return
@@ -139,7 +140,7 @@ const Select = (props: SelectProps): React.ReactNode => {
         }
       })
 
-      setAriaAttributes(null)
+      ariaAttributesRef.current = null
     }
   }, [open])
 
@@ -165,14 +166,19 @@ const Select = (props: SelectProps): React.ReactNode => {
   return (
     <SelectWrapper className={className} ref={selectRef}>
       <StyledSelect
-        filterOption={async && !filterOption ? false : filterOption}
         id={id}
         notFoundContent={!notFoundContent && async ? null : notFoundContent}
         onOpenChange={o => setOpen(o)}
-        onSearch={onSearch && searchFunc}
         open={open}
         popupRender={customDropdownRender}
-        showSearch={showSearch || !!onSearch}
+        showSearch={
+          showSearch || !!onSearch
+            ? {
+                filterOption: async && !filterOption ? false : filterOption,
+                onSearch: searchFunc,
+              }
+            : false
+        }
         virtual={virtual}
         {...rest}
       />

@@ -1,8 +1,8 @@
-import React, { useEffect, useRef, useState } from 'react'
+import React, { ReactNode, useEffect, useRef, useState } from 'react'
 import { CaretRightOutlined, CaretLeftOutlined } from '@ant-design/icons'
 import { Pagination } from '../../../src/ui'
 
-export const Base = () => {
+export const Base = (): ReactNode => {
   const [currentPage, setCurrentPage] = useState(1)
 
   return (
@@ -13,10 +13,10 @@ export const Base = () => {
   )
 }
 
-export const ControlPage = () => {
+export const ControlPage = (): ReactNode => {
   const [currentPage, setCurrentPage] = useState(1)
 
-  const onPageChange = page => {
+  const onPageChange = (page: number): void => {
     setCurrentPage(page)
   }
 
@@ -31,23 +31,31 @@ export const ControlPage = () => {
   )
 }
 
-export const CustomRender = () => {
+export const CustomRender = (): ReactNode => {
   const [currentPage, setCurrentPage] = useState(1)
-  const paginationRef = useRef(null)
+  const paginationRef = useRef<HTMLElement>(null)
 
-  const paginationLinkClick = e => {
+  const paginationLinkClick = (e: React.MouseEvent): void => {
     e.preventDefault()
   }
 
-  const paginationKeyDown = e => {
+  const paginationKeyDown = (
+    e: React.KeyboardEvent<HTMLAnchorElement>,
+  ): void => {
     if (e.key === 'Enter') {
       e.preventDefault()
       e.stopPropagation()
-      e.currentTarget.parentNode.click()
+
+      const parentNode = e.currentTarget.parentNode as HTMLElement
+      parentNode?.click()
     }
   }
 
-  const itemRender = (page, type, originalElement) => {
+  const itemRender = (
+    page: number,
+    type: string,
+    originalElement: ReactNode,
+  ): ReactNode => {
     if (type === 'next') {
       return (
         <CaretRightOutlined
@@ -88,31 +96,29 @@ export const CustomRender = () => {
         .forEach((page, index) => {
           const counter = index + 1
           let label = `Go to page ${counter}`
+          const child = page.querySelector(':scope > *')
 
           if (page.classList.contains('ant-pagination-item-active')) {
-            page
-              .querySelector(':scope > *')
-              .setAttribute('aria-current', 'page')
+            child?.setAttribute('aria-current', 'page')
             label = `Page ${counter} , Current Page`
           } else {
-            page.querySelector(':scope > *').removeAttribute('aria-current')
+            child?.removeAttribute('aria-current')
           }
 
-          page.querySelector(':scope > *').setAttribute('aria-label', label)
+          child?.setAttribute('aria-label', label)
         })
 
       paginationRef.current
         .querySelectorAll('.ant-pagination li:not([class*="custom-icon"])')
         .forEach(item => {
           item.removeAttribute('tabindex')
+          const child = item.querySelector(':scope > *')
 
           if (item.getAttribute('aria-disabled') === 'true') {
-            item.querySelector(':scope > *').removeAttribute('disabled')
-            item
-              .querySelector(':scope > *')
-              .setAttribute('aria-disabled', 'true')
+            child?.removeAttribute('disabled')
+            child?.setAttribute('aria-disabled', 'true')
           } else {
-            item.querySelector(':scope > *').removeAttribute('aria-disabled')
+            child?.removeAttribute('aria-disabled')
           }
         })
     }

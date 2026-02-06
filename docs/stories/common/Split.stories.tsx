@@ -1,4 +1,4 @@
-import React from 'react'
+import { ReactNode } from 'react'
 import styled, { css } from 'styled-components'
 // import { lorem } from '@faker-js/faker'
 
@@ -33,7 +33,7 @@ const Right = styled.div`
   ${boxes};
 `
 
-export const Base = () => (
+export const Base = (): ReactNode => (
   <Wrapper>
     <Split>
       <Left>left</Left>
@@ -42,7 +42,7 @@ export const Base = () => (
   </Wrapper>
 )
 
-export const TwoThirds = () => (
+export const TwoThirds = (): ReactNode => (
   <Wrapper>
     <Split splitAt={16}>
       <Left>left</Left>
@@ -51,7 +51,7 @@ export const TwoThirds = () => (
   </Wrapper>
 )
 
-export const WithGutter = () => (
+export const WithGutter = (): ReactNode => (
   <Wrapper>
     <Split gutter={8} splitAt={16}>
       <Left>left</Left>

@@ -6,10 +6,11 @@ import { faker } from '@faker-js/faker'
 
 import { List, Button, dndArrayMove } from '../../../src/ui'
 import type { DragEndEvent } from '../../../src/ui'
+import { type ThemeValue } from '../../../src/toolkit'
 import { createData } from '../_helpers'
 
 const Item = styled.div`
-  background: ${props => props.theme.colorBackgroundHue};
+  background: ${(props): ThemeValue => props.theme.colorBackgroundHue};
   margin-bottom: 8px;
   padding: 8px;
   width: 100%;
@@ -17,7 +18,7 @@ const Item = styled.div`
 
 // returns the position of the item in a paginated list (as a String)
 // eg. third item on page 2 will be 13
-const getItemListNumber = (i: number, currentPage: number) =>
+const getItemListNumber = (i: number, currentPage: number): string =>
   String(i + 1 + (currentPage - 1) * 10)
 
 type StoryDataItem = {
@@ -39,27 +40,34 @@ const Wrapper = styled.div`
   /* height: 700px; */
 `
 
-export const Base = () => (
-  <Wrapper>
-    <List
-      dataSource={data}
-      loading={false}
-      pagination={{
-        pageSize: 10,
-      }}
-      renderItem={item => <Item>{item.value as string}</Item>}
-      onSortOptionChange={null}
-      searchLoading={false}
-      showSearch={false}
-      showSort={false}
-      showTotalCount={false}
-      sortOptions={[]}
-      totalCount={null}
-    />
-  </Wrapper>
-)
+export const Base = (): React.ReactNode => {
+  const [currentPage, setCurrentPage] = useState(1)
 
-export const Loading = () => (
+  return (
+    <Wrapper>
+      <List
+        dataSource={data}
+        loading={false}
+        onSortOptionChange={null}
+        pagination={{
+          current: currentPage,
+          onChange: setCurrentPage,
+          pageSize: 10,
+          total: data.length,
+        }}
+        renderItem={item => <Item>{item.value as string}</Item>}
+        searchLoading={false}
+        showSearch={false}
+        showSort={false}
+        showTotalCount={false}
+        sortOptions={[]}
+        totalCount={null}
+      />
+    </Wrapper>
+  )
+}
+
+export const Loading = (): React.ReactNode => (
   <List
     dataSource={makeData(5)}
     loading
@@ -67,17 +75,19 @@ export const Loading = () => (
   />
 )
 
-export const Search = () => {
+export const Search = (): React.ReactNode => {
   const N = 27
 
   const [dataSource, setDataSource] = useState(makeData(N))
   const [searchLoading, setSearchLoading] = useState(false)
+  const [currentPage, setCurrentPage] = useState(1)
 
-  const handleSearch = () => {
+  const handleSearch = (): void => {
     setSearchLoading(true)
     setTimeout(() => {
       setSearchLoading(false)
       setDataSource(makeData(N))
+      setCurrentPage(1)
     }, 2000)
   }
 
@@ -87,7 +97,10 @@ export const Search = () => {
       loading={searchLoading}
       onSearch={handleSearch}
       pagination={{
+        current: currentPage,
+        onChange: setCurrentPage,
         pageSize: 10,
+        total: dataSource.length,
       }}
       renderItem={item => <Item>{item.value as string}</Item>}
       searchLoading={searchLoading}
@@ -97,28 +110,33 @@ export const Search = () => {
   )
 }
 
-export const TotalCount = () => {
+export const TotalCount = (): React.ReactNode => {
   const N = 97
+  const [currentPage, setCurrentPage] = useState(1)
 
   return (
     <List
       dataSource={makeData(N)}
       pagination={{
+        current: currentPage,
+        onChange: setCurrentPage,
         pageSize: 10,
+        total: N,
         showSizeChanger: false,
       }}
-      renderItem={(item, i) => <Item>{item.value as string}</Item>}
+      renderItem={(item, _i) => <Item>{item.value as string}</Item>}
       showTotalCount
       totalCount={N}
     />
   )
 }
 
-export const Sort = () => {
+export const Sort = (): React.ReactNode => {
   const N = 27
 
   const [dataSource, setDataSource] = useState(makeData(N))
   const [loading, setLoading] = useState(false)
+  const [currentPage, setCurrentPage] = useState(1)
 
   const sortOptions = [
     {
@@ -132,12 +150,13 @@ export const Sort = () => {
     },
   ]
 
-  const handleSortOptionChange = () => {
+  const handleSortOptionChange = (): void => {
     setLoading(true)
 
     setTimeout(() => {
       setLoading(false)
       setDataSource(makeData(N))
+      setCurrentPage(1)
     }, 1000)
   }
 
@@ -147,7 +166,10 @@ export const Sort = () => {
       loading={loading}
       onSortOptionChange={handleSortOptionChange}
       pagination={{
+        current: currentPage,
+        onChange: setCurrentPage,
         pageSize: 10,
+        total: dataSource.length,
       }}
       renderItem={item => <Item>{item.value as string}</Item>}
       showSort
@@ -156,7 +178,7 @@ export const Sort = () => {
   )
 }
 
-export const AsyncPagination = () => {
+export const AsyncPagination = (): React.ReactNode => {
   const PAGE_SIZE = 10
   const TOTAL = 62
   const INITIAL_PAGE = 1
@@ -165,7 +187,7 @@ export const AsyncPagination = () => {
   const [currentPage, setCurrentPage] = useState(INITIAL_PAGE)
   const [loading, setLoading] = useState(false)
 
-  const handlePageChange = (pageNumber: number, _pageSize: number) => {
+  const handlePageChange = (pageNumber: number, _pageSize: number): void => {
     setLoading(true)
 
     setTimeout(() => {
@@ -203,7 +225,7 @@ export const AsyncPagination = () => {
   )
 }
 
-export const SelectableRows = () => {
+export const SelectableRows = (): React.ReactNode => {
   const PAGE_SIZE = 10
   const TOTAL = 20
   const INITIAL_PAGE = 1
@@ -218,8 +240,9 @@ export const SelectableRows = () => {
   const [dataSource, setDataSource] = useState(allData.slice(0, 10))
   const [currentPage, setCurrentPage] = useState(INITIAL_PAGE)
   const [loading, setLoading] = useState(false)
+  const [selectedItems, setSelectedItems] = useState<string[]>([])
 
-  const handlePageChange = (pageNumber: number, _pageSize: number) => {
+  const handlePageChange = (pageNumber: number, _pageSize: number): void => {
     setLoading(true)
 
     setTimeout(() => {
@@ -230,15 +253,16 @@ export const SelectableRows = () => {
       setLoading(false)
       setDataSource(newData)
       setCurrentPage(pageNumber)
+      setSelectedItems([])
     }, 1000)
   }
 
-  const handleSelectionChange = (selectedIds: string[]) => {
+  const handleSelectionChange = (selectedIds: string[]): void => {
     console.log('handled', selectedIds)
+    setSelectedItems(selectedIds)
   }
 
   const BulkAction = (
-    // eslint-disable-next-line no-console
     <Button onClick={() => console.log('bulk action')} type="primary">
       Assign handling editor
     </Button>
@@ -259,16 +283,17 @@ export const SelectableRows = () => {
         total: TOTAL,
         showSizeChanger: false,
       }}
-      renderItem={(item, i) => (
+      renderItem={(item, _i) => (
         <Item>
           {item.id}: {item.value as string}
         </Item>
       )}
+      selectedItems={selectedItems}
     />
   )
 }
 
-export const preserveSelection = () => {
+export const PreserveSelection = (): React.ReactNode => {
   const PAGE_SIZE = 10
   const TOTAL = 20
   const INITIAL_PAGE = 1
@@ -287,7 +312,7 @@ export const preserveSelection = () => {
   // keep track of selected items in the parent component and pass them down to preserve selection between page changes
   const [selectedItems, setSelectedItems] = useState<string[]>([])
 
-  const handlePageChange = (pageNumber: number, _pageSize: number) => {
+  const handlePageChange = (pageNumber: number, _pageSize: number): void => {
     setLoading(true)
 
     setTimeout(() => {
@@ -301,13 +326,12 @@ export const preserveSelection = () => {
     }, 1000)
   }
 
-  const handleSelectionChange = (selectedIds: string[]) => {
+  const handleSelectionChange = (selectedIds: string[]): void => {
     console.log('selected', selectedIds)
     setSelectedItems(selectedIds)
   }
 
   const BulkAction = (
-    // eslint-disable-next-line no-console
     <Button onClick={() => console.log('bulk action')} type="primary">
       Assign handling editor
     </Button>
@@ -331,7 +355,7 @@ export const preserveSelection = () => {
           total: TOTAL,
           showSizeChanger: false,
         }}
-        renderItem={(item, i) => (
+        renderItem={(item, _i) => (
           <Item>
             {item.id}: {item.value as string}
           </Item>
@@ -342,14 +366,14 @@ export const preserveSelection = () => {
   )
 }
 
-export const EmptyList = () => (
+export const EmptyList = (): React.ReactNode => (
   <List
     dataSource={[]}
     renderItem={item => <Item>{item.value as string}</Item>}
   />
 )
 
-export const HidePagination = () => {
+export const HidePagination = (): React.ReactNode => {
   const N = 9
 
   return (
@@ -363,11 +387,10 @@ export const HidePagination = () => {
   )
 }
 
-export const HidePaginationButUseAction = () => {
+export const HidePaginationButUseAction = (): React.ReactNode => {
   const N = 19
 
   const BulkAction = (
-    // eslint-disable-next-line no-console
     <Button onClick={() => console.log('bulk action')} type="primary">
       Assign handling editor
     </Button>
@@ -385,10 +408,11 @@ export const HidePaginationButUseAction = () => {
   )
 }
 
-export const DraggableItems = () => {
+export const DraggableItems = (): React.ReactNode => {
   const [dataSource, setDataSource] = useState(makeData(10))
+  const [currentPage, setCurrentPage] = useState(1)
 
-  const handleDragEnd = (event: DragEndEvent) => {
+  const handleDragEnd = (event: DragEndEvent): void => {
     const { active, over } = event
 
     // check if no destination, or if no rearrangement happened
@@ -406,7 +430,10 @@ export const DraggableItems = () => {
       draggable
       onDragEnd={handleDragEnd}
       pagination={{
+        current: currentPage,
+        onChange: setCurrentPage,
         pageSize: 10,
+        total: dataSource.length,
         showSizeChanger: false,
       }}
       renderItem={item => (

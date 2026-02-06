@@ -1,6 +1,6 @@
 /* eslint-disable no-console */
 
-import React from 'react'
+import { ReactNode } from 'react'
 import styled from 'styled-components'
 import { faker } from '@faker-js/faker'
 
@@ -13,7 +13,7 @@ const Wrapper = styled.div`
   width: 300px;
 `
 
-export const Base = () => (
+export const Base = (): ReactNode => (
   <Wrapper>
     <Input onChange={v => console.log(v)} placeholder={faker.lorem.words(4)} />
   </Wrapper>
@@ -33,7 +33,7 @@ export const Base = () => (
 //   </Wrapper>
 // )
 
-export const Disabled = () => (
+export const Disabled = (): ReactNode => (
   <Wrapper>
     <Input
       disabled
@@ -43,7 +43,7 @@ export const Disabled = () => (
   </Wrapper>
 )
 
-export const PasswordType = () => (
+export const PasswordType = (): ReactNode => (
   <Wrapper>
     <Input
       onChange={v => console.log(v)}

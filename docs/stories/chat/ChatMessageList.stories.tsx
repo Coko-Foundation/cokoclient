@@ -1,11 +1,20 @@
-import React from 'react'
+import { ReactNode } from 'react'
 import { faker } from '@faker-js/faker'
 
 import { ChatMessageList } from '../../../src/ui'
 import { createData, randomPick } from '../_helpers'
 
-const createMessages = n =>
-  createData(n, i => ({
+const createMessages = (
+  n: number,
+): {
+  id: string
+  content: string
+  date: string
+  own: boolean
+  user: string
+}[] =>
+  createData(n, () => ({
+    id: faker.string.uuid(),
     content: faker.lorem.sentences(2),
     date: new Date().toISOString(),
     own: randomPick([true, false]),
@@ -14,6 +23,6 @@ const createMessages = n =>
 
 const messages = createMessages(10)
 
-export const Base = () => <ChatMessageList messages={messages} />
+export const Base = (): ReactNode => <ChatMessageList messages={messages} />
 
-export const Empty = () => <ChatMessageList />
+export const Empty = (): ReactNode => <ChatMessageList messages={[]} />

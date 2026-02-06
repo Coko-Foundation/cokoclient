@@ -1,11 +1,12 @@
 {
   "compilerOptions": {
-    "target": "ESNext",
-    "module": "ESNext",
-    "moduleResolution": "bundler",
+    "target": "esnext",
+    "module": "nodenext",
+    "moduleResolution": "nodenext",
     "jsx": "react-jsx",
     "strict": true,
     "esModuleInterop": true,
+    "maxNodeModuleJsDepth": 10,
     "skipLibCheck": true,
     "noEmit": true,
     "allowJs": true,

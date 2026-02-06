@@ -1,7 +1,6 @@
-import React from 'react'
+import { ReactNode } from 'react'
 import { DeactivatedUser } from '../../../src/ui'
 
-export const Base = () => {
+export const Base = (): ReactNode => {
   return <DeactivatedUser />
 }
-

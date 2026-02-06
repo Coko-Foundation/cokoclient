@@ -1,8 +1,11 @@
+import { ReactNode } from 'react'
 import styled from 'styled-components'
 import { faker } from '@faker-js/faker'
 
 import { uniq } from '../../../src/toolkit/funcs'
-import SearchBox from '../../../src/ui/assignReviewers/SearchBox'
+import SearchBox, {
+  type SearchResult,
+} from '../../../src/ui/assignReviewers/SearchBox'
 
 const Wrapper = styled.div`
   height: 400px;
@@ -10,11 +13,26 @@ const Wrapper = styled.div`
 
 const topics = uniq(Array.from(Array(20)).map(() => faker.animal.type()))
 
-const people = Array.from(Array(40)).map(() => ({
+type Person = {
+  id: string
+  displayName: string
+  value: string
+  label: string
+  isDisabled: boolean
+  status: string | undefined
+  assessmentTraining: boolean
+  languageTraining: boolean
+  topics: string[]
+  [key: string]: unknown
+}
+
+const people: Person[] = Array.from(Array(40)).map(() => ({
+  id: faker.string.uuid(),
+  displayName: faker.person.fullName(),
   value: faker.string.uuid(),
   label: faker.person.fullName(),
   isDisabled: Math.random() > 0.5,
-  status: faker.helpers.arrayElement([null, faker.lorem.words(2)]),
+  status: faker.helpers.arrayElement([undefined, faker.lorem.words(2)]),
   assessmentTraining: Math.random() > 0.5,
   languageTraining: Math.random() > 0.5,
   topics: faker.helpers.arrayElements(topics, { min: 0, max: 3 }),
@@ -36,7 +54,7 @@ const additionalSearchFields = [
   },
 ]
 
-const handleSearch = input => {
+const handleSearch = (input: string): Promise<SearchResult[]> => {
   if (!input) {
     return Promise.resolve([])
   }
@@ -51,14 +69,16 @@ const handleSearch = input => {
     let foundMatchingField = false
 
     additionalSearchFields.forEach(field => {
+      const fieldValue = person[field.value]
+
       if (
         field.label.toLocaleLowerCase().includes(lowerCaseInput) &&
-        typeof person[field.value] === 'boolean' &&
-        person[field.value]
+        typeof fieldValue === 'boolean' &&
+        fieldValue
       ) {
         foundMatchingField = true
-      } else if (person[field.value] && Array.isArray(person[field.value])) {
-        person[field.value].forEach(entry => {
+      } else if (fieldValue && Array.isArray(fieldValue)) {
+        fieldValue.forEach(entry => {
           if (entry.toLowerCase().includes(lowerCaseInput)) {
             foundMatchingField = true
           }
@@ -72,11 +92,11 @@ const handleSearch = input => {
   return Promise.resolve(results)
 }
 
-const handleAdd = () => {
+const handleAdd = (): Promise<void> => {
   return Promise.resolve()
 }
 
-export const Base = () => {
+export const Base = (): ReactNode => {
   return (
     <Wrapper>
       <SearchBox onAdd={handleAdd} onSearch={handleSearch} />
@@ -84,7 +104,7 @@ export const Base = () => {
   )
 }
 
-export const AdditionalSearchFields = () => {
+export const AdditionalSearchFields = (): ReactNode => {
   return (
     <Wrapper>
       <SearchBox

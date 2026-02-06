@@ -1,17 +1,20 @@
+import { ReactNode } from 'react'
 import { faker } from '@faker-js/faker'
 
 import { Tabs } from '../../../src/ui'
 
-const makeItems = (n: number) =>
+const makeItems = (
+  n: number,
+): { key: string; label: string; children: string }[] =>
   Array.from(Array(n)).map((_, i) => ({
     key: String(i),
     label: faker.lorem.words(2),
     children: faker.lorem.sentences(6),
   }))
 
-export const Base = () => <Tabs items={makeItems(3)} />
+export const Base = (): ReactNode => <Tabs items={makeItems(3)} />
 
-export const WithJSXContent = () => {
+export const WithJSXContent = (): ReactNode => {
   const items = [
     { label: 'Tab 1', key: 'tab-1', children: 'Tab 1 content - simple text' },
     {

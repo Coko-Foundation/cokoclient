@@ -1,15 +1,15 @@
-/* eslint-disable react/jsx-props-no-spreading */
-
-import React from 'react'
-// import { faker } from '@faker-js/faker'
+import { ReactNode, ComponentProps } from 'react'
 
 import { ResetPassword } from '../../../src/ui'
+import { noop } from '../../../src/toolkit/funcs'
 import { Background } from '../_helpers'
 
-const Template = args => (
+const Template = (props: ComponentProps<typeof ResetPassword>): ReactNode => (
   <Background>
-    <ResetPassword {...args} />
+    <ResetPassword {...props} />
   </Background>
 )
 
-export const Base = () => <Template onSubmit={() => {}} />
+export const Base = (): ReactNode => (
+  <Template onSubmit={noop} redirectToLogin={noop} />
+)

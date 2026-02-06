@@ -1,11 +1,4 @@
-import React, {
-  ComponentProps,
-  useEffect,
-  useState,
-  memo,
-  useCallback,
-  useRef,
-} from 'react'
+import React, { ComponentProps } from 'react'
 import styled from 'styled-components'
 import {
   DndContext,
@@ -187,17 +180,7 @@ const CheckBox = styled(UICheckBox)`
 `
 // #endregion styled
 
-const compareItem = (
-  preProps: SelectableItemProps,
-  nextProps: SelectableItemProps,
-): boolean => {
-  if (preProps.id === nextProps.id && preProps.selected === nextProps.selected)
-    return true
-  return false
-}
-
-// memoize Selectable item to avoid unecessary rerendering every time an item is selected/deselected
-const SelectableItem = memo((props: SelectableItemProps) => {
+const SelectableItem = (props: SelectableItemProps): React.ReactNode => {
   const {
     id,
     index,
@@ -209,7 +192,7 @@ const SelectableItem = memo((props: SelectableItemProps) => {
     ...rest
   } = props
 
-  const handleChange = () => {
+  const handleChange = (): void => {
     if (selected) {
       onDeselect(id)
     } else {
@@ -232,7 +215,7 @@ const SelectableItem = memo((props: SelectableItemProps) => {
       {renderItem({ id, ...rest }, index)}
     </CheckBox>
   )
-}, compareItem)
+}
 
 type SortableItemProps = {
   id: string
@@ -269,30 +252,6 @@ const SortableItem = ({ id, children }: SortableItemProps): React.ReactNode => {
   )
 }
 
-// memoized SelectableItem would use old value of selectedItems when handleSelect and handleDeselect are passed as they are
-// when you wrap them with the below function, they always refer to the List's updated selectedItems
-function useFunction<T extends (...args: any[]) => any>(callback: T): T {
-  const ref = useRef<T | null>(null)
-  ref.current = callback
-
-  return useCallback(
-    ((...args: Parameters<T>) => {
-      const cb = ref.current
-
-      if (typeof cb === 'function') {
-        return cb(...args)
-      }
-
-      return false
-    }) as T,
-    [],
-  )
-}
-
-// const EmptyList = () => {
-//   return 'no data'
-// }
-
 const List = (props: ListProps): React.ReactNode => {
   const {
     footerContent = null,
@@ -315,33 +274,20 @@ const List = (props: ListProps): React.ReactNode => {
     totalCount = null,
     draggable = false,
     onDragEnd = noop,
-    selectedItems: controlledSelectedItems = [],
+    selectedItems = [],
     ...rest
   } = props
 
-  const [selectedItems, setSelectedItems] = useState<string[]>([])
+  const handleSelect = (id: string): void => {
+    itemSelection?.onChange?.([...selectedItems, id])
+  }
 
-  useEffect(() => {
-    itemSelection?.onChange?.(selectedItems)
-  }, [selectedItems])
-
-  // Reset selected items to controlledSelectedItems when dataSource changes
-  // by default it will reset selection (controlledSelectedItems = [])
-  // to preserve it, keep track of selected items in the parent component, and pass it down via this prop
-  useEffect(() => {
-    setSelectedItems(controlledSelectedItems)
-  }, [dataSource])
-
-  const handleSelect = useFunction((id: string) => {
-    setSelectedItems([...selectedItems, id])
-  })
-
-  const handleDeselect = useFunction((id: string) => {
-    setSelectedItems(without(selectedItems, id))
-  })
+  const handleDeselect = (id: string): void => {
+    itemSelection?.onChange?.(without(selectedItems, id))
+  }
 
   const listItemToRender = itemSelection
-    ? (itemProps: ListItem, i: number) => {
+    ? (itemProps: ListItem, i: number): React.ReactNode => {
         return draggable ? (
           <SortableItem id={itemProps.id} key={itemProps.id}>
             <SelectableItem
@@ -366,7 +312,7 @@ const List = (props: ListProps): React.ReactNode => {
           </ListItemWrapper>
         )
       }
-    : (itemProps: ListItem, i: number) => {
+    : (itemProps: ListItem, i: number): React.ReactNode => {
         return draggable ? (
           <SortableItem id={itemProps.id} key={itemProps.id}>
             {renderItem(itemProps, i)}
@@ -378,43 +324,10 @@ const List = (props: ListProps): React.ReactNode => {
         )
       }
 
-  const paginationObj = {
+  const passedPagination = {
     current: 1,
     pageSize: 10,
     ...pagination,
-  }
-
-  const [paginationCurrent, setPaginationCurrent] = useState(
-    paginationObj.current,
-  )
-
-  const [paginationSize, setPaginationSize] = useState(paginationObj.pageSize)
-
-  useEffect(() => {
-    setPaginationCurrent(paginationObj.current)
-    setPaginationSize(paginationObj.pageSize)
-  }, [pagination])
-
-  const triggerPaginationEvent =
-    (eventName: 'onChange' | 'onShowSizeChange') =>
-    (page: number, pageSize: number) => {
-      setPaginationCurrent(page)
-      setPaginationSize(pageSize)
-
-      if (pagination && pagination[eventName]) {
-        pagination[eventName](page, pageSize)
-      }
-    }
-
-  const onPaginationChange = triggerPaginationEvent('onChange')
-
-  const onPaginationShowSizeChange = triggerPaginationEvent('onShowSizeChange')
-
-  const passedPagination = {
-    ...paginationObj,
-    current: paginationCurrent,
-    pageSize: paginationSize,
-    onShowSizeChange: onPaginationShowSizeChange,
   }
 
   let splitDataSource = [...dataSource]
@@ -574,7 +487,10 @@ const List = (props: ListProps): React.ReactNode => {
 
           {showPagination && (
             <Pagination
-              onChange={onPaginationChange}
+              onChange={pagination ? pagination.onChange : undefined}
+              onShowSizeChange={
+                pagination ? pagination.onShowSizeChange : undefined
+              }
               pagination={passedPagination}
             />
           )}

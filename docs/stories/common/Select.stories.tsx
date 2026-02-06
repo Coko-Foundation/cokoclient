@@ -1,15 +1,20 @@
-import React, { useState } from 'react'
+import { ReactNode, useState } from 'react'
 import { faker } from '@faker-js/faker'
 
 import { Select } from '../../../src/ui'
 
-const makeOptions = n =>
+type Option = {
+  label: string
+  value: string
+}
+
+const makeOptions = (n: number): Option[] =>
   Array.from(Array(n)).map(() => ({
     label: faker.person.fullName(),
     value: faker.string.uuid(),
   }))
 
-const makeLongOptions = n =>
+const makeLongOptions = (n: number): Option[] =>
   Array.from(Array(n)).map(() => ({
     label: faker.lorem.sentences(5),
     value: faker.string.uuid(),
@@ -30,15 +35,15 @@ const groupedOptions = [
 
 const longOptions = makeLongOptions(10)
 
-export const Base = () => (
+export const Base = (): ReactNode => (
   <Select options={options} placeholder={faker.lorem.words(4)} />
 )
 
-export const WithGroups = () => (
+export const WithGroups = (): ReactNode => (
   <Select options={groupedOptions} placeholder={faker.lorem.words(4)} />
 )
 
-export const Multi = () => (
+export const Multi = (): ReactNode => (
   <Select
     mode="multiple"
     options={options}
@@ -46,11 +51,11 @@ export const Multi = () => (
   />
 )
 
-export const Async = () => {
+export const Async = (): ReactNode => {
   const [loading, setLoading] = useState(false)
   const [optionsData, setOptionsData] = useState([])
 
-  const handleSearch = searchValue => {
+  const handleSearch = (): void => {
     setLoading(true)
 
     setTimeout(() => {
@@ -72,7 +77,7 @@ export const Async = () => {
   )
 }
 
-export const WrapOptionText = () => (
+export const WrapOptionText = (): ReactNode => (
   <Select
     options={longOptions}
     placeholder="Very long text options, sentence will be wrapped and option element will increase in height"

@@ -6,12 +6,18 @@ import { RuleObject } from 'antd/es/form'
 import { Form, FormSection, Input } from '../common'
 import ProfileForm from './ProfileForm'
 
+export type PasswordFormData = {
+  currentPassword: string
+  newPassword: string
+  newPasswordConfirmation: string
+}
+
 type ChangePasswordProps = {
   className?: string
   form?: FormInstance
   loading?: boolean
   message?: string
-  onSubmit: () => void
+  onSubmit: (vals: PasswordFormData) => void
   submissionStatus?: 'success' | 'error' | 'danger'
 }
 
@@ -42,7 +48,7 @@ const ChangePassword = (props: ChangePasswordProps): React.ReactNode => {
         form={form}
         loading={loading}
         message={message}
-        onSubmit={onSubmit}
+        onSubmit={(values): void => onSubmit(values as PasswordFormData)}
         submissionStatus={submissionStatus}
         {...rest}
       >

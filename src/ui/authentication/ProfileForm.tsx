@@ -12,7 +12,7 @@ type ProfileFormProps = {
   form?: FormInstance
   loading?: boolean
   message?: string
-  onSubmit: () => void
+  onSubmit: (values: unknown) => void
   showSecondaryButton?: boolean
   secondaryButtonAction?: () => void
   secondaryButtonLabel?: string

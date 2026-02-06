@@ -1,36 +1,37 @@
-/* eslint-disable react/jsx-props-no-spreading */
-
-import React from 'react'
+import { ReactNode, ComponentProps } from 'react'
 import { faker } from '@faker-js/faker'
 
 import { AuthenticationForm } from '../../../src/ui'
+import { noop } from '../../../src/toolkit/funcs'
 import { Filler } from '../_helpers'
 
-const Template = args => {
+const Template = (
+  props: ComponentProps<typeof AuthenticationForm>,
+): ReactNode => {
   return (
-    <AuthenticationForm {...args}>
+    <AuthenticationForm {...props}>
       <Filler />
     </AuthenticationForm>
   )
 }
 
-export const Base = () => (
+export const Base = (): ReactNode => (
   <Template
     alternativeActionLabel="Do you want to do something else?"
     alternativeActionLink="/"
-    onSubmit={() => {}}
     errorMessage={faker.lorem.sentence()}
     hasError={false}
+    onSubmit={noop}
   />
 )
 
-export const Loading = () => (
+export const Loading = (): ReactNode => (
   <Template
     alternativeActionLabel="Do you want to do something else?"
     alternativeActionLink="/"
-    onSubmit={() => {}}
     errorMessage={faker.lorem.sentence()}
     hasError={false}
     loading={true}
+    onSubmit={noop}
   />
 )

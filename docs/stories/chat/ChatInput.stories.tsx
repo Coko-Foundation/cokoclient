@@ -1,9 +1,8 @@
-import React from 'react'
-// import { lorem } from 'faker'
+import { ReactNode } from 'react'
 
 import { ChatInput } from '../../../src/ui'
 
-export const Base = () => (
+export const Base = (): ReactNode => (
   <ChatInput
     onSend={incoming => {
       /* eslint-disable-next-line no-console */
@@ -11,4 +10,3 @@ export const Base = () => (
     }}
   />
 )
-

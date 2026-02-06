@@ -1,20 +1,22 @@
-import React, { useState } from 'react'
+import { ReactNode, useState } from 'react'
 import { faker } from '@faker-js/faker'
 
 import { Radio } from '../../../src/ui'
 
-const makeOptions = n =>
+const makeOptions = (
+  n: number,
+): { id: string; label: string; value: number }[] =>
   Array.from(Array(n)).map((_, i) => ({
-    id: i,
+    id: `${i}`,
     label: faker.lorem.words(3),
     value: i,
   }))
 
 const options = makeOptions(4)
 
-export const Base = () => {
-  const [value, setValue] = useState(null)
-  const handleChange = val => setValue(val)
+export const Base = (): ReactNode => {
+  const [value, setValue] = useState<string | null>(null)
+  const handleChange = (val: string): void => setValue(val)
 
   return (
     <Radio
@@ -26,18 +28,18 @@ export const Base = () => {
   )
 }
 
-export const Vertical = () => {
-  const [value, setValue] = useState(null)
-  const handleChange = val => setValue(val)
+export const Vertical = (): ReactNode => {
+  const [value, setValue] = useState<string | null>(null)
+  const handleChange = (val: string): void => setValue(val)
 
   return (
     <Radio onChange={handleChange} options={options} value={value} vertical />
   )
 }
 
-export const ButtonStyle = () => {
-  const [value, setValue] = useState(null)
-  const handleChange = val => setValue(val)
+export const ButtonStyle = (): ReactNode => {
+  const [value, setValue] = useState<string | null>(null)
+  const handleChange = (val: string): void => setValue(val)
 
   return (
     <Radio
@@ -49,9 +51,9 @@ export const ButtonStyle = () => {
   )
 }
 
-export const SolidButtonStyle = () => {
-  const [value, setValue] = useState(null)
-  const handleChange = val => setValue(val)
+export const SolidButtonStyle = (): ReactNode => {
+  const [value, setValue] = useState<string | null>(null)
+  const handleChange = (val: string): void => setValue(val)
 
   return (
     <Radio

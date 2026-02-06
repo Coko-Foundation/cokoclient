@@ -1,9 +1,8 @@
-import React from 'react'
-// import { lorem } from '@faker-js/faker'
+import { ReactNode } from 'react'
 
 import { Button, Result } from '../../../src/ui'
 
-export const Base = () => (
+export const Base = (): ReactNode => (
   <Result
     extra={[
       <Button key={1} type="link">

@@ -103,17 +103,15 @@ const makeApolloClient = (
     headers: { 'Apollo-Require-Preflight': 'true' },
   })
 
-  const authLink = new SetContextLink(
-    ({ headers }: { headers?: Record<string, string> }) => {
-      const token = localStorage.getItem('token')
-      return {
-        headers: {
-          ...headers,
-          authorization: token ? `Bearer ${token}` : '',
-        },
-      }
-    },
-  )
+  const authLink = new SetContextLink(prevContext => {
+    const token = localStorage.getItem('token')
+    return {
+      headers: {
+        ...prevContext.headers,
+        authorization: token ? `Bearer ${token}` : '',
+      },
+    }
+  })
 
   const removeTypename = new ApolloLink((operation, forward) => {
     if (operation.variables) {

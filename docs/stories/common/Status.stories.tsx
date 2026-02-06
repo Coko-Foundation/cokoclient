@@ -1,10 +1,10 @@
-import React from 'react'
+import { ReactNode } from 'react'
 
 import { Status } from '../../../src/ui'
 
-export const NotSubmitted = () => <Status status="Not Submitted" />
-export const Submitted = () => <Status status="Submitted" />
-export const Rejected = () => <Status status="Rejected" />
-export const UnderReview = () => <Status status="Under Review" />
-export const InProduction = () => <Status status="In Production" />
-export const Published = () => <Status status="Published" />
+export const NotSubmitted = (): ReactNode => <Status status="Not Submitted" />
+export const Submitted = (): ReactNode => <Status status="Submitted" />
+export const Rejected = (): ReactNode => <Status status="Rejected" />
+export const UnderReview = (): ReactNode => <Status status="Under Review" />
+export const InProduction = (): ReactNode => <Status status="In Production" />
+export const Published = (): ReactNode => <Status status="Published" />

@@ -44,19 +44,21 @@ const StyledRibbon = styled(Ribbon)`
   margin-bottom: ${grid(1)};
 `
 
-type AdditionalReviewerColumn = {
+export type AdditionalReviewerColumn = {
   title: string
   dataIndex: string
 }
 
-type Reviewer = {
+export type Reviewer = {
   id: string
+  email?: string
   displayName: string
   invited?: boolean
   acceptedInvitation?: boolean
   rejectedInvitation?: boolean
   invitationRevoked?: boolean
   reviewSubmitted?: boolean
+  [key: string]: unknown
 }
 
 type AssignReviewersProps = {
@@ -76,7 +78,7 @@ type AssignReviewersProps = {
   onSearch: (value: string) => Promise<SearchResult[]>
   onTableChange: (data: Reviewer[]) => void
   reviewerPool?: Reviewer[]
-  searchPlaceholder: string
+  searchPlaceholder?: string
   suggestedReviewerName?: string
   useShowEmail?: boolean
 }

@@ -1,16 +1,16 @@
-import React, { useState } from 'react'
+import { ReactNode, useState } from 'react'
 import { faker } from '@faker-js/faker'
 
 import { AutoComplete } from '../../../src/ui'
 
-const makeOptions = n =>
+const makeOptions = (n: number): { value: string }[] =>
   Array.from(Array(n)).map(() => ({
     value: faker.person.fullName(),
   }))
 
 const originalOptions = makeOptions(100)
 
-export const Base = () => {
+export const Base = (): ReactNode => {
   const [options, setOptions] = useState(originalOptions)
 
   const onSearch = (searchValue: string): void => {
@@ -23,14 +23,14 @@ export const Base = () => {
 
   return (
     <AutoComplete
-      onSearch={onSearch}
       options={options}
       placeholder={faker.lorem.words(4)}
+      showSearch={{ onSearch }}
     />
   )
 }
 
-export const WithDebounce = () => {
+export const WithDebounce = (): ReactNode => {
   const [options, setOptions] = useState(originalOptions)
 
   const onSearch = (searchValue: string): void => {
@@ -45,9 +45,9 @@ export const WithDebounce = () => {
     <AutoComplete
       debounce
       debounceTimeout={1500}
-      onSearch={onSearch}
       options={options}
       placeholder={faker.lorem.words(4)}
+      showSearch={{ onSearch }}
     />
   )
 }

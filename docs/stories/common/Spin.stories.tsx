@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import { ReactNode, useState } from 'react'
 import styled from 'styled-components'
 // import { lorem } from '@faker-js/faker'
 
@@ -18,9 +18,9 @@ const Wrapper = styled.div`
   height: 300px;
 `
 
-export const Base = () => <Spin spinning />
+export const Base = (): ReactNode => <Spin spinning />
 
-export const Wrap = () => {
+export const Wrap = (): ReactNode => {
   const [spinning, setSpinning] = useState(true)
 
   return (
@@ -37,7 +37,7 @@ export const Wrap = () => {
   )
 }
 
-export const WrapButDoNotRenderBackground = () => {
+export const WrapButDoNotRenderBackground = (): ReactNode => {
   const [spinning, setSpinning] = useState(true)
 
   return (

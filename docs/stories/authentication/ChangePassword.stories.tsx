@@ -1,15 +1,20 @@
 /* eslint-disable no-console */
-import React, { useState } from 'react'
-import { ChangePassword, Checkbox } from '../../../src/ui'
 
-export const Base = () => {
+import { ReactNode, useState } from 'react'
+
+import { ChangePassword, Checkbox } from '../../../src/ui'
+import { type PasswordFormData } from '../../../src/ui/authentication/ChangePassword'
+
+export const Base = (): ReactNode => {
   const [loading, setLoading] = useState(false)
   const [message, setMessage] = useState('')
-  const [submissionStatus, setSubmissionStatus] = useState(null)
+  const [submissionStatus, setSubmissionStatus] = useState<
+  'success' | 'error' | 'danger' | undefined
+>()
 
   const [error, setError] = useState(false)
 
-  const handleSubmit = vals => {
+  const handleSubmit = (vals: PasswordFormData): void => {
     console.log(vals)
     console.log(error)
     setLoading(true)
@@ -34,6 +39,7 @@ export const Base = () => {
           Check and submit the form to see error state
         </Checkbox>
       </p>
+
       <ChangePassword
         loading={loading}
         message={message}
@@ -43,4 +49,3 @@ export const Base = () => {
     </>
   )
 }
-

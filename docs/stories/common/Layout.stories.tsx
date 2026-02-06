@@ -1,18 +1,18 @@
-import React, { useState } from 'react'
+import { ReactNode, useState } from 'react'
 import styled, { css } from 'styled-components'
-// import { lorem } from '@faker-js/faker'
 
 import { Layout, Paragraph, Switch } from '../../../src/ui'
+import { type ThemeValue } from '../../../src/toolkit/themeHelper'
 
 const Wrapper = styled.div<{ $showBorder?: boolean }>`
-  ${props =>
+  ${(props): ThemeValue =>
     props.$showBorder &&
     css`
       border: 2px solid coral;
     `}
 `
 
-export const Base = () => {
+export const Base = (): ReactNode => {
   const [showBorder, setShowBorder] = useState(true)
 
   return (

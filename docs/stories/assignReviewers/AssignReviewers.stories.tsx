@@ -1,10 +1,14 @@
-import React, { useEffect, useState } from 'react'
+import { ReactNode, useEffect, useState } from 'react'
 import styled from 'styled-components'
 import { faker } from '@faker-js/faker'
 
 import { grid } from '../../../src/toolkit'
 import { uniq } from '../../../src/toolkit/funcs'
-import AssignReviewers from '../../../src/ui/assignReviewers/AssignReviewers'
+import AssignReviewers, {
+  type AdditionalReviewerColumn,
+  type Reviewer as BaseReviewer,
+} from '../../../src/ui/assignReviewers/AssignReviewers'
+import { type AdditionalSearchField } from '../../../src/ui/assignReviewers/SearchBox'
 import { DateParser, Note } from '../../../src/ui'
 
 const Wrapper = styled.div`
@@ -28,7 +32,28 @@ const ButtonsWrapper = styled.div`
   }
 `
 
-const makeReviewers = n =>
+type Reviewer = BaseReviewer & {
+  // displayName: string
+  // email: string
+  // id: string
+  // invited: boolean
+  // invitationRevoked: boolean
+  isSignedUp: boolean
+  // acceptedInvitation: boolean
+  // rejectedInvitation: boolean
+  // reviewSubmitted: boolean
+  topics: string
+  assessmentTraining: boolean
+  languageTraining: boolean
+  lastUpdated: Date
+}
+
+type ReviewerOption = Reviewer & {
+  label: string
+  value: string
+}
+
+const makeReviewers = (n: number): Reviewer[] =>
   Array.from(Array(n)).map(() => ({
     displayName: faker.person.fullName(),
     email: faker.internet.email(),
@@ -47,9 +72,10 @@ const makeReviewers = n =>
 
 const suggestedReviewer = faker.person.fullName()
 
-const isActive = r => r.invited && !r.invitationRevoked && !r.rejectedInvitation
+const isActive = (r: Reviewer): boolean | undefined =>
+  r.invited && !r.invitationRevoked && !r.rejectedInvitation
 
-const isAvailable = r => !r.invited
+const isAvailable = (r: Reviewer): boolean => !r.invited
 
 const topics = uniq(Array.from(Array(20)).map(() => faker.animal.type()))
 
@@ -61,25 +87,25 @@ const additionalColumns = [
   {
     title: 'Assessment Training',
     dataIndex: 'assessmentTraining',
-    render: val => (val ? 'Yes' : ''),
-    sorter: (a, b) =>
+    render: (val: any): string => (val ? 'Yes' : ''),
+    sorter: (a: Reviewer, b: Reviewer): number =>
       Number(a.assessmentTraining) - Number(b.assessmentTraining),
   },
   {
     title: 'Language Training',
     dataIndex: 'languageTraining',
-    render: val => (val ? 'Yes' : ''),
-    sorter: (a, b) => Number(a.languageTraining) - Number(b.languageTraining),
+    render: (val: any): string => (val ? 'Yes' : ''),
+    sorter: (a: Reviewer, b: Reviewer): number =>
+      Number(a.languageTraining) - Number(b.languageTraining),
   },
   {
     title: 'Last Updated',
     dataIndex: 'lastUpdated',
-    render: val => (
-      <DateParser dateFormat="ddd D MMM | HH:mm" timestamp={val.getTime()}>
-        {timestamp => timestamp}
-      </DateParser>
+    render: (val: any): ReactNode => (
+      <DateParser dateFormat="ddd D MMM | HH:mm" timestamp={val.getTime()} />
     ),
-    sorter: (a, b) => a.lastUpdated.getTime() - b.lastUpdated.getTime(),
+    sorter: (a: Reviewer, b: Reviewer): number =>
+      a.lastUpdated.getTime() - b.lastUpdated.getTime(),
     align: 'right',
   },
 ]
@@ -100,10 +126,21 @@ const additionalSearchFields = [
   },
 ]
 
-const Template = ({ showInteractiveContent, ...args }) => {
+type TemplateProps = {
+  additionalReviewerColumns?: AdditionalReviewerColumn[]
+  additionalSearchFields?: AdditionalSearchField[]
+  showInteractiveContent: boolean
+  suggestedReviewerName: string
+  useShowEmail: boolean
+}
+
+const Template = ({
+  showInteractiveContent,
+  ...rest
+}: TemplateProps): ReactNode => {
   const [reviewers, setReviewers] = useState(makeReviewers(40))
-  const [pool, setPool] = useState(makeReviewers(8))
-  const [sortedPool, setSortedPool] = useState([])
+  const [pool, setPool] = useState<Reviewer[]>(makeReviewers(8))
+  const [sortedPool, setSortedPool] = useState<Reviewer[]>([])
   const [automation, setAutomation] = useState(false)
   const [amountOfReviewers, setAmountOfReviewers] = useState(2)
 
@@ -111,7 +148,9 @@ const Template = ({ showInteractiveContent, ...args }) => {
     setSortedPool(pool)
   }, [pool])
 
-  const handleAddReviewers = optionsClicked => {
+  const handleAddReviewers = async (
+    optionsClicked: string[],
+  ): Promise<void> => {
     const newReviewers = optionToReviewerData(optionsClicked)
     setPool([...pool, ...newReviewers])
     setReviewers(
@@ -121,13 +160,13 @@ const Template = ({ showInteractiveContent, ...args }) => {
     return Promise.resolve()
   }
 
-  const handleClickRemoveRow = rowId => {
-    const item = pool.find(r => r.id === rowId)
+  const handleClickRemoveRow = async (rowId: string): Promise<void> => {
+    const item = pool.find(r => r.id === rowId) as Reviewer
     setPool(pool.filter(r => r.id !== rowId))
     setReviewers([item, ...reviewers])
   }
 
-  const findAvailableSlots = () => {
+  const findAvailableSlots = (): number => {
     const active = pool.filter(r => isActive(r))
     const reviewerSlotsLeft = amountOfReviewers - active.length
 
@@ -135,12 +174,12 @@ const Template = ({ showInteractiveContent, ...args }) => {
     return reviewerSlotsLeft
   }
 
-  const canInviteMore = () => {
+  const canInviteMore = (): boolean => {
     const available = findAvailableSlots()
     return available > 0
   }
 
-  const runAutomation = () => {
+  const runAutomation = (): void => {
     const reviewerSlotsLeft = findAvailableSlots()
 
     // invite as many as allowed
@@ -153,7 +192,7 @@ const Template = ({ showInteractiveContent, ...args }) => {
     const poolClone = [...pool]
 
     reviewerIdsToInvite.forEach(id => {
-      const obj = poolClone.find(i => i.id === id)
+      const obj = poolClone.find(i => i.id === id) as Reviewer
       const index = poolClone.indexOf(obj)
       obj.invited = true
       poolClone[index] = obj
@@ -162,15 +201,17 @@ const Template = ({ showInteractiveContent, ...args }) => {
     setPool(poolClone)
   }
 
-  const handleAmountOfReviewersChange = value => {
-    setAmountOfReviewers(value)
+  const handleAmountOfReviewersChange = (
+    value: number | string | null,
+  ): void => {
+    setAmountOfReviewers(Number(value))
   }
 
-  const handleClickInvite = reviewerId => {
+  const handleClickInvite = async (reviewerId: string): Promise<void> => {
     if (!canInviteMore()) return
 
     const poolClone = [...pool]
-    const reviewer = poolClone.find(r => r.id === reviewerId)
+    const reviewer = poolClone.find(r => r.id === reviewerId) as Reviewer
 
     // reinvited
     if (reviewer.invited && reviewer.invitationRevoked) {
@@ -182,16 +223,18 @@ const Template = ({ showInteractiveContent, ...args }) => {
     setPool(poolClone)
   }
 
-  const handleClickRevokeInvitation = reviewerId => {
+  const handleClickRevokeInvitation = async (
+    reviewerId: string,
+  ): Promise<void> => {
     const poolClone = [...pool]
-    const reviewer = poolClone.find(r => r.id === reviewerId)
+    const reviewer = poolClone.find(r => r.id === reviewerId) as Reviewer
     reviewer.invitationRevoked = true
     setPool(poolClone)
 
     if (automation) runAutomation()
   }
 
-  const handleRejectInvitation = () => {
+  const handleRejectInvitation = (): void => {
     const poolClone = [...pool]
 
     const reviewer = poolClone.find(
@@ -210,7 +253,7 @@ const Template = ({ showInteractiveContent, ...args }) => {
     if (automation) runAutomation()
   }
 
-  const handleAcceptInvitation = () => {
+  const handleAcceptInvitation = (): void => {
     const poolClone = [...pool]
 
     const reviewer = poolClone.find(
@@ -229,7 +272,7 @@ const Template = ({ showInteractiveContent, ...args }) => {
     if (automation) runAutomation()
   }
 
-  const handleSubmitReview = () => {
+  const handleSubmitReview = (): void => {
     const poolClone = [...pool]
 
     const reviewer = poolClone.find(
@@ -244,13 +287,13 @@ const Template = ({ showInteractiveContent, ...args }) => {
     if (automation) runAutomation()
   }
 
-  const resetState = () => {
+  const resetState = (): void => {
     setReviewers(makeReviewers(10))
     setPool(makeReviewers(8))
     setAutomation(false)
   }
 
-  const handleAutomationChange = toAutomate => {
+  const handleAutomationChange = (toAutomate: boolean): void => {
     setAutomation(toAutomate)
 
     if (toAutomate) {
@@ -258,16 +301,16 @@ const Template = ({ showInteractiveContent, ...args }) => {
     }
   }
 
-  const reviewerDataToOption = reviewer => ({
+  const reviewerDataToOption = (reviewer: Reviewer): ReviewerOption => ({
     ...reviewer,
     label: reviewer.displayName,
     value: reviewer.id,
   })
 
-  const optionToReviewerData = options =>
+  const optionToReviewerData = (options: string[]): Reviewer[] =>
     reviewers.filter(r => options.includes(r.id))
 
-  const handleSearch = input =>
+  const handleSearch = (input: string): Promise<ReviewerOption[]> =>
     new Promise(resolve => {
       setTimeout(() => {
         if (!input) {
@@ -277,7 +320,7 @@ const Template = ({ showInteractiveContent, ...args }) => {
         const lowerCaseInput = input.toLowerCase()
 
         const results = reviewers
-          .filter(person => {
+          .filter((person: Reviewer) => {
             if (person.displayName.toLowerCase().includes(lowerCaseInput)) {
               return true
             }
@@ -285,29 +328,26 @@ const Template = ({ showInteractiveContent, ...args }) => {
             let foundMatchingField = false
 
             additionalSearchFields.forEach(field => {
+              const fieldValue = person[field.value]
+
               if (
                 field.label.toLocaleLowerCase().includes(lowerCaseInput) &&
-                typeof person[field.value] === 'boolean' &&
-                person[field.value]
+                typeof fieldValue === 'boolean' &&
+                fieldValue
               ) {
                 foundMatchingField = true
-              } else if (
-                person[field.value] &&
-                Array.isArray(person[field.value])
-              ) {
-                person[field.value].forEach(entry => {
+              } else if (fieldValue && Array.isArray(fieldValue)) {
+                fieldValue.forEach((entry: string) => {
                   if (entry.toLowerCase().includes(lowerCaseInput)) {
                     foundMatchingField = true
                   }
                 })
-              } else if (field.items && person[field.value]) {
-                field.items.forEach(item => {
-                  if (
-                    person[field.value].toLowerCase().includes(lowerCaseInput)
-                  ) {
-                    foundMatchingField = true
-                  }
-                })
+              } else if (
+                field.items &&
+                typeof fieldValue === 'string' &&
+                fieldValue.toLowerCase().includes(lowerCaseInput)
+              ) {
+                foundMatchingField = true
               }
             })
 
@@ -360,7 +400,7 @@ const Template = ({ showInteractiveContent, ...args }) => {
       )}
 
       <AssignReviewers
-        {...args}
+        {...rest}
         amountOfReviewers={amountOfReviewers}
         automate={automation}
         canInviteMore={canInviteMore()}
@@ -371,27 +411,27 @@ const Template = ({ showInteractiveContent, ...args }) => {
         onClickRemoveRow={handleClickRemoveRow}
         onClickRevokeInvitation={handleClickRevokeInvitation}
         onSearch={handleSearch}
-        onTableChange={setPool}
+        onTableChange={data => setPool(data as Reviewer[])}
         reviewerPool={pool}
       />
     </Wrapper>
   )
 }
 
-export const Base = () => (
+export const Base = (): ReactNode => (
   <Template
-    useShowEmail
-    suggestedReviewerName={suggestedReviewer}
     showInteractiveContent
+    suggestedReviewerName={suggestedReviewer}
+    useShowEmail
   />
 )
 
-export const AdditionalFields = () => (
+export const AdditionalFields = (): ReactNode => (
   <Template
-    useShowEmail
-    suggestedReviewerName={suggestedReviewer}
-    showInteractiveContent={false}
     additionalReviewerColumns={additionalColumns}
     additionalSearchFields={additionalSearchFields}
+    showInteractiveContent={false}
+    suggestedReviewerName={suggestedReviewer}
+    useShowEmail
   />
 )
