@@ -13,16 +13,18 @@ export default defineConfig({
   plugins: [react()],
 
   build: {
+    outDir: 'dist',
+    assetsDir: '',
     lib: {
       entry: path.resolve(srcDir, 'index.ts'),
       formats: ['es'],
     },
-    rollupOptions: {
+    rolldownOptions: {
       external: (id) => !id.startsWith('.') && !id.startsWith('/'),
       output: {
         preserveModules: true,
         preserveModulesRoot: srcDir,
-        dir: 'dist',
+        entryFileNames: '[name].js',
       },
     },
     emptyOutDir: true,

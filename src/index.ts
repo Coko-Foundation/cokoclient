@@ -16,5 +16,6 @@ export { ProviderConnectionPage } from './pages'
 
 export * from './components'
 export * from './toolkit'
+export * from './ui'
 
 export { default as theme } from './theme'

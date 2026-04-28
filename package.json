@@ -12,7 +12,8 @@
   "license": "MIT",
   "author": "Yannis Barlas",
   "type": "module",
-  "main": "dist",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
   "bin": {
     "coko-client-build": "./scripts/coko-client-build.mjs",
     "coko-client-dev": "./scripts/coko-client-dev.mjs"
@@ -23,7 +24,7 @@
     "vite"
   ],
   "scripts": {
-    "build": "vite build --config vite.lib.config.mts",
+    "build": "vite build --config vite.lib.config.mts && tsc --project tsconfig.build.json",
     "clean": "rm -rf node_modules && rm -rf dist && rm -rf dev/server/node_modules",
     "commit": "yarn coko-lint commit",
     "prepack": "yarn run build",
