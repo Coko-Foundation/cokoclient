@@ -48,7 +48,6 @@ const PaginationNav = styled.nav`
       padding: 0 ${grid(1)};
       width: 100%;
 
-      /* stylelint-disable-next-line string-quotes */
       &[aria-disabled='true'] {
         color: ${(props): string => `${props.theme.colorText}77`};
         cursor: not-allowed;

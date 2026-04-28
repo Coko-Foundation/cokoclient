@@ -43,10 +43,8 @@ const Page = styled.div<PageProps>`
   height: 100%;
   overflow-y: auto;
 
-  /* stylelint-disable-next-line order/properties-alphabetical-order */
   ${(props): ThemeValue => props.$padPages && padPage}
 
-  /* stylelint-disable-next-line no-descending-specificity */
   > div {
     ${(props): ThemeValue => props.$fadeInPages && fadeInPage}
   }

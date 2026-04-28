@@ -1,10 +1,9 @@
-/* stylelint-disable declaration-no-important */
 import styled from 'styled-components'
 
 const VisuallyHiddenElement = styled.span`
+  /* stylelint-disable declaration-no-important */
   border: 0 !important;
-  clip: rect(1px, 1px, 1px, 1px) !important; /* 1 */
-  clip-path: inset(50%) !important; /* 2 */
+  clip-path: inset(50%) !important;
   height: 1px !important;
   margin: -1px !important;
   overflow: hidden !important;

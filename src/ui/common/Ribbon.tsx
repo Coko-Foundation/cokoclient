@@ -36,7 +36,6 @@ const Wrapper = styled.div<WrapperProps>`
   padding: ${grid(0.5)} ${grid(2)};
   text-align: center;
 
-  /* stylelint-disable-next-line order/properties-alphabetical-order */
   ${(props): ThemeValue =>
     props.$hide &&
     css`

@@ -24,7 +24,6 @@ const Message = styled.div<{ $own?: boolean }>`
   max-width: 90%;
   padding: ${grid(2)};
 
-  /* stylelint-disable-next-line order/properties-alphabetical-order */
   ${(props): ThemeValue =>
     props.$own &&
     css`

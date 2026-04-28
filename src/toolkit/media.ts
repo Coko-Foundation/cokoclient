@@ -34,6 +34,7 @@ const media = (Object.keys(sizes) as Array<keyof MediaSizes>).reduce(
       first: CSSObject | TemplateStringsArray,
       ...rest: Interpolation<object>[]
     ): ThemeValue => css`
+      /* stylelint-disable-next-line media-query-no-invalid */
       @media (min-width: ${sizes[label]}px) {
         ${css(first as TemplateStringsArray, ...rest)};
       }

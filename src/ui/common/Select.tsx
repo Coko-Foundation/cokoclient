@@ -1,7 +1,3 @@
-/* stylelint-disable indentation */
-/* stylelint-disable selector-combinator-space-before */
-/* stylelint-disable selector-descendant-combinator-no-non-space */
-/* stylelint-disable string-quotes */
 import React, { ComponentProps, useEffect, useRef, useState } from 'react'
 import styled, { css } from 'styled-components'
 import { Select as AntSelect } from 'antd'

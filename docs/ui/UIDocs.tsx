@@ -21,8 +21,10 @@ const Wrapper = styled.div`
 `
 
 const Sidebar = styled.div`
+  /* stylelint-disable declaration-no-important */
+
   background-color: ${th('colorSecondary')};
-  box-shadow: 1px 0 3px rgba(0, 0, 0, 0.15);
+  box-shadow: 1px 0 3px rgb(0 0 0 / 15%);
   padding: ${grid(10)};
   width: 350px;
   min-width: 350px;

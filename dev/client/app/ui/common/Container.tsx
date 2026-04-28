@@ -7,7 +7,6 @@ const Container = styled.div<{ $second?: boolean }>`
   flex-direction: column;
   min-height: 100%;
 
-  /* stylelint-disable-next-line no-descending-specificity */
   > div:first-child {
     align-self: center;
     margin: 20px 0;

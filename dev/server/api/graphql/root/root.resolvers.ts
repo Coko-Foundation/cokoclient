@@ -15,6 +15,7 @@ function wait(seconds: number): Promise<void> {
 }
 
 function startSendingTestObjects(): void {
+  /* eslint-disable-next-line promise/catch-or-return, promise/always-return */
   wait(3).then(() => {
     setInterval(() => {
       subscriptionManager.publish(TEST_OBECT_ADDED_EVENT, {

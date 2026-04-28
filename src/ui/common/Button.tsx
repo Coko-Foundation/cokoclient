@@ -49,6 +49,7 @@ const StyledButton = styled(AntButton)<{
           &:hover,
           &:focus,
           &:active {
+            /* stylelint-disable-next-line declaration-no-important */
             background-color: ${darken('colorPrimary', 0.25)} !important;
           }
         `
@@ -58,7 +59,9 @@ const StyledButton = styled(AntButton)<{
         &:hover,
         &:focus,
         &:active {
+          /* stylelint-disable-next-line declaration-no-important */
           border-color: ${darken('colorPrimary', 0.25)} !important;
+          /* stylelint-disable-next-line declaration-no-important */
           color: ${darken('colorPrimary', 0.25)} !important;
         }
       `
@@ -82,10 +85,12 @@ const StyledButton = styled(AntButton)<{
 
         &:hover,
         &:focus {
+          /* stylelint-disable-next-line declaration-no-important */
           background-color: ${darken(color, 0.25)} !important;
         }
 
         &:active {
+          /* stylelint-disable-next-line declaration-no-important */
           background-color: ${darken(color, 0.25)} !important;
         }
       `

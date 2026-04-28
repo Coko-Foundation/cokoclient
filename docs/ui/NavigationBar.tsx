@@ -13,7 +13,7 @@ const Wrapper = styled.div`
   top: 0;
   width: 100%;
 
-  box-shadow: 1px 1px 3px rgba(0, 0, 0, 0.15);
+  box-shadow: 1px 1px 3px rgb(0 0 0 / 15%);
   z-index: 100;
 `
 

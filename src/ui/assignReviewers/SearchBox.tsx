@@ -10,12 +10,15 @@ const Wrapper = styled.div`
   margin: 0 auto;
   width: 100%;
 
+  /* stylelint-disable-next-line media-query-no-invalid */
   @media (min-width: ${th('mediaQueries.small')}) {
     padding: ${grid(4)};
   }
 `
 
 const StyledSelect = styled(Select)`
+  /* stylelint-disable selector-class-pattern */
+
   flex-grow: 1;
 
   .react-select__control {
@@ -91,6 +94,7 @@ const SearchBox = (props: SearchBoxProps): React.ReactNode => {
   const handleSearch = (searchValue: string): void => {
     setLoadingSearchResults(true)
 
+    /* eslint-disable-next-line promise/catch-or-return */
     onSearch(searchValue)
       .then((data: SearchResult[]) => {
         if (!additionalSearchFields.length || !data.length) {
@@ -109,6 +113,7 @@ const SearchBox = (props: SearchBoxProps): React.ReactNode => {
 
         const parsedData: SearchResultGroup[] = []
 
+        /* eslint-disable-next-line promise/always-return */
         if (nameMatchData.length > 0) {
           parsedData.push({
             label: 'Reviewer Name',
@@ -171,6 +176,7 @@ const SearchBox = (props: SearchBoxProps): React.ReactNode => {
   }
 
   const handleAdd = (): void => {
+    /* eslint-disable-next-line promise/catch-or-return */
     onAdd(selection.map(s => s.value)).finally(() => {
       setSearchResults([])
       setSelection([])

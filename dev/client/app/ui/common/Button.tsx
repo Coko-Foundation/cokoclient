@@ -26,6 +26,7 @@ const StyledButton = styled(AntButton)<{
   $direction?: 'rtl' | 'ltr'
   $status?: 'error' | 'danger' | 'success'
 }>`
+  /* stylelint-disable declaration-no-important */
   box-shadow: none;
   font-size: ${th('fontSizeBase')};
   /* let lineHeight expand the button height */

@@ -11,10 +11,9 @@
     "noEmit": true,
     "allowJs": true,
     "checkJs": false,
-    "baseUrl": ".",
     "paths": {
-      "ui/*": ["src/ui/*"],
-      "pages/*": ["src/pages/*"]
+      "ui/*": ["./src/ui/*"],
+      "pages/*": ["./src/pages/*"]
     },
     "types": ["vite/client"],
 
