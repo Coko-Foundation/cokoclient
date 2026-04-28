@@ -96,6 +96,7 @@ const Table = (props: TableProps): ReactNode => {
   const [paginationSize, setPaginationSize] = useState(paginationObj.pageSize)
 
   useEffect(() => {
+    /* eslint-disable-next-line react-hooks/set-state-in-effect */
     setPaginationCurrent(paginationObj.current)
     setPaginationSize(paginationObj.pageSize)
   }, [paginationObj])

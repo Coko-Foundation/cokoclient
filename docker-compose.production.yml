@@ -1,5 +1,3 @@
-version: '3'
-
 services:
   client:
     build:
@@ -20,38 +18,7 @@ services:
       dockerfile: ./Dockerfile-server
     depends_on:
       - db
-    entrypoint:
-      [
-        'node_modules/.bin/wait-for-it',
-        'db:5432',
-        '--',
-        'sh',
-        'scripts/setupDevServer.sh',
-      ]
-    command:
-      [
-        'node_modules/.bin/nodemon',
-        'startServer.js',
-        '--watch',
-        'startServer.js',
-        '--watch',
-        'app.js',
-        '--watch',
-        'api',
-        '--watch',
-        'config',
-        '--watch',
-        'controllers',
-        '--watch',
-        'models',
-        '--watch',
-        'services',
-        '--watch',
-        'scripts',
-        '--watch',
-        '--ext',
-        'js,graphql',
-      ]
+    command: ['yarn', 'coko-server', 'start-dev']
     ports:
       - ${SERVER_PORT:-3000}:${SERVER_PORT:-3000}
     environment:
@@ -63,22 +30,22 @@ services:
       - POSTGRES_PASSWORD=${POSTGRES_PASSWORD:-password}
       - SECRET=${SECRET:-thesecret}
       - SERVER_PORT=${SERVER_PORT:-3000}
-      - CLIENT_URL=${CLIENT_URL:-http://0.0.0.0:4000}
+      - SERVER_URL=http://localhost:3000
+      - CLIENT_URL=${CLIENT_URL:-http://localhost:4000}
+      - ADMIN_USERNAME=admin
+      - ADMIN_PASSWORD=password
+      - ADMIN_GIVEN_NAMES=Admin
+      - ADMIN_SURNAME=Adminov
+      - ADMIN_EMAIL=admin@example.com
     volumes:
       - ./dev/server/api:/home/node/app/api
-      - ./dev/server/config:/home/node/app/config
-      - ./dev/server/controllers:/home/node/app/controllers
-      - ./dev/server/models:/home/node/app/models
-      - ./dev/server/scripts:/home/node/app/scripts
-      - ./dev/server/services:/home/node/app/services
+      - ./dev/server/config.ts:/home/node/app/config.ts
 
   db:
-    image: postgres:15
+    image: postgres:18
     ports:
       - ${POSTGRES_PORT:-5432}:5432
     environment:
       - POSTGRES_DB=${POSTGRES_DB:-dev}
       - POSTGRES_USER=${POSTGRES_USER:-user}
       - POSTGRES_PASSWORD=${POSTGRES_PASSWORD:-password}
-    # volumes:
-    #   - ./scripts/init-pgboss.sql:/docker-entrypoint-initdb.d/init-pgboss.sql

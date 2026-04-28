@@ -20,7 +20,7 @@ export default defineConfig({
       formats: ['es'],
     },
     rolldownOptions: {
-      external: (id) => !id.startsWith('.') && !id.startsWith('/'),
+      external: id => !id.startsWith('.') && !id.startsWith('/'),
       output: {
         preserveModules: true,
         preserveModulesRoot: srcDir,

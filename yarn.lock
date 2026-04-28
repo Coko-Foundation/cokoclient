@@ -361,10 +361,10 @@ __metadata:
     uuid: "npm:^14.0.0"
     vite: "npm:^8.0.10"
   peerDependencies:
-    "@apollo/client": ^4.1.3
-    react: ^19.2.4
-    react-router: ^7.13.0
-    styled-components: ^6.3.8
+    "@apollo/client": ^4.1.9
+    react: ^19.2.5
+    react-router: ^7.14.2
+    styled-components: ^6.4.1
   bin:
     coko-client-build: ./scripts/coko-client-build.mjs
     coko-client-dev: ./scripts/coko-client-dev.mjs
