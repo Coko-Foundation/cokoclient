@@ -2,9 +2,8 @@ import path from 'node:path'
 import fs from 'node:fs'
 import { fileURLToPath } from 'node:url'
 
-import { defineConfig, type UserConfig, type Plugin } from 'vite'
+import { defineConfig, type UserConfig } from 'vite'
 import react from '@vitejs/plugin-react-swc'
-import * as esbuild from 'esbuild'
 
 import logger from './logger'
 
@@ -180,37 +179,6 @@ function processTemplate(html: string): string {
     .replace('{{ENTRY}}', entryFilePath)
 }
 
-// Plugin to handle JSX and CommonJS in .js files
-function jsTransformPlugin(): Plugin {
-  return {
-    name: 'js-transform',
-    enforce: 'pre',
-
-    async transform(code, id) {
-      // Only process .js files outside node_modules
-      if (!id.endsWith('.js') || id.includes('node_modules')) {
-        return null
-      }
-
-      // Determine if file has JSX
-      const hasJsx = /<[A-Za-z]/.test(code)
-
-      try {
-        const result = await esbuild.transform(code, {
-          loader: hasJsx ? 'jsx' : 'js',
-          jsx: 'automatic',
-          jsxImportSource: 'react',
-          format: 'esm',
-        })
-        return { code: result.code, map: result.map }
-      } catch {
-        // If transform fails, let other plugins handle it
-        return null
-      }
-    },
-  }
-}
-
 // Plugin to serve index.html from vite folder
 function cokoHtmlPlugin(): Plugin {
   let cachedHtml: string | null = null
@@ -298,16 +266,15 @@ const viteConfig: UserConfig = defineConfig({
   },
 
   plugins: [
-    jsTransformPlugin(),
     cokoHtmlPlugin(),
-    react({ tsDecorators: true }),
+    react({ tsDecorators: true, include: /\.[jt]sx?$/ }),
   ],
 
   build: {
     outDir: buildFolderPath,
     emptyOutDir: true,
     sourcemap: isEnvDevelopment ? 'inline' : false,
-    minify: isEnvProduction ? 'esbuild' : false,
+    minify: isEnvProduction,
     cssCodeSplit: true,
   },
 

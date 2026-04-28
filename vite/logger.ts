@@ -4,7 +4,7 @@ import pc from 'picocolors'
 
 const logger = {
   divider: (): void => {
-    console.log(pc.dim('—'.repeat(50)))
+    console.log(pc.dim('—'.repeat(75)))
   },
 
   header: (txt: string): void => {
