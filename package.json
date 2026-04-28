@@ -23,7 +23,7 @@
     "vite"
   ],
   "scripts": {
-    "build": "vite build --config vite/vite.lib.config.mts",
+    "build": "vite build --config vite.lib.config.mts",
     "clean": "rm -rf node_modules && rm -rf dist && rm -rf dev/server/node_modules",
     "commit": "yarn coko-lint commit",
     "prepack": "yarn run build",

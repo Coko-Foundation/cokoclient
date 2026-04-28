@@ -7,7 +7,7 @@ import react from '@vitejs/plugin-react-swc'
 const __filename = fileURLToPath(import.meta.url)
 const __dirname = path.dirname(__filename)
 
-const srcDir = path.resolve(__dirname, '../src')
+const srcDir = path.resolve(__dirname, 'src')
 
 export default defineConfig({
   plugins: [react()],
