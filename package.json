@@ -23,11 +23,9 @@
     "vite"
   ],
   "scripts": {
-    "build": "npx babel --delete-dir-on-start src --out-dir dist",
+    "build": "vite build --config vite/vite.lib.config.mts",
     "clean": "rm -rf node_modules && rm -rf dist && rm -rf dev/server/node_modules",
     "commit": "yarn coko-lint commit",
-    "commitlint": "./node_modules/.bin/commitlint",
-    "prepare": "husky install",
     "prepack": "yarn run build",
     "release": "standard-version",
     "typecheck": "tsc --noEmit"
