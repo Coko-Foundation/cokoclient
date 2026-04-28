@@ -2,6 +2,36 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [2.0.0-alpha.0](https://github.com/Coko-Foundation/cokoclient/compare/v1.2.2...v2.0.0-alpha.0) (2026-04-28)
+
+
+### Features
+
+* improved logging ([0cbc854](https://github.com/Coko-Foundation/cokoclient/commit/0cbc8549415d90cf4087f9d8e31c4b16840cee5a))
+* improved useCurrentUser hook ([d6fb4a2](https://github.com/Coko-Foundation/cokoclient/commit/d6fb4a2e815054172848fa657dae1a51da4c3d08))
+* ts everywhere ([68c5ac6](https://github.com/Coko-Foundation/cokoclient/commit/68c5ac6d814b94888d25e186aa770cba099c4995))
+* **ui:** drop story helpers from distributed library ([21dccb1](https://github.com/Coko-Foundation/cokoclient/commit/21dccb18752215754a2d0d116d8bc0c7a8892e69))
+* **ui:** upgrade ant to v6 ([eec2ad8](https://github.com/Coko-Foundation/cokoclient/commit/eec2ad80546ce2183924710c0e573f5e9fc80eb0))
+* upgrade to react 19 ([92bea97](https://github.com/Coko-Foundation/cokoclient/commit/92bea97bd727e95d513f8e55effd79a9db059d53))
+* upgrade to react router v7 ([0a0a17f](https://github.com/Coko-Foundation/cokoclient/commit/0a0a17ffe4e9d4b41aa3b78bf2cc6eeb9f468db8))
+* **vite:** use vite instead of webpack ([e986308](https://github.com/Coko-Foundation/cokoclient/commit/e9863086868ed975166452f038be9a428ff2fd27))
+
+
+### Bug Fixes
+
+* fix a bunch of eslint and typescript errors ([9a7dfe3](https://github.com/Coko-Foundation/cokoclient/commit/9a7dfe3ce5cee77a55c77f6283f568cf14522307))
+* fix date parser and drop moment ([5a06b54](https://github.com/Coko-Foundation/cokoclient/commit/5a06b546c0dea4b6b6eb73a32305fd2455d096ca))
+* make decorators work ([f94b2eb](https://github.com/Coko-Foundation/cokoclient/commit/f94b2ebd2c431aa9459f0f6a6646e6ae7a243101))
+* make sure eslint does not ignore docs folder ([1a290a7](https://github.com/Coko-Foundation/cokoclient/commit/1a290a76a7008bbcaa4d5b6029215a9192d956cd))
+* **ui:** drop default prop from authentication components ([7e2df8d](https://github.com/Coko-Foundation/cokoclient/commit/7e2df8d3ef4699aef31c9fe3b6f74f3e71111ba8))
+* **ui:** drop default prop from chat components ([2f7939b](https://github.com/Coko-Foundation/cokoclient/commit/2f7939bc4b6660e1235ff5e8e2496f58c895ad25))
+* **ui:** drop default props from all remaining components ([ae030b4](https://github.com/Coko-Foundation/cokoclient/commit/ae030b49437e4178f0173e9417a7eb642e4e5785))
+* **ui:** drop default props from all src/ui/common components ([2985a78](https://github.com/Coko-Foundation/cokoclient/commit/2985a78adfee207f81922ec0434070423da0cbd2))
+* **ui:** fix issues in button and spin ([7fca9f2](https://github.com/Coko-Foundation/cokoclient/commit/7fca9f2af1f215d0abedfa140551fece96e3c7ef))
+* **ui:** more eslint and typescript fixes ([6f0c19c](https://github.com/Coko-Foundation/cokoclient/commit/6f0c19cc4ed1effa3cc1708c396544d1ca0479dc))
+* **ui:** more fixes in stories ([f753323](https://github.com/Coko-Foundation/cokoclient/commit/f753323ae9613e2aaf755c15c2e003cb20a1854b))
+* **ui:** more typescript fixes ([ebeb7fc](https://github.com/Coko-Foundation/cokoclient/commit/ebeb7fc0cf983f05a0f4aaa7364865c4d7436e4d))
+
 ### [1.2.2](https://gitlab.coko.foundation/cokoapps/client/compare/v1.2.1...v1.2.2) (2025-11-28)
 
 
