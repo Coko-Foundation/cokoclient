@@ -2,7 +2,7 @@ import path from 'node:path'
 import fs from 'node:fs'
 import { fileURLToPath } from 'node:url'
 
-import { defineConfig, type UserConfig } from 'vite'
+import { defineConfig, type UserConfig, type Plugin } from 'vite'
 import react from '@vitejs/plugin-react-swc'
 
 import logger from './logger'
@@ -106,7 +106,7 @@ const staticFolderPath =
 const buildFolderPath =
   CLIENT_BUILD_FOLDER_PATH || path.resolve(appPath, '..', '_build')
 
-const entryFilePath = CLIENT_ENTRY_FILE_PATH || './start.js'
+const entryFilePath = CLIENT_ENTRY_FILE_PATH || '/start.js'
 const devServerPort = Number(CLIENT_PORT) || 8080
 const faviconPath = CLIENT_FAVICON_PATH
 const pageTitle = CLIENT_PAGE_TITLE || 'Coko App'
@@ -265,10 +265,7 @@ const viteConfig: UserConfig = defineConfig({
     extensions: ['.mjs', '.js', '.jsx', '.ts', '.tsx', '.json'],
   },
 
-  plugins: [
-    cokoHtmlPlugin(),
-    react({ tsDecorators: true, include: /\.[jt]sx?$/ }),
-  ],
+  plugins: [cokoHtmlPlugin(), react({ tsDecorators: true })],
 
   build: {
     outDir: buildFolderPath,

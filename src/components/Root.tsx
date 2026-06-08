@@ -147,7 +147,15 @@ const makeApolloClient = (
           console.log(`${subscriptionsLogMessage} Connected.`)
         },
         closed: event => {
-          console.error(`${subscriptionsLogMessage} Disconnected:`, event)
+          if (event instanceof CloseEvent && event.wasClean) {
+            /* eslint-disable-next-line no-console */
+            console.log(`${subscriptionsLogMessage} Disconnected:`, event)
+          } else {
+            console.error(
+              `${subscriptionsLogMessage} Disconnected unexpectedly:`,
+              event,
+            )
+          }
         },
       },
     }),

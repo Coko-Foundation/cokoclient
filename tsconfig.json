@@ -15,7 +15,7 @@
       "ui/*": ["./src/ui/*"],
       "pages/*": ["./src/pages/*"]
     },
-    "types": ["vite/client"],
+    "types": ["vite/client", "node"],
 
     // 👇 add these for Inversify
     "experimentalDecorators": true,
