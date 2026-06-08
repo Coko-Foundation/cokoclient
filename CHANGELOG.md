@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [2.0.0-beta.0](https://github.com/Coko-Foundation/cokoclient/compare/v2.0.0-alpha.0...v2.0.0-beta.0) (2026-06-08)
+
+
+### Bug Fixes
+
+* do not log ws disconnect as an error unless there is one ([8577437](https://github.com/Coko-Foundation/cokoclient/commit/857743749848a5ab16d7fc9f2835e7a10586f925))
+
 ## [2.0.0-alpha.0](https://github.com/Coko-Foundation/cokoclient/compare/v1.2.2...v2.0.0-alpha.0) (2026-04-28)
 
 
