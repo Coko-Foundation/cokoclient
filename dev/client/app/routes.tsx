@@ -13,15 +13,17 @@ import {
   Protected,
   Teams,
   SubscriptionsTest,
+  WaxDemo,
 } from './pages'
 
 const RoutesDeclared = (
   <PageLayout fadeInPages navComponent={NavigationBar} padPages>
     <Routes>
       <Route element={<Root />} path="/" />
-      <Route element={<ImageDemo />} path="/imagedemo" />
+      <Route element={<ImageDemo />} path="/image-demo" />
       <Route element={<AntDemo />} path="/ant" />
       <Route element={<Teams />} path="/teams" />
+      <Route element={<WaxDemo />} path="/wax-demo" />
 
       <Route
         element={

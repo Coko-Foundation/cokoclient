@@ -3,7 +3,7 @@ import fs from 'node:fs'
 import { fileURLToPath } from 'node:url'
 
 import { defineConfig, type UserConfig, type Plugin } from 'vite'
-import react from '@vitejs/plugin-react-swc'
+import react from '@vitejs/plugin-react'
 
 import logger from './logger'
 
@@ -265,7 +265,11 @@ const viteConfig: UserConfig = defineConfig({
     extensions: ['.mjs', '.js', '.jsx', '.ts', '.tsx', '.json'],
   },
 
-  plugins: [cokoHtmlPlugin(), react({ tsDecorators: true })],
+  plugins: [cokoHtmlPlugin(), react()],
+
+  oxc: {
+    decorator: { legacy: true },
+  },
 
   build: {
     outDir: buildFolderPath,

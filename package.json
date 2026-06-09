@@ -45,7 +45,7 @@
     "@dnd-kit/sortable": "^10.0.0",
     "@dnd-kit/utilities": "^3.2.2",
     "@sentry/react": "^10.50.0",
-    "@vitejs/plugin-react-swc": "^4.3.0",
+    "@vitejs/plugin-react": "^6.0.2",
     "antd": "^6.3.7",
     "apollo-upload-client": "^19.0.0",
     "color": "^5.0.3",
@@ -72,8 +72,10 @@
     "@types/node": "^24.1.0",
     "@types/react": "^19.2.14",
     "@types/react-dom": "^19.2.3",
-    "inversify": "^7.11.0",
-    "standard-version": "^9.5.0"
+    "inversify": "^5.0.1",
+    "standard-version": "^9.5.0",
+    "wax-prosemirror-core": "^0.10.2",
+    "wax-prosemirror-services": "^0.10.2"
   },
   "peerDependencies": {
     "@apollo/client": "^4.1.9",

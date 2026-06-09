@@ -41,11 +41,12 @@ const Root = (props: RootProps): ReactNode => {
   return (
     <Container>
       <div>
-        <Link to="/imagedemo">Image demo</Link>
+        <Link to="/image-demo">Image demo</Link>
         <Link to="/ant">Ant</Link>
         <Link to="/protected">Protected</Link>
         <Link to="/profile">Profile</Link>
         <Link to="/subscriptions-test">Subscriptions</Link>
+        <Link to="/wax-demo">Wax</Link>
       </div>
 
       <Buttons>
