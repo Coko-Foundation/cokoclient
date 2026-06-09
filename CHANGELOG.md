@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [2.0.0-beta.1](https://github.com/Coko-Foundation/cokoclient/compare/v2.0.0-beta.0...v2.0.0-beta.1) (2026-06-09)
+
+
+### Bug Fixes
+
+* **vite:** support legacy decorators in production builds ([02f7804](https://github.com/Coko-Foundation/cokoclient/commit/02f78043ee9413a80cd405860910535a6137b60d))
+
 ## [2.0.0-beta.0](https://github.com/Coko-Foundation/cokoclient/compare/v2.0.0-alpha.0...v2.0.0-beta.0) (2026-06-08)
 
 
