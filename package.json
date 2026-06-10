@@ -65,7 +65,7 @@
   },
   "devDependencies": {
     "@apollo/client": "^4.1.9",
-    "@coko/lint": "^3.0.0-alpha.28",
+    "@coko/lint": "^3.0.0",
     "@faker-js/faker": "^10.4.0",
     "@fontsource/advent-pro": "^5.2.7",
     "@fontsource/source-sans-pro": "^5.2.5",
