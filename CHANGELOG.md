@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [2.1.0](https://github.com/Coko-Foundation/cokoclient/compare/v2.0.0...v2.1.0) (2026-07-10)
+
+
+### Features
+
+* **theme:** handle rem values in ant theme and export AntConfigProvider ([b92200f](https://github.com/Coko-Foundation/cokoclient/commit/b92200f83e511a66bb786d85e345f8d60f3a27b8))
+
 ## [2.0.0](https://github.com/Coko-Foundation/cokoclient/compare/v2.0.0-beta.1...v2.0.0) (2026-06-10)
 
 ## [2.0.0-beta.1](https://github.com/Coko-Foundation/cokoclient/compare/v2.0.0-beta.0...v2.0.0-beta.1) (2026-06-09)
