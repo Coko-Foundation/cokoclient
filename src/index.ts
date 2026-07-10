@@ -11,6 +11,7 @@ export {
 
 export { useCurrentUser } from './helpers/useCurrentUser'
 export { useSubscriptionManager } from './helpers/subscriptionManagerContext'
+export { useNotification } from './helpers/useNotification'
 
 export { ProviderConnectionPage } from './pages'
 

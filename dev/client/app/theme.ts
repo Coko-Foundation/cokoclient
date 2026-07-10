@@ -5,6 +5,9 @@ const theme: DefaultTheme = {
   colorBackground: '#fefae0',
   colorBorder: 'lightslategray',
   colorPrimary: '#606c38',
+  colorInfo: 'gray',
+
+  borderRadius: '3px',
 
   fontInterface: 'Advent Pro',
   fontSize: '16',

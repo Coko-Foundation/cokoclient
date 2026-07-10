@@ -4,6 +4,7 @@ import { DefaultTheme, ThemeProvider } from 'styled-components'
 import { DocumentNode } from '@apollo/client'
 import { ApolloProvider } from '@apollo/client/react'
 import { loadErrorMessages, loadDevMessages } from '@apollo/client/dev'
+import type { AppProps } from 'antd'
 
 import { noop } from '../toolkit/funcs'
 import { CurrentUserQueryContext } from '../helpers/useCurrentUser'
@@ -26,6 +27,7 @@ type RootProps = {
   routes: ReactNode
   theme: DefaultTheme
   onLogout?: () => void
+  notification?: AppProps['notification']
 }
 
 const Root = ({
@@ -34,6 +36,7 @@ const Root = ({
   makeApolloConfig,
   routes,
   theme,
+  notification,
 }: RootProps): ReactNode => {
   const client = useMemo(
     () => makeApolloClient(makeApolloConfig),
@@ -47,7 +50,7 @@ const Root = ({
           <CurrentUserQueryContext.Provider
             value={{ currentUserQuery, onLogout }}
           >
-            <AntConfigProvider theme={theme}>
+            <AntConfigProvider notification={notification} theme={theme}>
               <ThemeProvider theme={theme}>
                 <GlobalStyle />
                 {routes}

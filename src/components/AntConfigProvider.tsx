@@ -1,9 +1,17 @@
 import { type ReactNode, useMemo } from 'react'
 import { DefaultTheme } from 'styled-components'
-import { ConfigProvider, theme as antdTheme } from 'antd'
+import { App, ConfigProvider, theme as antdTheme } from 'antd'
+import type { AppProps } from 'antd'
 
 const REM_BASE_PX = 16
 const VALID_ANTD_TOKEN_KEYS = new Set(Object.keys(antdTheme.getDesignToken()))
+
+const DEFAULT_NOTIFICATION_CONFIG: AppProps['notification'] = {
+  stack: false,
+  showProgress: true,
+  pauseOnHover: true,
+  duration: 4,
+}
 
 const pxToNumConverter = (
   value: string | number | undefined,
@@ -58,15 +66,26 @@ export function makeAntdTheme(providedTheme: DefaultTheme): {
 type AntConfigProviderProps = {
   children: ReactNode
   theme: DefaultTheme
+  notification?: AppProps['notification']
 }
 
 const AntConfigProvider = ({
   children,
   theme,
+  notification,
 }: AntConfigProviderProps): ReactNode => {
   const mappedAntdTheme = useMemo(() => makeAntdTheme(theme), [theme])
 
-  return <ConfigProvider theme={mappedAntdTheme}>{children}</ConfigProvider>
+  const mergedNotification = useMemo(
+    () => ({ ...DEFAULT_NOTIFICATION_CONFIG, ...notification }),
+    [notification],
+  )
+
+  return (
+    <ConfigProvider theme={mappedAntdTheme}>
+      <App notification={mergedNotification}>{children}</App>
+    </ConfigProvider>
+  )
 }
 
 export default AntConfigProvider
