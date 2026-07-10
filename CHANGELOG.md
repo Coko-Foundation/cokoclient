@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [2.2.0](https://github.com/Coko-Foundation/cokoclient/compare/v2.1.0...v2.2.0) (2026-07-10)
+
+
+### Features
+
+* **components:** add useNotification helper ([1aa1299](https://github.com/Coko-Foundation/cokoclient/commit/1aa12997ed1b33458e5fcc99e283e381aa45ebc8))
+
 ## [2.1.0](https://github.com/Coko-Foundation/cokoclient/compare/v2.0.0...v2.1.0) (2026-07-10)
 
 
