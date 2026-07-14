@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [2.2.1](https://github.com/Coko-Foundation/cokoclient/compare/v2.2.0...v2.2.1) (2026-07-14)
+
+
+### Bug Fixes
+
+* fix websocket link not updating its token param after login ([291b627](https://github.com/Coko-Foundation/cokoclient/commit/291b6276d0aeeaa2c6ac7b0f4856f3d61d4bd6b3))
+
 ## [2.2.0](https://github.com/Coko-Foundation/cokoclient/compare/v2.1.0...v2.2.0) (2026-07-10)
 
 
