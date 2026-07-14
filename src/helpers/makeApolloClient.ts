@@ -79,8 +79,10 @@ const makeApolloClient = (
     createClient({
       url: webSocketUrl,
       retryAttempts: Infinity,
-      connectionParams: {
-        authToken: localStorage.getItem('token'),
+      connectionParams: () => {
+        return {
+          authToken: localStorage.getItem('token'),
+        }
       },
       shouldRetry: () => {
         /* eslint-disable-next-line no-console */
@@ -92,7 +94,7 @@ const makeApolloClient = (
           /* eslint-disable-next-line no-console */
           console.log(`${subscriptionsLogMessage} Connecting...`)
         },
-        connected: _socket => {
+        connected: () => {
           /* eslint-disable-next-line no-console */
           console.log(`${subscriptionsLogMessage} Connected.`)
         },

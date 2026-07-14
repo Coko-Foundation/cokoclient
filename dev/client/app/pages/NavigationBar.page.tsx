@@ -1,4 +1,5 @@
 import { ReactNode, useEffect } from 'react'
+import { useNavigate, useSearchParams } from 'react-router'
 import { gql } from '@apollo/client'
 import { useMutation } from '@apollo/client/react'
 
@@ -26,14 +27,19 @@ const LOGIN = gql`
 const NavigationBarPage = (): ReactNode => {
   const [login, { data, loading }] = useMutation<LoginData>(LOGIN)
   const { currentUser, refetch, logout } = useCurrentUser()
+  const [searchParams] = useSearchParams()
+  const navigate = useNavigate()
 
   useEffect(() => {
     if (data) {
       const token = data.login?.token
       if (token) localStorage.setItem('token', token)
       refetch()
+
+      const next = searchParams.get('next')
+      if (next) navigate(next, { replace: true })
     }
-  }, [data, refetch])
+  }, [data, refetch, searchParams, navigate])
 
   return (
     <NavigationBar
