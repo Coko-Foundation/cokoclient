@@ -1,7 +1,7 @@
 import { type ReactNode, useMemo } from 'react'
 import { DefaultTheme } from 'styled-components'
 import { App, ConfigProvider, theme as antdTheme } from 'antd'
-import type { AppProps } from 'antd'
+import type { AppProps, ThemeConfig } from 'antd'
 
 const REM_BASE_PX = 16
 const VALID_ANTD_TOKEN_KEYS = new Set(Object.keys(antdTheme.getDesignToken()))
@@ -24,9 +24,7 @@ const pxToNumConverter = (
   return typeof value === 'number' ? value : undefined
 }
 
-export function makeAntdTheme(providedTheme: DefaultTheme): {
-  token: Record<string, unknown>
-} {
+export function makeAntdTheme(providedTheme: DefaultTheme): ThemeConfig {
   const mapper: Record<string, unknown> = {
     borderRadius: pxToNumConverter(providedTheme.borderRadius),
     colorBgBase: providedTheme.colorBackground,
@@ -60,6 +58,7 @@ export function makeAntdTheme(providedTheme: DefaultTheme): {
       ...filteredProvidedTheme,
       ...mapped,
     },
+    components: providedTheme.antComponents,
   }
 }
 

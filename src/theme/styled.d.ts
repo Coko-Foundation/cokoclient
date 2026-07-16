@@ -1,4 +1,5 @@
 import 'styled-components'
+import type { ThemeConfig } from 'antd'
 
 declare module 'styled-components' {
   export interface DefaultTheme {
@@ -64,6 +65,10 @@ declare module 'styled-components' {
     cssOverrides?: {
       [key: string]: any
     }
+
+    /* Per-component antd theme token overrides, passed straight through
+       to antd's ConfigProvider theme.components (e.g. { Table: { headerBg: '...' } }) */
+    antComponents?: ThemeConfig['components']
 
     /* Allow arbitrary additional properties */
     [key: string]: any
