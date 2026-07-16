@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [2.3.0](https://github.com/Coko-Foundation/cokoclient/compare/v2.2.2...v2.3.0) (2026-07-16)
+
+
+### Features
+
+* **theme:** allow editing of ant component theme values from the theme ([424cf60](https://github.com/Coko-Foundation/cokoclient/commit/424cf601edb619ab3ff79a414da8415b231ad8c8))
+
 ### [2.2.2](https://github.com/Coko-Foundation/cokoclient/compare/v2.2.1...v2.2.2) (2026-07-16)
 
 
