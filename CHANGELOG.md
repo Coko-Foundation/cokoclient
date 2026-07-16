@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [2.2.2](https://github.com/Coko-Foundation/cokoclient/compare/v2.2.1...v2.2.2) (2026-07-16)
+
+
+### Bug Fixes
+
+* **components:** fix spin wrapper moving children ([5ad7803](https://github.com/Coko-Foundation/cokoclient/commit/5ad7803cf1c3aa891f9c0362bf384fed79d2d725))
+
 ### [2.2.1](https://github.com/Coko-Foundation/cokoclient/compare/v2.2.0...v2.2.1) (2026-07-14)
 
 
