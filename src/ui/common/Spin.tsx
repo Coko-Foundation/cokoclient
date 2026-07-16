@@ -29,7 +29,7 @@ const StyledSpin = styled(AntSpin)<StyledSpinProps>`
     css`
       z-index: 4;
 
-      > div {
+      > .ant-spin-section {
         position: absolute;
         left: 50%;
         top: 50%;
