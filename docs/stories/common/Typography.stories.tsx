@@ -1,17 +1,29 @@
-import { ReactNode } from 'react'
+import { ReactElement } from 'react'
 import { faker } from '@faker-js/faker'
 import { Paragraph, Text } from '../../../src/ui'
+import preview from '../../../.storybook/preview'
 
-export const Base = (): ReactNode => (
-  <Paragraph>{faker.lorem.sentences(10)}</Paragraph>
-)
+const meta = preview.meta({
+  component: Paragraph,
+  title: 'Common/Typography',
+})
 
-export const ParagraphDemo = (): ReactNode => (
-  <Paragraph>{faker.lorem.sentences(10)}</Paragraph>
-)
+export const Base = meta.story({
+  render: (): ReactElement => (
+    <Paragraph>{faker.lorem.sentences(10)}</Paragraph>
+  ),
+})
 
-export const TextDemo = (): ReactNode => <Text>{faker.lorem.sentence()}</Text>
+export const ParagraphDemo = meta.story({
+  render: (): ReactElement => (
+    <Paragraph>{faker.lorem.sentences(10)}</Paragraph>
+  ),
+})
 
-export const StrongText = (): ReactNode => (
-  <Text strong>{faker.lorem.sentence()}</Text>
-)
+export const TextDemo = meta.story({
+  render: (): ReactElement => <Text>{faker.lorem.sentence()}</Text>,
+})
+
+export const StrongText = meta.story({
+  render: (): ReactElement => <Text strong>{faker.lorem.sentence()}</Text>,
+})

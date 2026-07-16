@@ -1,19 +1,31 @@
-import { ReactNode, useState } from 'react'
+/* eslint-disable react-hooks/rules-of-hooks */
+
+import { useState, ReactElement } from 'react'
 import { faker } from '@faker-js/faker'
 
 import { Switch } from '../../../src/ui'
+import preview from '../../../.storybook/preview'
 
-export const Base = (): ReactNode => {
-  const [checked, setChecked] = useState(false)
-  const handleChange = (): void => setChecked(!checked)
+const meta = preview.meta({
+  component: Switch,
+  title: 'Common/Switch',
+})
 
-  return <Switch checked={checked} onChange={handleChange} />
-}
+export const Base = meta.story({
+  render: (): ReactElement => {
+    const [checked, setChecked] = useState(false)
+    const handleChange = (): void => setChecked(!checked)
 
-export const WithLabel = (): ReactNode => (
-  <Switch label={faker.lorem.words(5)} />
-)
+    return <Switch checked={checked} onChange={handleChange} />
+  },
+})
 
-export const WithLabelLeft = (): ReactNode => (
-  <Switch label={faker.lorem.words(5)} labelPosition="left" />
-)
+export const WithLabel = meta.story({
+  render: (): ReactElement => <Switch label={faker.lorem.words(5)} />,
+})
+
+export const WithLabelLeft = meta.story({
+  render: (): ReactElement => (
+    <Switch label={faker.lorem.words(5)} labelPosition="left" />
+  ),
+})

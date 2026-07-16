@@ -1,12 +1,22 @@
-import { ReactNode } from 'react'
+import { ReactElement } from 'react'
 import { faker } from '@faker-js/faker'
 
 import { TextArea } from '../../../src/ui'
+import preview from '../../../.storybook/preview'
 
-export const Base = (): ReactNode => (
-  <TextArea placeholder={faker.lorem.words(4)} rows={3} />
-)
+const meta = preview.meta({
+  component: TextArea,
+  title: 'Common/TextArea',
+})
 
-export const AutoSize = (): ReactNode => (
-  <TextArea autoSize placeholder={faker.lorem.words(4)} />
-)
+export const Base = meta.story({
+  render: (): ReactElement => (
+    <TextArea placeholder={faker.lorem.words(4)} rows={3} />
+  ),
+})
+
+export const AutoSize = meta.story({
+  render: (): ReactElement => (
+    <TextArea autoSize placeholder={faker.lorem.words(4)} />
+  ),
+})

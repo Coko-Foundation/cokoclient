@@ -1,4 +1,4 @@
-import { ReactNode } from 'react'
+import { ReactElement } from 'react'
 import styled from 'styled-components'
 import { faker } from '@faker-js/faker'
 
@@ -6,6 +6,12 @@ import { uniq } from '../../../src/toolkit/funcs'
 import SearchBox, {
   type SearchResult,
 } from '../../../src/ui/assignReviewers/SearchBox'
+import preview from '../../../.storybook/preview'
+
+const meta = preview.meta({
+  component: SearchBox,
+  title: 'Assign Reviewers/SearchBox',
+})
 
 const Wrapper = styled.div`
   height: 400px;
@@ -96,22 +102,26 @@ const handleAdd = (): Promise<void> => {
   return Promise.resolve()
 }
 
-export const Base = (): ReactNode => {
-  return (
-    <Wrapper>
-      <SearchBox onAdd={handleAdd} onSearch={handleSearch} />
-    </Wrapper>
-  )
-}
+export const Base = meta.story({
+  render: (): ReactElement => {
+    return (
+      <Wrapper>
+        <SearchBox onAdd={handleAdd} onSearch={handleSearch} />
+      </Wrapper>
+    )
+  },
+})
 
-export const AdditionalSearchFields = (): ReactNode => {
-  return (
-    <Wrapper>
-      <SearchBox
-        additionalSearchFields={additionalSearchFields}
-        onAdd={handleAdd}
-        onSearch={handleSearch}
-      />
-    </Wrapper>
-  )
-}
+export const AdditionalSearchFields = meta.story({
+  render: (): ReactElement => {
+    return (
+      <Wrapper>
+        <SearchBox
+          additionalSearchFields={additionalSearchFields}
+          onAdd={handleAdd}
+          onSearch={handleSearch}
+        />
+      </Wrapper>
+    )
+  },
+})

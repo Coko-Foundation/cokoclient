@@ -1,24 +1,38 @@
-import { ReactNode, useState } from 'react'
+/* eslint-disable react-hooks/rules-of-hooks */
+
+import { useState, ReactElement } from 'react'
 import { faker } from '@faker-js/faker'
 
 import { Search } from '../../../src/ui'
+import preview from '../../../.storybook/preview'
 
-export const Base = (): ReactNode => {
-  const [loading, setLoading] = useState(false)
+const meta = preview.meta({
+  component: Search,
+  title: 'Common/Search',
+})
 
-  const handleChange = (): void => {
-    setLoading(true)
-    setTimeout(() => setLoading(false), 2000)
-  }
+export const Base = meta.story({
+  render: (): ReactElement => {
+    const [loading, setLoading] = useState(false)
 
-  return (
-    <Search
-      loading={loading}
-      onSearch={handleChange}
-      placeholder={faker.lorem.words(4)}
-    />
-  )
-}
+    const handleChange = (): void => {
+      setLoading(true)
+      setTimeout(() => setLoading(false), 2000)
+    }
 
-export const Plain = (): ReactNode => <Search />
-export const Loading = (): ReactNode => <Search loading />
+    return (
+      <Search
+        loading={loading}
+        onSearch={handleChange}
+        placeholder={faker.lorem.words(4)}
+      />
+    )
+  },
+})
+
+export const Plain = meta.story({
+  render: (): ReactElement => <Search />,
+})
+export const Loading = meta.story({
+  render: (): ReactElement => <Search loading />,
+})

@@ -1,8 +1,16 @@
-import { ReactNode } from 'react'
+import { ReactElement } from 'react'
 import { faker } from '@faker-js/faker'
 
 import { AuthenticationHeader } from '../../../src/ui'
+import preview from '../../../.storybook/preview'
 
-export const Base = (): ReactNode => (
-  <AuthenticationHeader>{faker.lorem.words(3)}</AuthenticationHeader>
-)
+const meta = preview.meta({
+  component: AuthenticationHeader,
+  title: 'Authentication/AuthenticationHeader',
+})
+
+export const Base = meta.story({
+  render: (): ReactElement => (
+    <AuthenticationHeader>{faker.lorem.words(3)}</AuthenticationHeader>
+  ),
+})

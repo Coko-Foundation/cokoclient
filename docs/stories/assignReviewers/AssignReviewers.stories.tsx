@@ -1,4 +1,4 @@
-import { ReactNode, useEffect, useState } from 'react'
+import { useEffect, useState, ReactElement } from 'react'
 import styled from 'styled-components'
 import { faker } from '@faker-js/faker'
 
@@ -10,6 +10,12 @@ import AssignReviewers, {
 } from '../../../src/ui/assignReviewers/AssignReviewers'
 import { type AdditionalSearchField } from '../../../src/ui/assignReviewers/SearchBox'
 import { DateParser, Note } from '../../../src/ui'
+import preview from '../../../.storybook/preview'
+
+const meta = preview.meta({
+  component: AssignReviewers,
+  title: 'Assign Reviewers/AssignReviewers',
+})
 
 const Wrapper = styled.div`
   margin-bottom: 100px;
@@ -101,7 +107,7 @@ const additionalColumns = [
   {
     title: 'Last Updated',
     dataIndex: 'lastUpdated',
-    render: (val: any): ReactNode => (
+    render: (val: any): ReactElement => (
       <DateParser dateFormat="ddd D MMM | HH:mm" timestamp={val.getTime()} />
     ),
     sorter: (a: Reviewer, b: Reviewer): number =>
@@ -137,7 +143,7 @@ type TemplateProps = {
 const Template = ({
   showInteractiveContent,
   ...rest
-}: TemplateProps): ReactNode => {
+}: TemplateProps): ReactElement => {
   const [reviewers, setReviewers] = useState(makeReviewers(40))
   const [pool, setPool] = useState<Reviewer[]>(makeReviewers(8))
   const [sortedPool, setSortedPool] = useState<Reviewer[]>([])
@@ -419,20 +425,24 @@ const Template = ({
   )
 }
 
-export const Base = (): ReactNode => (
-  <Template
-    showInteractiveContent
-    suggestedReviewerName={suggestedReviewer}
-    useShowEmail
-  />
-)
+export const Base = meta.story({
+  render: (): ReactElement => (
+    <Template
+      showInteractiveContent
+      suggestedReviewerName={suggestedReviewer}
+      useShowEmail
+    />
+  ),
+})
 
-export const AdditionalFields = (): ReactNode => (
-  <Template
-    additionalReviewerColumns={additionalColumns}
-    additionalSearchFields={additionalSearchFields}
-    showInteractiveContent={false}
-    suggestedReviewerName={suggestedReviewer}
-    useShowEmail
-  />
-)
+export const AdditionalFields = meta.story({
+  render: (): ReactElement => (
+    <Template
+      additionalReviewerColumns={additionalColumns}
+      additionalSearchFields={additionalSearchFields}
+      showInteractiveContent={false}
+      suggestedReviewerName={suggestedReviewer}
+      useShowEmail
+    />
+  ),
+})

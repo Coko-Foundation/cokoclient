@@ -1,37 +1,61 @@
 /* eslint-disable no-console */
 
-import { ReactNode } from 'react'
+import { ReactElement } from 'react'
 
 import { noop } from '../../../src/toolkit/funcs'
 import { VerifyEmail } from '../../../src/ui'
+import preview from '../../../.storybook/preview'
+
+const meta = preview.meta({
+  component: VerifyEmail,
+  title: 'Authentication/VerifyEmail',
+})
 
 const resend = (): void => console.log('resend')
 const redirect = (): void => console.log('redirect')
 
-export const Base = (): ReactNode => (
-  <VerifyEmail redirectToLogin={noop} resend={noop} verifying />
-)
+export const Base = meta.story({
+  render: (): ReactElement => (
+    <VerifyEmail redirectToLogin={noop} resend={noop} verifying />
+  ),
+})
 
-export const Success = (): ReactNode => (
-  <VerifyEmail redirectToLogin={redirect} resend={noop} successfullyVerified />
-)
+export const Success = meta.story({
+  render: (): ReactElement => (
+    <VerifyEmail
+      redirectToLogin={redirect}
+      resend={noop}
+      successfullyVerified
+    />
+  ),
+})
 
-export const AlreadyVerified = (): ReactNode => (
-  <VerifyEmail alreadyVerified redirectToLogin={redirect} resend={noop} />
-)
+export const AlreadyVerified = meta.story({
+  render: (): ReactElement => (
+    <VerifyEmail alreadyVerified redirectToLogin={redirect} resend={noop} />
+  ),
+})
 
-export const Expired = (): ReactNode => (
-  <VerifyEmail expired redirectToLogin={noop} resend={resend} />
-)
+export const Expired = meta.story({
+  render: (): ReactElement => (
+    <VerifyEmail expired redirectToLogin={noop} resend={resend} />
+  ),
+})
 
-export const Resending = (): ReactNode => (
-  <VerifyEmail redirectToLogin={noop} resend={noop} resending />
-)
+export const Resending = meta.story({
+  render: (): ReactElement => (
+    <VerifyEmail redirectToLogin={noop} resend={noop} resending />
+  ),
+})
 
-export const Resent = (): ReactNode => (
-  <VerifyEmail redirectToLogin={noop} resend={noop} resent />
-)
+export const Resent = meta.story({
+  render: (): ReactElement => (
+    <VerifyEmail redirectToLogin={noop} resend={noop} resent />
+  ),
+})
 
-export const Error = (): ReactNode => (
-  <VerifyEmail redirectToLogin={noop} resend={noop} />
-)
+export const Error = meta.story({
+  render: (): ReactElement => (
+    <VerifyEmail redirectToLogin={noop} resend={noop} />
+  ),
+})

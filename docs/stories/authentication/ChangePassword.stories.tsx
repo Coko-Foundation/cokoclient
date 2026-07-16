@@ -1,51 +1,60 @@
 /* eslint-disable no-console */
+/* eslint-disable react-hooks/rules-of-hooks */
 
-import { ReactNode, useState } from 'react'
+import { useState, ReactElement } from 'react'
 
 import { ChangePassword, Checkbox } from '../../../src/ui'
 import { type PasswordFormData } from '../../../src/ui/authentication/ChangePassword'
+import preview from '../../../.storybook/preview'
 
-export const Base = (): ReactNode => {
-  const [loading, setLoading] = useState(false)
-  const [message, setMessage] = useState('')
-  const [submissionStatus, setSubmissionStatus] = useState<
-    'success' | 'error' | 'danger' | undefined
-  >()
+const meta = preview.meta({
+  component: ChangePassword,
+  title: 'Authentication/ChangePassword',
+})
 
-  const [error, setError] = useState(false)
+export const Base = meta.story({
+  render: (): ReactElement => {
+    const [loading, setLoading] = useState(false)
+    const [message, setMessage] = useState('')
+    const [submissionStatus, setSubmissionStatus] = useState<
+      'success' | 'error' | 'danger' | undefined
+    >()
 
-  const handleSubmit = (vals: PasswordFormData): void => {
-    console.log(vals)
-    console.log(error)
-    setLoading(true)
+    const [error, setError] = useState(false)
 
-    setTimeout(() => {
-      setLoading(false)
+    const handleSubmit = (vals: PasswordFormData): void => {
+      console.log(vals)
+      console.log(error)
+      setLoading(true)
 
-      if (!error) {
-        setMessage('Password changed successfully')
-        setSubmissionStatus('success')
-      } else {
-        setMessage('There was an error, please try again')
-        setSubmissionStatus('error')
-      }
-    }, 1000)
-  }
+      setTimeout(() => {
+        setLoading(false)
 
-  return (
-    <>
-      <p>
-        <Checkbox checked={error} onChange={() => setError(!error)}>
-          Check and submit the form to see error state
-        </Checkbox>
-      </p>
+        if (!error) {
+          setMessage('Password changed successfully')
+          setSubmissionStatus('success')
+        } else {
+          setMessage('There was an error, please try again')
+          setSubmissionStatus('error')
+        }
+      }, 1000)
+    }
 
-      <ChangePassword
-        loading={loading}
-        message={message}
-        onSubmit={handleSubmit}
-        submissionStatus={submissionStatus}
-      />
-    </>
-  )
-}
+    return (
+      <>
+        <p>
+          <Checkbox checked={error} onChange={() => setError(!error)}>
+            Check and submit the form to see error state
+          </Checkbox>
+        </p>
+
+        <ChangePassword
+          loading={loading}
+          message={message}
+          onSubmit={handleSubmit}
+          submissionStatus={submissionStatus}
+        />
+      </>
+    )
+  },
+})

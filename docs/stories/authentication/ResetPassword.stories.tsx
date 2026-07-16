@@ -1,15 +1,25 @@
-import { ReactNode, ComponentProps } from 'react'
+import { ComponentProps, ReactElement } from 'react'
 
 import { ResetPassword } from '../../../src/ui'
 import { noop } from '../../../src/toolkit/funcs'
 import { Background } from '../_helpers'
+import preview from '../../../.storybook/preview'
 
-const Template = (props: ComponentProps<typeof ResetPassword>): ReactNode => (
+const meta = preview.meta({
+  component: ResetPassword,
+  title: 'Authentication/ResetPassword',
+})
+
+const Template = (
+  props: ComponentProps<typeof ResetPassword>,
+): ReactElement => (
   <Background>
     <ResetPassword {...props} />
   </Background>
 )
 
-export const Base = (): ReactNode => (
-  <Template onSubmit={noop} redirectToLogin={noop} />
-)
+export const Base = meta.story({
+  render: (): ReactElement => (
+    <Template onSubmit={noop} redirectToLogin={noop} />
+  ),
+})

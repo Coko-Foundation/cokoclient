@@ -1,7 +1,15 @@
-import { ReactNode, useState } from 'react'
+/* eslint-disable react-hooks/rules-of-hooks */
+
+import { useState, ReactElement } from 'react'
 import { faker } from '@faker-js/faker'
 
 import { Select } from '../../../src/ui'
+import preview from '../../../.storybook/preview'
+
+const meta = preview.meta({
+  component: Select,
+  title: 'Common/Select',
+})
 
 type Option = {
   label: string
@@ -35,52 +43,62 @@ const groupedOptions = [
 
 const longOptions = makeLongOptions(10)
 
-export const Base = (): ReactNode => (
-  <Select options={options} placeholder={faker.lorem.words(4)} />
-)
+export const Base = meta.story({
+  render: (): ReactElement => (
+    <Select options={options} placeholder={faker.lorem.words(4)} />
+  ),
+})
 
-export const WithGroups = (): ReactNode => (
-  <Select options={groupedOptions} placeholder={faker.lorem.words(4)} />
-)
+export const WithGroups = meta.story({
+  render: (): ReactElement => (
+    <Select options={groupedOptions} placeholder={faker.lorem.words(4)} />
+  ),
+})
 
-export const Multi = (): ReactNode => (
-  <Select
-    mode="multiple"
-    options={options}
-    placeholder={faker.lorem.words(4)}
-  />
-)
-
-export const Async = (): ReactNode => {
-  const [loading, setLoading] = useState(false)
-  const [optionsData, setOptionsData] = useState<Option[]>([])
-
-  const handleSearch = (): void => {
-    setLoading(true)
-
-    setTimeout(() => {
-      setOptionsData(makeOptions(5))
-      setLoading(false)
-    }, 500)
-  }
-
-  return (
+export const Multi = meta.story({
+  render: (): ReactElement => (
     <Select
-      async
-      loading={loading}
       mode="multiple"
-      onSearch={handleSearch}
-      options={optionsData}
+      options={options}
       placeholder={faker.lorem.words(4)}
-      // showSearch
     />
-  )
-}
+  ),
+})
 
-export const WrapOptionText = (): ReactNode => (
-  <Select
-    options={longOptions}
-    placeholder="Very long text options, sentence will be wrapped and option element will increase in height"
-    wrapOptionText
-  />
-)
+export const Async = meta.story({
+  render: (): ReactElement => {
+    const [loading, setLoading] = useState(false)
+    const [optionsData, setOptionsData] = useState<Option[]>([])
+
+    const handleSearch = (): void => {
+      setLoading(true)
+
+      setTimeout(() => {
+        setOptionsData(makeOptions(5))
+        setLoading(false)
+      }, 500)
+    }
+
+    return (
+      <Select
+        async
+        loading={loading}
+        mode="multiple"
+        onSearch={handleSearch}
+        options={optionsData}
+        placeholder={faker.lorem.words(4)}
+        // showSearch
+      />
+    )
+  },
+})
+
+export const WrapOptionText = meta.story({
+  render: (): ReactElement => (
+    <Select
+      options={longOptions}
+      placeholder="Very long text options, sentence will be wrapped and option element will increase in height"
+      wrapOptionText
+    />
+  ),
+})

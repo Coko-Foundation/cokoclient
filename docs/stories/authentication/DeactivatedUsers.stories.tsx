@@ -1,6 +1,14 @@
-import { ReactNode } from 'react'
+import { ReactElement } from 'react'
 import { DeactivatedUser } from '../../../src/ui'
+import preview from '../../../.storybook/preview'
 
-export const Base = (): ReactNode => {
-  return <DeactivatedUser />
-}
+const meta = preview.meta({
+  component: DeactivatedUser,
+  title: 'Authentication/DeactivatedUsers',
+})
+
+export const Base = meta.story({
+  render: (): ReactElement => {
+    return <DeactivatedUser />
+  },
+})

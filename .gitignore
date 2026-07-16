@@ -81,4 +81,4 @@ uploads/
 !**/.yarn/sdks
 !**/.yarn/versions
 
-.claude
+.claude/settings.local.json

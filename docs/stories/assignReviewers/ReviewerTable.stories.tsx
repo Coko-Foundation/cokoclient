@@ -1,9 +1,17 @@
-import { ReactNode, useState } from 'react'
+/* eslint-disable react-hooks/rules-of-hooks */
+
+import { useState, ReactElement } from 'react'
 import { faker } from '@faker-js/faker'
 
 import ReviewerTable from '../../../src/ui/assignReviewers/ReviewerTable'
 import { DateParser, Switch } from '../../../src/ui'
 import { asyncNoop } from '../../../src/toolkit/funcs'
+import preview from '../../../.storybook/preview'
+
+const meta = preview.meta({
+  component: ReviewerTable,
+  title: 'Assign Reviewers/ReviewerTable',
+})
 
 type StoryReviewer = {
   displayName: string
@@ -28,127 +36,138 @@ const makeReviewers = (n: number): StoryReviewer[] =>
     lastUpdated: faker.date.recent({ days: 180 }),
   }))
 
-export const Base = (): ReactNode => {
-  const [reviewers, setReviewers] = useState(makeReviewers(8))
+export const Base = meta.story({
+  render: (): ReactElement => {
+    const [reviewers, setReviewers] = useState(makeReviewers(8))
 
-  const onClickRemoveRow = async (rowId: string): Promise<void> => {
-    setReviewers(reviewers.filter(r => r.id !== rowId))
-  }
+    const onClickRemoveRow = async (rowId: string): Promise<void> => {
+      setReviewers(reviewers.filter(r => r.id !== rowId))
+    }
 
-  const handleChange = (data: { id: string }[]): void => {
-    setReviewers(data as StoryReviewer[])
-  }
+    const handleChange = (data: { id: string }[]): void => {
+      setReviewers(data as StoryReviewer[])
+    }
 
-  return (
-    <ReviewerTable
-      canInviteMore={false}
-      onChange={handleChange}
-      onInvite={asyncNoop}
-      onRemoveRow={onClickRemoveRow}
-      onRevokeInvitation={asyncNoop}
-      reviewers={reviewers}
-    />
-  )
-}
-
-export const Empty = (): ReactNode => {
-  return (
-    <ReviewerTable
-      canInviteMore={false}
-      onChange={asyncNoop}
-      onInvite={asyncNoop}
-      onRemoveRow={asyncNoop}
-      onRevokeInvitation={asyncNoop}
-    />
-  )
-}
-
-export const ShowEmails = (): ReactNode => {
-  const [reviewers, setReviewers] = useState(makeReviewers(8))
-
-  const onClickRemoveRow = async (rowId: string): Promise<void> => {
-    setReviewers(reviewers.filter(r => r.id !== rowId))
-  }
-
-  const handleChange = (data: { id: string }[]): void => {
-    setReviewers(data as StoryReviewer[])
-  }
-
-  return (
-    <ReviewerTable
-      canInviteMore={false}
-      onChange={handleChange}
-      onInvite={asyncNoop}
-      onRemoveRow={onClickRemoveRow}
-      onRevokeInvitation={asyncNoop}
-      reviewers={reviewers}
-      showEmails
-    />
-  )
-}
-
-export const AdditionalColumns = (): ReactNode => {
-  const [reviewers, setReviewers] = useState(makeReviewers(8))
-  const [manualSorting, setManualSorting] = useState(false)
-
-  const onClickRemoveRow = async (rowId: string): Promise<void> => {
-    setReviewers(reviewers.filter(r => r.id !== rowId))
-  }
-
-  const handleChange = (data: { id: string }[]): void => {
-    setReviewers(data as StoryReviewer[])
-  }
-
-  const additionalColumns = [
-    {
-      title: 'Topics',
-      dataIndex: 'topics',
-    },
-    {
-      title: 'Assessment Training',
-      dataIndex: 'assessmentTraining',
-      render: (val: boolean): string => (val ? 'Yes' : ''),
-      sorter: (a: StoryReviewer, b: StoryReviewer): number =>
-        Number(a.assessmentTraining) - Number(b.assessmentTraining),
-    },
-    {
-      title: 'Language Training',
-      dataIndex: 'languageTraining',
-      render: (val: boolean): string => (val ? 'Yes' : ''),
-      sorter: (a: StoryReviewer, b: StoryReviewer): number =>
-        Number(a.languageTraining) - Number(b.languageTraining),
-    },
-    {
-      title: 'Date',
-      dataIndex: 'lastUpdated',
-      render: (val: Date): ReactNode => (
-        <DateParser dateFormat="ddd D MMM | HH:mm" timestamp={val.getTime()} />
-      ),
-      sorter: (a: StoryReviewer, b: StoryReviewer): number =>
-        a.lastUpdated.getTime() - b.lastUpdated.getTime(),
-      align: 'right',
-    },
-  ]
-
-  return (
-    <div>
-      <Switch
-        checked={manualSorting}
-        label="Manual sorting"
-        labelPosition="left"
-        onChange={setManualSorting}
-      />
-
+    return (
       <ReviewerTable
-        additionalColumns={additionalColumns}
         canInviteMore={false}
-        manualSorting={manualSorting}
         onChange={handleChange}
         onInvite={asyncNoop}
         onRemoveRow={onClickRemoveRow}
         onRevokeInvitation={asyncNoop}
         reviewers={reviewers}
       />
-    </div>
-  )
-}
+    )
+  },
+})
+
+export const Empty = meta.story({
+  render: (): ReactElement => {
+    return (
+      <ReviewerTable
+        canInviteMore={false}
+        onChange={asyncNoop}
+        onInvite={asyncNoop}
+        onRemoveRow={asyncNoop}
+        onRevokeInvitation={asyncNoop}
+      />
+    )
+  },
+})
+
+export const ShowEmails = meta.story({
+  render: (): ReactElement => {
+    const [reviewers, setReviewers] = useState(makeReviewers(8))
+
+    const onClickRemoveRow = async (rowId: string): Promise<void> => {
+      setReviewers(reviewers.filter(r => r.id !== rowId))
+    }
+
+    const handleChange = (data: { id: string }[]): void => {
+      setReviewers(data as StoryReviewer[])
+    }
+
+    return (
+      <ReviewerTable
+        canInviteMore={false}
+        onChange={handleChange}
+        onInvite={asyncNoop}
+        onRemoveRow={onClickRemoveRow}
+        onRevokeInvitation={asyncNoop}
+        reviewers={reviewers}
+        showEmails
+      />
+    )
+  },
+})
+
+export const AdditionalColumns = meta.story({
+  render: (): ReactElement => {
+    const [reviewers, setReviewers] = useState(makeReviewers(8))
+    const [manualSorting, setManualSorting] = useState(false)
+
+    const onClickRemoveRow = async (rowId: string): Promise<void> => {
+      setReviewers(reviewers.filter(r => r.id !== rowId))
+    }
+
+    const handleChange = (data: { id: string }[]): void => {
+      setReviewers(data as StoryReviewer[])
+    }
+
+    const additionalColumns = [
+      {
+        title: 'Topics',
+        dataIndex: 'topics',
+      },
+      {
+        title: 'Assessment Training',
+        dataIndex: 'assessmentTraining',
+        render: (val: boolean): string => (val ? 'Yes' : ''),
+        sorter: (a: StoryReviewer, b: StoryReviewer): number =>
+          Number(a.assessmentTraining) - Number(b.assessmentTraining),
+      },
+      {
+        title: 'Language Training',
+        dataIndex: 'languageTraining',
+        render: (val: boolean): string => (val ? 'Yes' : ''),
+        sorter: (a: StoryReviewer, b: StoryReviewer): number =>
+          Number(a.languageTraining) - Number(b.languageTraining),
+      },
+      {
+        title: 'Date',
+        dataIndex: 'lastUpdated',
+        render: (val: Date): ReactElement => (
+          <DateParser
+            dateFormat="ddd D MMM | HH:mm"
+            timestamp={val.getTime()}
+          />
+        ),
+        sorter: (a: StoryReviewer, b: StoryReviewer): number =>
+          a.lastUpdated.getTime() - b.lastUpdated.getTime(),
+        align: 'right',
+      },
+    ]
+
+    return (
+      <div>
+        <Switch
+          checked={manualSorting}
+          label="Manual sorting"
+          labelPosition="left"
+          onChange={setManualSorting}
+        />
+
+        <ReviewerTable
+          additionalColumns={additionalColumns}
+          canInviteMore={false}
+          manualSorting={manualSorting}
+          onChange={handleChange}
+          onInvite={asyncNoop}
+          onRemoveRow={onClickRemoveRow}
+          onRevokeInvitation={asyncNoop}
+          reviewers={reviewers}
+        />
+      </div>
+    )
+  },
+})

@@ -1,8 +1,14 @@
-import { ReactNode } from 'react'
+import { ReactElement } from 'react'
 import { faker } from '@faker-js/faker'
 
 import { ChatMessageList } from '../../../src/ui'
 import { createData, randomPick } from '../_helpers'
+import preview from '../../../.storybook/preview'
+
+const meta = preview.meta({
+  component: ChatMessageList,
+  title: 'Chat/ChatMessageList',
+})
 
 const createMessages = (
   n: number,
@@ -23,6 +29,10 @@ const createMessages = (
 
 const messages = createMessages(10)
 
-export const Base = (): ReactNode => <ChatMessageList messages={messages} />
+export const Base = meta.story({
+  render: (): ReactElement => <ChatMessageList messages={messages} />,
+})
 
-export const Empty = (): ReactNode => <ChatMessageList messages={[]} />
+export const Empty = meta.story({
+  render: (): ReactElement => <ChatMessageList messages={[]} />,
+})

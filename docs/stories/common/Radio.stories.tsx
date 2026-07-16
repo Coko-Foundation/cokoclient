@@ -1,7 +1,15 @@
-import { ReactNode, useState } from 'react'
+/* eslint-disable react-hooks/rules-of-hooks */
+
+import { useState, ReactElement } from 'react'
 import { faker } from '@faker-js/faker'
 
 import { Radio } from '../../../src/ui'
+import preview from '../../../.storybook/preview'
+
+const meta = preview.meta({
+  component: Radio,
+  title: 'Common/Radio',
+})
 
 const makeOptions = (
   n: number,
@@ -14,54 +22,62 @@ const makeOptions = (
 
 const options = makeOptions(4)
 
-export const Base = (): ReactNode => {
-  const [value, setValue] = useState<string | null>(null)
-  const handleChange = (val: string): void => setValue(val)
+export const Base = meta.story({
+  render: (): ReactElement => {
+    const [value, setValue] = useState<string | null>(null)
+    const handleChange = (val: string): void => setValue(val)
 
-  return (
-    <Radio
-      name="radio"
-      onChange={handleChange}
-      options={options}
-      value={value}
-    />
-  )
-}
+    return (
+      <Radio
+        name="radio"
+        onChange={handleChange}
+        options={options}
+        value={value}
+      />
+    )
+  },
+})
 
-export const Vertical = (): ReactNode => {
-  const [value, setValue] = useState<string | null>(null)
-  const handleChange = (val: string): void => setValue(val)
+export const Vertical = meta.story({
+  render: (): ReactElement => {
+    const [value, setValue] = useState<string | null>(null)
+    const handleChange = (val: string): void => setValue(val)
 
-  return (
-    <Radio onChange={handleChange} options={options} value={value} vertical />
-  )
-}
+    return (
+      <Radio onChange={handleChange} options={options} value={value} vertical />
+    )
+  },
+})
 
-export const ButtonStyle = (): ReactNode => {
-  const [value, setValue] = useState<string | null>(null)
-  const handleChange = (val: string): void => setValue(val)
+export const ButtonStyle = meta.story({
+  render: (): ReactElement => {
+    const [value, setValue] = useState<string | null>(null)
+    const handleChange = (val: string): void => setValue(val)
 
-  return (
-    <Radio
-      onChange={handleChange}
-      options={options}
-      optionType="button"
-      value={value}
-    />
-  )
-}
+    return (
+      <Radio
+        onChange={handleChange}
+        options={options}
+        optionType="button"
+        value={value}
+      />
+    )
+  },
+})
 
-export const SolidButtonStyle = (): ReactNode => {
-  const [value, setValue] = useState<string | null>(null)
-  const handleChange = (val: string): void => setValue(val)
+export const SolidButtonStyle = meta.story({
+  render: (): ReactElement => {
+    const [value, setValue] = useState<string | null>(null)
+    const handleChange = (val: string): void => setValue(val)
 
-  return (
-    <Radio
-      buttonStyle="solid"
-      onChange={handleChange}
-      options={options}
-      optionType="button"
-      value={value}
-    />
-  )
-}
+    return (
+      <Radio
+        buttonStyle="solid"
+        onChange={handleChange}
+        options={options}
+        optionType="button"
+        value={value}
+      />
+    )
+  },
+})

@@ -1,7 +1,13 @@
-import { ReactNode } from 'react'
+import { ReactElement } from 'react'
 import { faker } from '@faker-js/faker'
 
 import { CheckboxGroup } from '../../../src/ui'
+import preview from '../../../.storybook/preview'
+
+const meta = preview.meta({
+  component: CheckboxGroup,
+  title: 'Common/CheckboxGroup',
+})
 
 type Option = {
   value: number
@@ -17,16 +23,20 @@ const makeOptions = (n: number): Option[] =>
 
 const options = makeOptions(4)
 
-export const Base = (): ReactNode => <CheckboxGroup options={options} />
+export const Base = meta.story({
+  render: (): ReactElement => <CheckboxGroup options={options} />,
+})
 
-export const Vertical = (): ReactNode => (
-  <CheckboxGroup options={options} vertical />
-)
+export const Vertical = meta.story({
+  render: (): ReactElement => <CheckboxGroup options={options} vertical />,
+})
 
-export const DisabledOptions = (): ReactNode => {
-  const optionsWithDisabled = makeOptions(5)
-  optionsWithDisabled[1].disabled = true
-  optionsWithDisabled[2].disabled = true
+export const DisabledOptions = meta.story({
+  render: (): ReactElement => {
+    const optionsWithDisabled = makeOptions(5)
+    optionsWithDisabled[1].disabled = true
+    optionsWithDisabled[2].disabled = true
 
-  return <CheckboxGroup options={optionsWithDisabled} vertical />
-}
+    return <CheckboxGroup options={optionsWithDisabled} vertical />
+  },
+})

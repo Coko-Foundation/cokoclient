@@ -1,12 +1,22 @@
-import { ReactNode } from 'react'
+import { ReactElement } from 'react'
 
 import { VerifyCheck } from '../../../src/ui'
 import { noop } from '../../../src/toolkit/funcs'
+import preview from '../../../.storybook/preview'
 
-export const Base = (): ReactNode => <VerifyCheck resend={noop} />
+const meta = preview.meta({
+  component: VerifyCheck,
+  title: 'Authentication/VerifyCheck',
+})
 
-export const Resending = (): ReactNode => (
-  <VerifyCheck resend={noop} resending />
-)
+export const Base = meta.story({
+  render: (): ReactElement => <VerifyCheck resend={noop} />,
+})
 
-export const Resent = (): ReactNode => <VerifyCheck resend={noop} resent />
+export const Resending = meta.story({
+  render: (): ReactElement => <VerifyCheck resend={noop} resending />,
+})
+
+export const Resent = meta.story({
+  render: (): ReactElement => <VerifyCheck resend={noop} resent />,
+})

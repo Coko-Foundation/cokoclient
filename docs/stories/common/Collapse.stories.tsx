@@ -1,6 +1,12 @@
-import { ReactNode } from 'react'
+import { ReactElement } from 'react'
 import { faker } from '@faker-js/faker'
 import { Collapse } from '../../../src/ui/common'
+import preview from '../../../.storybook/preview'
+
+const meta = preview.meta({
+  component: Collapse,
+  title: 'Common/Collapse',
+})
 
 const makeItems = (
   n: number,
@@ -11,8 +17,10 @@ const makeItems = (
     children: faker.lorem.sentences(6),
   }))
 
-export const Base = (): ReactNode => <Collapse items={makeItems(3)} />
+export const Base = meta.story({
+  render: (): ReactElement => <Collapse items={makeItems(3)} />,
+})
 
-export const AccordionMode = (): ReactNode => (
-  <Collapse accordion items={makeItems(3)} />
-)
+export const AccordionMode = meta.story({
+  render: (): ReactElement => <Collapse accordion items={makeItems(3)} />,
+})

@@ -1,19 +1,36 @@
-import { ReactNode, useState } from 'react'
+/* eslint-disable react-hooks/rules-of-hooks */
+
+import { useState, ReactElement } from 'react'
 
 import { InputNumber } from '../../../src/ui'
+import preview from '../../../.storybook/preview'
 
-export const Base = (): ReactNode => {
-  const [value, setValue] = useState<number | string | null>(2)
+const meta = preview.meta({
+  component: InputNumber,
+  title: 'Common/InputNumber',
+})
 
-  return (
+export const Base = meta.story({
+  render: (): ReactElement => {
+    const [value, setValue] = useState<number | string | null>(2)
+
+    return (
+      <InputNumber
+        label="Choose a number"
+        onChange={val => setValue(val)}
+        value={value}
+      />
+    )
+  },
+})
+
+export const Disabled = meta.story({
+  render: (): ReactElement => (
     <InputNumber
+      disabled
       label="Choose a number"
-      onChange={val => setValue(val)}
-      value={value}
+      onChange={() => {}}
+      value={3}
     />
-  )
-}
-
-export const Disabled = (): ReactNode => (
-  <InputNumber disabled label="Choose a number" onChange={() => {}} value={3} />
-)
+  ),
+})
