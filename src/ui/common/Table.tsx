@@ -127,6 +127,7 @@ const Table = (props: TableProps): ReactNode => {
       {showSearch && (
         <SearchWrapper>
           <Search
+            allowClear
             loading={searchLoading}
             onSearch={onSearch}
             placeholder={searchPlaceholder}
