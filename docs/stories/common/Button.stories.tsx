@@ -54,3 +54,19 @@ export const Link = meta.story({
     </Button>
   ),
 })
+
+export const Medium = meta.story({
+  render: (): ReactElement => (
+    <Button size="middle" type="primary">
+      {faker.lorem.words(2)}
+    </Button>
+  ),
+})
+
+export const Small = meta.story({
+  render: (): ReactElement => (
+    <Button size="small" type="primary">
+      {faker.lorem.words(2)}
+    </Button>
+  ),
+})

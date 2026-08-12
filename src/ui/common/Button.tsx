@@ -21,10 +21,23 @@ const StyledButton = styled(AntButton)<{
   $status?: ButtonProps['status']
 }>`
   box-shadow: none;
-  font-size: ${th('fontSizeBase')};
-  /* let lineHeight expand the button height */
   height: unset;
-  line-height: ${th('lineHeightBase')};
+  padding-block: ${grid(2)};
+  font-size: ${th('fontSizeBase')};
+
+  ${(props): ThemeValue =>
+    props.size === 'small' &&
+    css`
+      padding-block: ${grid(1)};
+      font-size: ${th('fontSizeBaseSmall')};
+    `};
+
+  ${(props): ThemeValue =>
+    props.size === 'large' &&
+    css`
+      padding-block: ${grid(3)};
+    `};
+
   ${(props): ThemeValue =>
     props.$direction === 'rtl' &&
     css`
@@ -112,8 +125,6 @@ const StyledButton = styled(AntButton)<{
       }
     `
   }};
-
-  padding: ${grid(2)} ${grid(4)};
 `
 
 /**
@@ -127,6 +138,7 @@ const Button = (props: ButtonProps): ReactNode => {
     className,
     autoFocus = false,
     direction = 'ltr',
+    size = 'large',
     status,
     ...passProps
   } = props
@@ -145,6 +157,7 @@ const Button = (props: ButtonProps): ReactNode => {
       $status={status}
       className={className}
       ref={buttonRef}
+      size={size}
       {...passProps}
     >
       {children}
