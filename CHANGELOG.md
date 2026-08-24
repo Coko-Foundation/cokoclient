@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [2.6.0](https://github.com/Coko-Foundation/cokoclient/compare/v2.5.0...v2.6.0) (2026-08-24)
+
+
+### Features
+
+* **vite:** add rollup visualizer plugin ([5518914](https://github.com/Coko-Foundation/cokoclient/commit/5518914aad3f592144a929f252fca341a947a0a8))
+
 ## [2.5.0](https://github.com/Coko-Foundation/cokoclient/compare/v2.4.0...v2.5.0) (2026-08-12)
 
 
