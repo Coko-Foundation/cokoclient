@@ -1,6 +1,6 @@
 {
   "name": "@coko/client",
-  "version": "2.6.0",
+  "version": "2.7.0",
   "description": "Client side common code for coko apps",
   "keywords": [
     "coko"

@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [2.7.0](https://github.com/Coko-Foundation/cokoclient/compare/v2.6.0...v2.7.0) (2026-08-26)
+
+
+### Features
+
+* **vite:** remove bundle analyzer and leave it to the apps to implement ([3e2136d](https://github.com/Coko-Foundation/cokoclient/commit/3e2136dcadd6d9fa37e8d196b261de9c00d3b65a))
+
 ## [2.6.0](https://github.com/Coko-Foundation/cokoclient/compare/v2.5.0...v2.6.0) (2026-08-24)
 
 
