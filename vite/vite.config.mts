@@ -4,7 +4,6 @@ import { fileURLToPath } from 'node:url'
 
 import { defineConfig, type UserConfig, type Plugin } from 'vite'
 import react from '@vitejs/plugin-react'
-import { visualizer } from 'rollup-plugin-visualizer'
 
 import logger from './logger'
 
@@ -266,9 +265,7 @@ const viteConfig: UserConfig = defineConfig({
     extensions: ['.mjs', '.js', '.jsx', '.ts', '.tsx', '.json'],
   },
 
-  plugins: [cokoHtmlPlugin(), react(), !isEnvProduction && visualizer()].filter(
-    Boolean,
-  ),
+  plugins: [cokoHtmlPlugin(), react()],
 
   oxc: {
     decorator: { legacy: true },
