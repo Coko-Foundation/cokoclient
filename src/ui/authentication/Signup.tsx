@@ -1,0 +1,234 @@
+import React, { ReactNode, useMemo } from 'react'
+import { v4 as uuid } from 'uuid'
+import { RuleObject } from 'antd/es/form'
+
+import AuthenticationForm from './AuthenticationForm'
+import AuthenticationHeader from './AuthenticationHeader'
+import AuthenticationWrapper from './AuthenticationWrapper'
+import {
+  Button,
+  Form,
+  Input,
+  Link,
+  Modal,
+  Result,
+  Checkbox,
+  Paragraph,
+  Page,
+} from '../common'
+
+type SignupProps = {
+  className?: string
+  errorMessage?: string
+  hasError?: boolean
+  hasSuccess?: boolean
+  loading?: boolean
+  onSubmit: () => void
+  termsAndConditionsContent?: ReactNode
+}
+
+const ModalContext = React.createContext(null)
+const ModalHeader = Modal.header
+const ModalFooter = Modal.footer
+
+const Signup = (props: SignupProps): React.ReactNode => {
+  const {
+    className,
+    errorMessage,
+    hasError = false,
+    hasSuccess = false,
+    loading = false,
+    onSubmit,
+    termsAndConditionsContent,
+  } = props
+
+  const formId = useMemo(() => uuid(), [])
+
+  const [modal, contextHolder] = Modal.useModal()
+
+  const showTermsAndConditions = (e: React.MouseEvent): void => {
+    e.preventDefault()
+    const termsAndConditionsModal = modal.info({})
+    termsAndConditionsModal.update({
+      title: <ModalHeader>Agreeing to Terms and Conditions</ModalHeader>,
+      content: <Paragraph>{termsAndConditionsContent}</Paragraph>,
+      footer: [
+        <ModalFooter key="footer">
+          <Button onClick={termsAndConditionsModal.destroy} type="primary">
+            OK
+          </Button>
+        </ModalFooter>,
+      ],
+      maskClosable: true,
+      width: 570,
+      bodyStyle: {
+        marginRight: 38,
+        textAlign: 'justify',
+      },
+    })
+  }
+
+  return (
+    <Page maxWidth={600}>
+      <AuthenticationWrapper className={className}>
+        <AuthenticationHeader>Sign up</AuthenticationHeader>
+
+        {hasSuccess && (
+          <div role="alert">
+            <Result
+              className={className}
+              status="success"
+              subTitle={
+                <Paragraph>
+                  We&apos;ve sent you a verification email. Click on the link in
+                  the email to activate your account.
+                </Paragraph>
+              }
+              title="Sign up successful!"
+            />
+          </div>
+        )}
+
+        {!hasSuccess && (
+          <AuthenticationForm
+            alternativeActionLabel="Do you want to login instead?"
+            alternativeActionLink="/login"
+            errorMessage={errorMessage}
+            hasError={hasError}
+            loading={loading}
+            onSubmit={onSubmit}
+            showForgotPassword={false}
+            submitButtonLabel="Sign up"
+            title="Sign up"
+          >
+            <Form.Item
+              label="First Name"
+              name="firstName"
+              rules={[{ required: true, message: 'First name is required' }]}
+            >
+              <Input
+                autoComplete="given-name"
+                id={`form-${formId}-given-name`}
+                placeholder="Fill in your first name"
+              />
+            </Form.Item>
+
+            <Form.Item
+              label="Last Name"
+              name="lastName"
+              rules={[{ required: true, message: 'Last name is required' }]}
+            >
+              <Input
+                autoComplete="family-name"
+                id={`form-${formId}-family-name`}
+                placeholder="Fill in your last name"
+              />
+            </Form.Item>
+
+            <Form.Item
+              label="Email"
+              name="email"
+              rules={[
+                {
+                  required: true,
+                  message: 'Email is required',
+                },
+                {
+                  type: 'email',
+                  message: 'This is not a valid email address',
+                },
+              ]}
+            >
+              <Input
+                autoComplete="email"
+                id={`form-${formId}-email`}
+                placeholder="Fill in your email"
+                type="email"
+              />
+            </Form.Item>
+
+            <Form.Item
+              label="Password"
+              name="password"
+              rules={[{ required: true, message: 'Password is required' }]}
+            >
+              <Input
+                autoComplete="new-password"
+                id={`form-${formId}-new-password`}
+                placeholder="Fill in your password"
+                type="password"
+              />
+            </Form.Item>
+
+            <Form.Item
+              dependencies={['password']}
+              label="Confirm Password"
+              name="confirm-password"
+              rules={[
+                {
+                  required: true,
+                  message: 'Please confirm your password!',
+                },
+                ({ getFieldValue }): RuleObject => ({
+                  validator(_, value): Promise<void> {
+                    if (!value || getFieldValue('password') === value) {
+                      return Promise.resolve()
+                    }
+
+                    return Promise.reject(
+                      new Error(
+                        'The two passwords that you entered do not match!',
+                      ),
+                    )
+                  },
+                }),
+              ]}
+            >
+              <Input
+                autoComplete="new-password"
+                id={`form-${formId}-confirm-password`}
+                placeholder="Fill in your password again"
+                type="password"
+              />
+            </Form.Item>
+
+            {termsAndConditionsContent && (
+              <ModalContext.Provider value={null}>
+                <Form.Item
+                  name="agreedTc"
+                  rules={[
+                    {
+                      validator: (_, value) =>
+                        value
+                          ? Promise.resolve()
+                          : Promise.reject(
+                              new Error(
+                                'You need to agree to the terms and conditions',
+                              ),
+                            ),
+                    },
+                  ]}
+                  valuePropName="checked"
+                >
+                  <Checkbox aria-label="I agree to the terms and conditions">
+                    I agree to the{' '}
+                    <Link
+                      id="termsAndConditions"
+                      onClick={showTermsAndConditions}
+                      to="#termsAndCondition"
+                    >
+                      terms and conditions
+                    </Link>
+                  </Checkbox>
+                </Form.Item>
+                {contextHolder}
+              </ModalContext.Provider>
+            )}
+          </AuthenticationForm>
+        )}
+      </AuthenticationWrapper>
+    </Page>
+  )
+}
+
+export default Signup

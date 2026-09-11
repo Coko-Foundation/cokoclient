@@ -1,6 +1,6 @@
 {
   "name": "@coko/client",
-  "version": "1.2.2",
+  "version": "2.7.0",
   "description": "Client side common code for coko apps",
   "keywords": [
     "coko"
@@ -11,107 +11,83 @@
   },
   "license": "MIT",
   "author": "Yannis Barlas",
-  "main": "dist",
+  "type": "module",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
   "bin": {
-    "coko-client-build": "./scripts/coko-client-build.sh",
-    "coko-client-build-js": "./scripts/coko-client-build.js",
-    "coko-client-dev": "./scripts/coko-client-dev.sh",
-    "coko-client-dev-js": "./scripts/coko-client-dev.js"
+    "coko-client-build": "./scripts/coko-client-build.mjs",
+    "coko-client-dev": "./scripts/coko-client-dev.mjs"
   },
   "files": [
     "dist",
     "scripts",
-    "webpack"
+    "vite"
   ],
   "scripts": {
-    "build": "npx babel --delete-dir-on-start src --out-dir dist",
+    "build": "vite build --config vite.lib.config.mts && tsc --project tsconfig.build.json",
     "clean": "rm -rf node_modules && rm -rf dist && rm -rf dev/server/node_modules",
-    "cz": "./node_modules/.bin/lint-staged && ./node_modules/.bin/git-cz",
-    "commitlint": "./node_modules/.bin/commitlint",
-    "prepare": "husky install",
+    "commit": "yarn coko-lint commit",
     "prepack": "yarn run build",
     "release": "standard-version",
-    "storybook": "STORYBOOK_THEME_PATH='src/theme/index.js' coko-storybook"
+    "typecheck": "tsc --noEmit"
   },
   "config": {
     "commitizen": {
       "path": "cz-customizable"
+    },
+    "cz-customizable": {
+      "config": ".cz-config.cjs"
     }
   },
-  "resolutions": {
-    "postcss": "8",
-    "prettier": "2.8.8"
-  },
   "dependencies": {
-    "@ant-design/icons": "^5.1.4",
-    "@babel/cli": "^7.13.14",
-    "@babel/core": "^7.13.14",
-    "@babel/plugin-proposal-decorators": "^7.24.1",
-    "@babel/plugin-transform-class-properties": "^7.27.1",
-    "@babel/plugin-transform-private-methods": "^7.27.1",
-    "@babel/plugin-transform-private-property-in-object": "^7.27.1",
-    "@babel/plugin-transform-runtime": "^7.14.5",
-    "@babel/preset-env": "^7.13.12",
-    "@babel/preset-react": "^7.13.13",
-    "@pmmmwh/react-refresh-webpack-plugin": "^0.5.0-beta.6",
-    "@sentry/react": "^10.27.0",
-    "antd": "^5.6.1",
-    "apollo-upload-client": "^18.0.1",
-    "app-root-path": "^3.0.0",
-    "babel-loader": "^8.2.2",
-    "babel-plugin-parameter-decorator": "^1.0.16",
-    "babel-plugin-styled-components": "^1.12.0",
-    "babel-preset-minify": "^0.5.1",
-    "color": "^4.2.3",
-    "colors": "^1.4.0",
-    "compression-webpack-plugin": "^7.1.2",
-    "copy-webpack-plugin": "^8.1.0",
-    "css-loader": "^5.2.0",
-    "graphql": "^16.8.1",
-    "graphql-ws": "^5.16.0",
-    "history": "^5.0.0",
-    "html-loader": "^2.1.2",
-    "html-webpack-plugin": "^5.3.1",
-    "lodash": "^4.17.21",
-    "mini-css-extract-plugin": "^1.4.0",
-    "moment": "^2.29.4",
-    "prop-types": "^15.7.2",
-    "react": "^17.0.2",
-    "react-beautiful-dnd": "^13.1.1",
-    "react-dom": "^17.0.2",
-    "react-is": "^17.0.2",
-    "react-refresh": "^0.10.0",
-    "react-router-dom": "^5.2.0",
-    "style-loader": "^2.0.0",
-    "styled-components": "^5.2.3",
-    "styled-normalize": "^8.0.7",
-    "ts-loader": "^8.1.0",
-    "typescript": "^5.8.3",
-    "url-loader": "^4.1.1",
-    "uuid": "^8.3.2",
-    "webpack": "^5.30.0",
-    "webpack-bundle-analyzer": "^4.9.0",
-    "webpack-cli": "^4.6.0",
-    "webpack-dev-server": "^4.0.0-beta.2"
+    "@ant-design/icons": "^6.2.2",
+    "@dnd-kit/core": "^6.3.1",
+    "@dnd-kit/sortable": "^10.0.0",
+    "@dnd-kit/utilities": "^3.2.2",
+    "@sentry/react": "^10.50.0",
+    "@vitejs/plugin-react": "^6.0.2",
+    "antd": "^6.3.7",
+    "apollo-upload-client": "^19.0.0",
+    "color": "^5.0.3",
+    "dayjs": "^1.11.20",
+    "graphql": "^16.13.2",
+    "graphql-ws": "^6.0.8",
+    "picocolors": "^1.1.1",
+    "react": "^19.2.5",
+    "react-dom": "^19.2.5",
+    "react-router": "^7.14.2",
+    "rxjs": "^7.8.2",
+    "styled-components": "^6.4.1",
+    "styled-normalize": "^8.1.1",
+    "typescript": "^6.0.3",
+    "uuid": "^14.0.0",
+    "vite": "^8.0.10"
   },
   "devDependencies": {
-    "@apollo/client": "^3.3.13",
-    "@coko/lint": "^2.0.1",
-    "@coko/storybook": "^2.0.0",
-    "@faker-js/faker": "^8.0.2",
-    "fontsource-advent-pro": "^4.0.0",
-    "nodemon": "^2.0.7",
-    "standard-version": "^9.2.0"
+    "@apollo/client": "^4.1.9",
+    "@coko/lint": "^3.0.0",
+    "@faker-js/faker": "^10.4.0",
+    "@fontsource/advent-pro": "^5.2.7",
+    "@fontsource/source-sans-pro": "^5.2.5",
+    "@storybook/addon-docs": "^10.5.0",
+    "@storybook/react-vite": "^10.5.0",
+    "@types/node": "^24.1.0",
+    "@types/react": "^19.2.14",
+    "@types/react-dom": "^19.2.3",
+    "inversify": "^5.0.1",
+    "standard-version": "^9.5.0",
+    "storybook": "^10.5.0",
+    "wax-prosemirror-core": "^0.10.2",
+    "wax-prosemirror-services": "^0.10.2"
   },
   "peerDependencies": {
-    "@apollo/client": "^3.3.13",
-    "prop-types": "^15.7.2",
-    "react": "^17.0.2",
-    "react-router-dom": "^5.2.0",
-    "styled-components": "^5.2.3"
+    "@apollo/client": "^4.1.9",
+    "react": "^19.2.5",
+    "react-router": "^7.14.2",
+    "styled-components": "^6.4.1"
   },
   "publishConfig": {
     "access": "public"
   },
-  "packageManager": "yarn@4.9.2"
+  "packageManager": "yarn@4.12.0"
 }

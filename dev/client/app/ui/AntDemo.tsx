@@ -1,0 +1,61 @@
+import { ReactNode } from 'react'
+import { Link } from 'react-router'
+import styled from 'styled-components'
+import { Select } from 'antd'
+
+import Button from './common/Button'
+import Container from './common/Container'
+import { useNotification } from '../../../../src'
+
+const Explainer = styled.div`
+  margin: 20px;
+`
+
+const Element = styled.div`
+  margin: 10px;
+`
+
+const AntDemo = (): ReactNode => {
+  const notify = useNotification()
+
+  const handleNotificationClick = (): void => {
+    notify.info({
+      message: 'This is a notification!',
+    })
+  }
+
+  return (
+    <Container $second>
+      <div>
+        <Link to="/">Go back</Link>
+      </div>
+
+      <Explainer>
+        Changes to the primary color in the theme should be reflected here.
+      </Explainer>
+
+      <Element>
+        <Button type="primary">Primary button</Button>
+      </Element>
+
+      <Element>
+        <Select
+          options={[
+            { value: '1', label: 'test1' },
+            { value: '2', label: 'test2' },
+            { value: '3', label: 'test3' },
+          ]}
+          placeholder="Select an option"
+        />
+      </Element>
+
+      <Element>
+        <Button onClick={handleNotificationClick} type="primary">
+          Notify!
+        </Button>
+      </Element>
+    </Container>
+  )
+}
+
+export default AntDemo

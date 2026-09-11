@@ -1,0 +1,36 @@
+{
+  "compilerOptions": {
+    "target": "esnext",
+    "module": "esnext",
+    "moduleResolution": "bundler",
+    "jsx": "react-jsx",
+    "strict": true,
+    "esModuleInterop": true,
+    "maxNodeModuleJsDepth": 10,
+    "skipLibCheck": true,
+    "noEmit": true,
+    "allowJs": true,
+    "checkJs": false,
+    "paths": {
+      "ui/*": ["./src/ui/*"],
+      "pages/*": ["./src/pages/*"]
+    },
+    "types": ["vite/client", "node"],
+
+    // 👇 add these for Inversify
+    "experimentalDecorators": true,
+    "emitDecoratorMetadata": true
+  },
+  "include": [
+    "src/**/*.ts",
+    "src/**/*.tsx",
+    "src/**/*.d.ts",
+    "src/**/*.js",
+    "src/**/*.jsx",
+    "docs/**/*.ts",
+    "docs/**/*.tsx",
+    "vite/**/*.ts",
+    "dev/**/*.ts",
+    "dev/**/*.tsx"
+  ]
+}

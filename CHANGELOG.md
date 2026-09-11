@@ -2,6 +2,115 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [2.7.0](https://github.com/Coko-Foundation/cokoclient/compare/v2.6.0...v2.7.0) (2026-08-26)
+
+
+### Features
+
+* **vite:** remove bundle analyzer and leave it to the apps to implement ([3e2136d](https://github.com/Coko-Foundation/cokoclient/commit/3e2136dcadd6d9fa37e8d196b261de9c00d3b65a))
+
+## [2.6.0](https://github.com/Coko-Foundation/cokoclient/compare/v2.5.0...v2.6.0) (2026-08-24)
+
+
+### Features
+
+* **vite:** add rollup visualizer plugin ([5518914](https://github.com/Coko-Foundation/cokoclient/commit/5518914aad3f592144a929f252fca341a947a0a8))
+
+## [2.5.0](https://github.com/Coko-Foundation/cokoclient/compare/v2.4.0...v2.5.0) (2026-08-12)
+
+
+### Features
+
+* **components:** properly handle medium and small sizes for button ([e7936ae](https://github.com/Coko-Foundation/cokoclient/commit/e7936ae070bf9a9dfd58251bcafa0dd58ffa4085))
+
+## [2.4.0](https://github.com/Coko-Foundation/cokoclient/compare/v2.3.0...v2.4.0) (2026-07-30)
+
+
+### Features
+
+* **components:** add clear button to table search ([fc0e1d5](https://github.com/Coko-Foundation/cokoclient/commit/fc0e1d5dbc6d7e7aff9100130611c5515ba6002c))
+
+## [2.3.0](https://github.com/Coko-Foundation/cokoclient/compare/v2.2.2...v2.3.0) (2026-07-16)
+
+
+### Features
+
+* **theme:** allow editing of ant component theme values from the theme ([424cf60](https://github.com/Coko-Foundation/cokoclient/commit/424cf601edb619ab3ff79a414da8415b231ad8c8))
+
+### [2.2.2](https://github.com/Coko-Foundation/cokoclient/compare/v2.2.1...v2.2.2) (2026-07-16)
+
+
+### Bug Fixes
+
+* **components:** fix spin wrapper moving children ([5ad7803](https://github.com/Coko-Foundation/cokoclient/commit/5ad7803cf1c3aa891f9c0362bf384fed79d2d725))
+
+### [2.2.1](https://github.com/Coko-Foundation/cokoclient/compare/v2.2.0...v2.2.1) (2026-07-14)
+
+
+### Bug Fixes
+
+* fix websocket link not updating its token param after login ([291b627](https://github.com/Coko-Foundation/cokoclient/commit/291b6276d0aeeaa2c6ac7b0f4856f3d61d4bd6b3))
+
+## [2.2.0](https://github.com/Coko-Foundation/cokoclient/compare/v2.1.0...v2.2.0) (2026-07-10)
+
+
+### Features
+
+* **components:** add useNotification helper ([1aa1299](https://github.com/Coko-Foundation/cokoclient/commit/1aa12997ed1b33458e5fcc99e283e381aa45ebc8))
+
+## [2.1.0](https://github.com/Coko-Foundation/cokoclient/compare/v2.0.0...v2.1.0) (2026-07-10)
+
+
+### Features
+
+* **theme:** handle rem values in ant theme and export AntConfigProvider ([b92200f](https://github.com/Coko-Foundation/cokoclient/commit/b92200f83e511a66bb786d85e345f8d60f3a27b8))
+
+## [2.0.0](https://github.com/Coko-Foundation/cokoclient/compare/v2.0.0-beta.1...v2.0.0) (2026-06-10)
+
+## [2.0.0-beta.1](https://github.com/Coko-Foundation/cokoclient/compare/v2.0.0-beta.0...v2.0.0-beta.1) (2026-06-09)
+
+
+### Bug Fixes
+
+* **vite:** support legacy decorators in production builds ([02f7804](https://github.com/Coko-Foundation/cokoclient/commit/02f78043ee9413a80cd405860910535a6137b60d))
+
+## [2.0.0-beta.0](https://github.com/Coko-Foundation/cokoclient/compare/v2.0.0-alpha.0...v2.0.0-beta.0) (2026-06-08)
+
+
+### Bug Fixes
+
+* do not log ws disconnect as an error unless there is one ([8577437](https://github.com/Coko-Foundation/cokoclient/commit/857743749848a5ab16d7fc9f2835e7a10586f925))
+
+## [2.0.0-alpha.0](https://github.com/Coko-Foundation/cokoclient/compare/v1.2.2...v2.0.0-alpha.0) (2026-04-28)
+
+
+### Features
+
+* improved logging ([0cbc854](https://github.com/Coko-Foundation/cokoclient/commit/0cbc8549415d90cf4087f9d8e31c4b16840cee5a))
+* improved useCurrentUser hook ([d6fb4a2](https://github.com/Coko-Foundation/cokoclient/commit/d6fb4a2e815054172848fa657dae1a51da4c3d08))
+* ts everywhere ([68c5ac6](https://github.com/Coko-Foundation/cokoclient/commit/68c5ac6d814b94888d25e186aa770cba099c4995))
+* **ui:** drop story helpers from distributed library ([21dccb1](https://github.com/Coko-Foundation/cokoclient/commit/21dccb18752215754a2d0d116d8bc0c7a8892e69))
+* **ui:** upgrade ant to v6 ([eec2ad8](https://github.com/Coko-Foundation/cokoclient/commit/eec2ad80546ce2183924710c0e573f5e9fc80eb0))
+* upgrade to react 19 ([92bea97](https://github.com/Coko-Foundation/cokoclient/commit/92bea97bd727e95d513f8e55effd79a9db059d53))
+* upgrade to react router v7 ([0a0a17f](https://github.com/Coko-Foundation/cokoclient/commit/0a0a17ffe4e9d4b41aa3b78bf2cc6eeb9f468db8))
+* **vite:** use vite instead of webpack ([e986308](https://github.com/Coko-Foundation/cokoclient/commit/e9863086868ed975166452f038be9a428ff2fd27))
+
+
+### Bug Fixes
+
+* fix a bunch of eslint and typescript errors ([9a7dfe3](https://github.com/Coko-Foundation/cokoclient/commit/9a7dfe3ce5cee77a55c77f6283f568cf14522307))
+* fix date parser and drop moment ([5a06b54](https://github.com/Coko-Foundation/cokoclient/commit/5a06b546c0dea4b6b6eb73a32305fd2455d096ca))
+* make decorators work ([f94b2eb](https://github.com/Coko-Foundation/cokoclient/commit/f94b2ebd2c431aa9459f0f6a6646e6ae7a243101))
+* make sure eslint does not ignore docs folder ([1a290a7](https://github.com/Coko-Foundation/cokoclient/commit/1a290a76a7008bbcaa4d5b6029215a9192d956cd))
+* **ui:** drop default prop from authentication components ([7e2df8d](https://github.com/Coko-Foundation/cokoclient/commit/7e2df8d3ef4699aef31c9fe3b6f74f3e71111ba8))
+* **ui:** drop default prop from chat components ([2f7939b](https://github.com/Coko-Foundation/cokoclient/commit/2f7939bc4b6660e1235ff5e8e2496f58c895ad25))
+* **ui:** drop default props from all remaining components ([ae030b4](https://github.com/Coko-Foundation/cokoclient/commit/ae030b49437e4178f0173e9417a7eb642e4e5785))
+* **ui:** drop default props from all src/ui/common components ([2985a78](https://github.com/Coko-Foundation/cokoclient/commit/2985a78adfee207f81922ec0434070423da0cbd2))
+* **ui:** fix issues in button and spin ([7fca9f2](https://github.com/Coko-Foundation/cokoclient/commit/7fca9f2af1f215d0abedfa140551fece96e3c7ef))
+* **ui:** more eslint and typescript fixes ([6f0c19c](https://github.com/Coko-Foundation/cokoclient/commit/6f0c19cc4ed1effa3cc1708c396544d1ca0479dc))
+* **ui:** more fixes in stories ([f753323](https://github.com/Coko-Foundation/cokoclient/commit/f753323ae9613e2aaf755c15c2e003cb20a1854b))
+* **ui:** more typescript fixes ([ebeb7fc](https://github.com/Coko-Foundation/cokoclient/commit/ebeb7fc0cf983f05a0f4aaa7364865c4d7436e4d))
+
 ### [1.2.2](https://gitlab.coko.foundation/cokoapps/client/compare/v1.2.1...v1.2.2) (2025-11-28)
 
 

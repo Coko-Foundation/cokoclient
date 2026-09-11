@@ -1,0 +1,36 @@
+import { ReactNode } from 'react'
+import { gql } from '@apollo/client'
+import { useMutation } from '@apollo/client/react'
+
+import { useCurrentUser } from '../../../../src'
+
+import Profile from '../ui/Profile'
+
+const UPDATE_USER = gql`
+  mutation UpdateUser($id: ID!, $input: UpdateUserInput!) {
+    updateUser(id: $id, input: $input) {
+      id
+      username
+    }
+  }
+`
+
+const ProfilePage = (): ReactNode => {
+  const { currentUser } = useCurrentUser()
+  const [updateUser] = useMutation(UPDATE_USER)
+
+  const handleSubmit = (username: string): void => {
+    updateUser({
+      variables: {
+        id: currentUser?.id,
+        input: {
+          username,
+        },
+      },
+    })
+  }
+
+  return <Profile onSubmit={handleSubmit} />
+}
+
+export default ProfilePage

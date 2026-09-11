@@ -3,15 +3,12 @@ services:
     build:
       context: .
       dockerfile: ./dev/client/Dockerfile-client-development
-    command: ['./scripts/coko-client-dev.js']
+    command: ['node', './scripts/coko-client-dev.mjs']
     ports:
       - ${CLIENT_PORT:-4000}:${CLIENT_PORT:-4000}
-      - ${WEBPACK_ANALYZER_PORT:-8888}:8888
     environment:
       - NODE_ENV=development
-      - WEBPACK_CONFIG_PATH=./webpack/webpack.config.js
       - CLIENT_PORT=${CLIENT_PORT:-4000}
-      - CLIENT_FAST_REFRESH=1
       - CLIENT_PAGE_TITLE=${CLIENT_PAGE_TITLE:-"Coko client playground"}
       - CLIENT_APP_ROOT_PATH=./dev/client/app
       - CLIENT_FAVICON_PATH=../static/favicon.ico
@@ -19,11 +16,10 @@ services:
       - WEBSOCKET_SERVER_URL=${WEBSOCKET_SERVER_URL:-http://localhost:3001}
       - YJS_WEBSOCKET_SERVER_URL=${YJS_WEBSOCKET_SERVER_URL:-http://localhost:3002}
       - CLIENT_CUSTOM_VAR=${CLIENT_CUSTOM_VAR}
-      - CLIENT_FOO=bar
     volumes:
       - ./dev:/home/node/client/dev
       - ./scripts:/home/node/client/scripts
-      - ./webpack:/home/node/client/webpack
+      - ./vite:/home/node/client/vite
       - ./src:/home/node/client/src
     tty: true
 
@@ -45,19 +41,21 @@ services:
       - POSTGRES_PASSWORD=${POSTGRES_PASSWORD:-password}
       - SECRET=${SECRET:-thesecret}
       - SERVER_PORT=${SERVER_PORT:-3000}
-      - CLIENT_URL=${CLIENT_URL:-http://0.0.0.0:4000}
+      - SERVER_URL=http://localhost:3000
+      - CLIENT_URL=${CLIENT_URL:-http://localhost:4000}
+      - ADMIN_USERNAME=admin
+      - ADMIN_PASSWORD=password
+      - ADMIN_GIVEN_NAMES=Admin
+      - ADMIN_SURNAME=Adminov
+      - ADMIN_EMAIL=admin@example.com
     volumes:
       - ./dev/server/api:/home/node/app/api
-      - ./dev/server/config:/home/node/app/config
-      # - ./dev/server/controllers:/home/node/app/controllers
-      # - ./dev/server/models:/home/node/app/models
-      - ./dev/server/scripts:/home/node/app/scripts
-      # - ./dev/server/services:/home/node/app/services
+      - ./dev/server/config.ts:/home/node/app/config.ts
       # - ./dev/server/node_modules/@coko/server:/home/node/app/node_modules/@coko/server
     tty: true
 
   db:
-    image: postgres:15
+    image: postgres:18
     ports:
       - ${POSTGRES_PORT:-5432}:5432
     environment:
